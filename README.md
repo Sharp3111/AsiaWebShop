@@ -1,5 +1,5 @@
+
 Software Engineering Course Project
-Team: Sharp
 ===========
 
 Project Problem Description: http://course.cse.ust.hk/comp3111/Project/Activities/problem-statement.pdf
