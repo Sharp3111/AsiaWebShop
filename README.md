@@ -5,4 +5,4 @@ Project Problem Description: http://course.cse.ust.hk/comp3111/Project/Activitie
 
 Project Q&A: http://course.cse.ust.hk/comp3111/Project/project-info.html#activity-q&a
 
-Disk Address:  \\ugsmb.cse.ust.hk\cs3111t115
+Disk Address:  \\\\ugsmb.cse.ust.hk\cs3111t115
