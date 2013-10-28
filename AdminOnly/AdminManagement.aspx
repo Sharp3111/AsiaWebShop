@@ -4,9 +4,21 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <asp:HyperLink ID="ItemManagement" runat="server" 
-        NavigateUrl="ItemManagement.aspx">Item Management</asp:HyperLink>
+        NavigateUrl="ItemManagement.aspx" Font-Bold="True" Font-Size="Large">Item Management</asp:HyperLink>
     <br />
     <br />
-    <asp:HyperLink ID="MemberSearch" runat="server" NavigateUrl="MemberSearch.aspx">Member Information Edit</asp:HyperLink>
+    <asp:HyperLink ID="MemberSearch" runat="server" 
+    NavigateUrl="MemberSearch.aspx" Font-Bold="True" Font-Size="Large">Member Information Edit</asp:HyperLink>
+<br />
+<br />
+    <asp:HyperLink ID="PersonalReport" runat="server" 
+    NavigateUrl="~/AdminOnly/PersonalReport.aspx" Font-Bold="True" 
+    Font-Size="Large">Generate personal details report</asp:HyperLink>
+<br />
+<br />
+    <asp:HyperLink ID="AmountReport" runat="server" 
+    NavigateUrl="~/AdminOnly/AmountReport.aspx" Font-Bold="True" Font-Size="Large">Generate purchase amount report</asp:HyperLink>
+<br />
+<br />
 </asp:Content>
 
