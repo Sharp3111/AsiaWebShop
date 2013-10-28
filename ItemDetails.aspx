@@ -39,9 +39,6 @@
                     SortExpression="discountPrice" />
                 <asp:BoundField DataField="quantityAvailable" HeaderText="QuantityAvailable" 
                     SortExpression="quantityAvailable" />
-                <asp:HyperLinkField DataNavigateUrlFields="upc" 
-                    DataNavigateUrlFormatString="ItemDetails.aspx?upc={0}" 
-                    Text="View item details" />
             </Fields>
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
             <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />

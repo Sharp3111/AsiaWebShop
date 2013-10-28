@@ -124,6 +124,16 @@
                 SortExpression="discountPrice" />
             <asp:BoundField DataField="quantityAvailable" HeaderText="Quantity Available" 
                 SortExpression="quantityAvailable" />
+            <asp:HyperLinkField DataNavigateUrlFields="upc" 
+                DataNavigateUrlFormatString="ItemDetails.aspx?upc={0}" 
+                Text="View item details" />
+            <asp:TemplateField ShowHeader="False">
+                <ItemTemplate>
+                    <asp:Button ID="btn_ShoppingCart" runat="server" Height="25px" 
+                        Text="Add To Shopping Cart" Width="150px" 
+                        onclick="btn_ShoppingCart_Click" />
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>
         <EditRowStyle BackColor="#2461BF" />
         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
