@@ -45,7 +45,7 @@ public partial class AdminOnly_PersonalReport : System.Web.UI.Page
                                 "FROM [Member]" +
                                 "JOIN [Address] on [Address].[userName] = [Member].[userName]" +
                                 "JOIN [CreditCard] on [CreditCard].[userName] = [Member].[userName] " +
-                                "ORDER BY [Member].[lastName], [Address].[district]";
+                                "ORDER BY [Address].[district], [Member].[lastName] ";
         }
 
 
@@ -70,7 +70,7 @@ public partial class AdminOnly_PersonalReport : System.Web.UI.Page
                                 "JOIN [Address] on [Address].[userName] = [Member].[userName]" +
                                 "JOIN [CreditCard] on [CreditCard].[userName] = [Member].[userName] " +
                                 " AND ([Member].[userName] LIKE N'%" + searchString + "%')" +
-                                "ORDER BY [Member].[lastName], [Address].[district]";
+                                "ORDER BY [Address].[district], [Member].[lastName] ";
         }
         // Execute the SQL statement; order the result by item name.
         SqlDataSource1.SelectCommand = SQLCmd;
