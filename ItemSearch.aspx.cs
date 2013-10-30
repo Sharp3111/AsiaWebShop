@@ -52,6 +52,7 @@ public partial class _Default : System.Web.UI.Page
                     break;
             }
         }
+        ValidationSummary1.Enabled = false;
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
@@ -141,6 +142,7 @@ public partial class _Default : System.Web.UI.Page
             ((CustomValidator)gvItemSearchResult.Rows[i].FindControl("cvQuantity")).ValidationGroup = "QuantityValidationGroup" + i;
             ((Button)gvItemSearchResult.Rows[i].FindControl("btn_ShoppingCart")).ValidationGroup = "QuantityValidationGroup" + i;
         }
+        //ValidationSummary1.Enabled = true;
 
     }
 
@@ -148,7 +150,7 @@ public partial class _Default : System.Web.UI.Page
     {
         GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
         Int32 Row_index = gridViewRow.RowIndex;
-        
+        ValidationSummary1.Enabled = true;
         ValidationSummary1.ValidationGroup = "QuantityValidationGroup" +Row_index;
         //Response.Write("<script>alert('" + Row_index + "  " + ((Button)(sender as Control)).ValidationGroup + "')</script>");
         //check if the user has logined
@@ -246,7 +248,7 @@ public partial class _Default : System.Web.UI.Page
                 }
 
 
-
+                //lblSearchResultMessage.Text="Successfully add to shopping cart";
                 Response.Write("<script>alert('Successfully add to shopping cart')</script>");
             }
             else // if the user does not log, send a error message

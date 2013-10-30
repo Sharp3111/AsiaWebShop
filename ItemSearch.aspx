@@ -169,7 +169,7 @@
             <asp:TemplateField HeaderText="Quantity">
                 <ItemTemplate>
                     <asp:TextBox ID="tbQuantity" runat="server" Height="22px" 
-                        ValidationGroup="QuantityValidationGroup" Width="30px">1</asp:TextBox>
+                        ValidationGroup="QuantityValidationGroup" Width="30px" MaxLength="10">1</asp:TextBox>
                     <asp:RegularExpressionValidator ID="revQuantity" runat="server" 
                         ControlToValidate="tbQuantity" Display="Dynamic" EnableClientScript="False" 
                         ErrorMessage="Please input the correct quantity" ForeColor="Red" 
