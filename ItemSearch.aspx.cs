@@ -13,41 +13,44 @@ public partial class _Default : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        string catagory = Request.QueryString["category"];
-        switch (catagory)
+        if (!Page.IsPostBack)
         {
-            case "Appliances": 
-                categoryDropDownList.SelectedIndex = 1;
-                btnSearch_Click(sender,e);
-                break;
-            case "BabyandChildren":
-                categoryDropDownList.SelectedIndex = 2;
-                btnSearch_Click(sender, e);
-                break;
-            case "ComputersandElectronics":
-                categoryDropDownList.SelectedIndex = 3;
-                btnSearch_Click(sender, e);
-                break;
-            case "JewelryandWatches":
-                categoryDropDownList.SelectedIndex = 4;
-                btnSearch_Click(sender, e);
-                break;
-            case "Luggage":
-                categoryDropDownList.SelectedIndex = 5;
-                btnSearch_Click(sender, e);
-                break;
-            case "Men":
-                categoryDropDownList.SelectedIndex = 6;
-                btnSearch_Click(sender, e);
-                break;
-            case "ToysandGames":
-                categoryDropDownList.SelectedIndex = 7;
-                btnSearch_Click(sender, e);
-                break;
-            case "Women":
-                categoryDropDownList.SelectedIndex = 8;
-                btnSearch_Click(sender, e);
-                break;
+            string catagory = Request.QueryString["category"];
+            switch (catagory)
+            {
+                case "Appliances":
+                    categoryDropDownList.SelectedIndex = 1;
+                    btnSearch_Click(sender, e);
+                    break;
+                case "BabyandChildren":
+                    categoryDropDownList.SelectedIndex = 2;
+                    btnSearch_Click(sender, e);
+                    break;
+                case "ComputersandElectronics":
+                    categoryDropDownList.SelectedIndex = 3;
+                    btnSearch_Click(sender, e);
+                    break;
+                case "JewelryandWatches":
+                    categoryDropDownList.SelectedIndex = 4;
+                    btnSearch_Click(sender, e);
+                    break;
+                case "Luggage":
+                    categoryDropDownList.SelectedIndex = 5;
+                    btnSearch_Click(sender, e);
+                    break;
+                case "Men":
+                    categoryDropDownList.SelectedIndex = 6;
+                    btnSearch_Click(sender, e);
+                    break;
+                case "ToysandGames":
+                    categoryDropDownList.SelectedIndex = 7;
+                    btnSearch_Click(sender, e);
+                    break;
+                case "Women":
+                    categoryDropDownList.SelectedIndex = 8;
+                    btnSearch_Click(sender, e);
+                    break;
+            }
         }
     }
 
@@ -135,6 +138,7 @@ public partial class _Default : System.Web.UI.Page
 
     protected void btn_ShoppingCart_Click(object sender, EventArgs e)
     {
+        //check if the user has logined
         if (User.Identity.Name != "")
         {
             string connectionString = "AsiaWebShopDBConnectionString";
@@ -142,28 +146,96 @@ public partial class _Default : System.Web.UI.Page
             GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
             int Row_index = gridViewRow.RowIndex;
             string upc = gvItemSearchResult.DataKeys[Row_index][0].ToString().Trim();
-            //Response.Write("<script>alert('Upc:"+upc+"')</script>");
             int quantity = 1;
-
-            string SQLCmd = "INSERT INTO [ShoppingCart] " +
-                           "VALUES (@UserName, @Upc, @Quantity)";
-
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand(SQLCmd, connection))
+            Int32 count;
+            
+            //check if the item has already added into the shopping cart
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
             {
-                // Define the INSERT query parameters and their values.
-                command.Parameters.AddWithValue("@UserName", userName);
-                command.Parameters.AddWithValue("@Upc", upc);
-                command.Parameters.AddWithValue("@Quantity", quantity);
 
-                // Open the connection, execute the INSERT query and close the connection.
-                command.Connection.Open();
-                command.ExecuteNonQuery();
-                command.Connection.Close();
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([upc] = N'" + upc + "' AND [userName] = N'" + userName + "')", connection);
+                count = (Int32)command.ExecuteScalar();
+                connection.Close();
             }
+            
+            //if the item is not in the shopping cart, then add it into shopping cart
+            if (count == 0)
+            {
+                string SQLCmd = "INSERT INTO [ShoppingCart] " +
+                    "VALUES (@UserName, @Upc, @Quantity, CURRENT_TIMESTAMP )";
+
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(SQLCmd, connection))
+                {
+                    // Define the INSERT query parameters and their values.
+                    command.Parameters.AddWithValue("@UserName", userName);
+                    command.Parameters.AddWithValue("@Upc", upc);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+
+                    // Open the connection, execute the INSERT query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+            //if the item is already in the shopping cart, change the quantity of it    
+            else
+            {
+                //read the quantity in the database
+                {
+                    string query = "SELECT [quantity] FROM [ShoppingCart] WHERE ([upc] = N'" + upc + "' AND [userName] = N'" + userName + "')";
+
+                    // Create the connection and the SQL command.
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Open the connection.
+                        command.Connection.Open();
+                        // Execute the SELECT query and place the result in a DataReader.
+                        SqlDataReader reader = command.ExecuteReader();
+                        // Check if a result was returned.
+                        if (reader.HasRows)
+                        {
+                            // Iterate through the table to get the retrieved values.
+                            while (reader.Read())
+                            {
+                                quantity += reader.GetInt32(0);
+                            }
+                        }
+
+                        // Close the connection and the DataReader.
+                        command.Connection.Close();
+                        reader.Close();
+                    }
+                }
+                //update the quantity to database
+                {
+                    // Define the UPDATE query with parameters.
+                    string query = "UPDATE [ShoppingCart] SET [quantity] = @quantity, [addDateTime] = CURRENT_TIMESTAMP WHERE ([userName] = @UserName AND [upc] = @Upc ) ";
+
+                    // Create the connection and the SQL command.
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Define the UPDATE query parameters and their values.
+                        command.Parameters.AddWithValue("@UserName", userName);
+                        command.Parameters.AddWithValue("@Upc", upc);
+                        command.Parameters.AddWithValue("@Quantity", quantity);
+
+                        // Open the connection, execute the INSERT query and close the connection.
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }
+            }
+            
+
+
             Response.Redirect("~/MemberOnly/ShoppingCart.aspx");
         }
-        else 
+        else // if the user does not log, send a error message
         {
             Response.Write("<script>alert('Please Login')</script>");
         }
