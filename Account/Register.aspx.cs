@@ -9,6 +9,8 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 
+
+
 public partial class Account_Register : System.Web.UI.Page
 {
 
@@ -41,10 +43,10 @@ public partial class Account_Register : System.Web.UI.Page
         // After the registration information is validated, add the address data into the database.
         InsertAddress(connectionString,
             RegisterUser.UserName.Trim(),
-            (((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("Building")).Text.Trim() + " " +
-            ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("Floor")).Text.Trim() + " " +
-            ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("FlatSuite")).Text.Trim() + " " +
-            ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("BlockTower")).Text.Trim()),
+            ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("Building")).Text.Trim(),
+            ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("Floor")).Text.Trim(),
+            ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("FlatSuite")).Text.Trim(),
+            ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("BlockTower")).Text.Trim(),
             ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("Street")).Text.Trim(),
             ((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("DistrictDropDownList")).SelectedItem.Text.Trim());
 
@@ -56,6 +58,7 @@ public partial class Account_Register : System.Web.UI.Page
             ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("CardHolderName")).Text.Trim(),
             ((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("MonthDropDownList")).SelectedItem.Text.Trim(),
             ((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).SelectedItem.Text.Trim());
+
 
 
         FormsAuthentication.SetAuthCookie(RegisterUser.UserName, false /* createPersistentCookie */);
@@ -93,11 +96,11 @@ public partial class Account_Register : System.Web.UI.Page
         }
     }
 
-    protected void InsertAddress(string connectionString, string userName, string buildingAddress, string streetAddress, string district)
+    protected void InsertAddress(string connectionString, string userName, string building, string floor, string flatSuite, string blockTower, string streetAddress, string district)
     {
         // Define the INSERT query with parameters.
-        string query = "INSERT INTO [Address]([userName], [buildingAddress], [streetAddress], [district])" +
-                               "VALUES (@UserName, @BuildingAddress, @StreetAddress, @District)";
+        string query = "INSERT INTO [Address]([userName], [building], [floor], [flatSuite], [BlockTower], [streetAddress], [district])" +
+                               "VALUES (@UserName, @Building, @Floor, @FlatSuite, @BlockTower, @StreetAddress, @District)";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -105,7 +108,10 @@ public partial class Account_Register : System.Web.UI.Page
         {
             // Define the INSERT query parameters and their values.
             command.Parameters.AddWithValue("@UserName", userName);
-            command.Parameters.AddWithValue("@BuildingAddress", buildingAddress);
+            command.Parameters.AddWithValue("@Building", building);
+            command.Parameters.AddWithValue("@Floor", floor);
+            command.Parameters.AddWithValue("@FlatSuite", flatSuite);
+            command.Parameters.AddWithValue("@BlockTower", blockTower);
             command.Parameters.AddWithValue("@StreetAddress", streetAddress);
             command.Parameters.AddWithValue("@District", district);
 
@@ -172,11 +178,15 @@ public partial class Account_Register : System.Web.UI.Page
 
     protected void cvExpiryDate_ServerValidate(object source, ServerValidateEventArgs args)
     {
-        Int16 month = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("MonthDropDownList")).SelectedValue.Trim()));
-        Int16 year = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).SelectedValue.Trim()));
-        if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
+        if ((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("MonthDropDownList")).SelectedValue.Trim() != "00") &
+            (((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).SelectedValue.Trim() != "0"))
         {
-            args.IsValid = false;
+            Int16 month = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("MonthDropDownList")).SelectedValue.Trim()));
+            Int16 year = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).SelectedValue.Trim()));
+            if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
+            {
+                args.IsValid = false;
+            }
         }
     }
 }

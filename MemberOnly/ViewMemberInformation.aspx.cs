@@ -57,7 +57,7 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
-        string query = "SELECT [buildingAddress], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "')";
+        string query = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -74,7 +74,10 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
                 while (reader.Read())
                 {
                     // Assign the data values to the web form labels.
-                    Address.Text = reader["buildingAddress"].ToString().Trim();
+                    Address.Text = reader["building"].ToString().Trim() + " " +
+                                   reader["floor"].ToString().Trim()    + " " +
+                                   reader["flatSuite"].ToString().Trim()+ " " +
+                                   reader["blockTower"].ToString().Trim();
                     Street.Text = reader["streetAddress"].ToString().Trim();
                     District.Text = reader["district"].ToString().Trim();
                 }
@@ -118,10 +121,5 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
             command.Connection.Close();
             reader.Close();
         }
-    }
-    protected void Edit_Click(object sender, EventArgs e)
-    {
-        string continueUrl = "EditMemberInformation.aspx";
-        Response.Redirect(continueUrl);
     }
 }

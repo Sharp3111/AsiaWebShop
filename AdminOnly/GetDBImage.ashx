@@ -2,14 +2,15 @@
 
 using System;
 using System.Web;
+
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 
+
 public class GetDBImage : IHttpHandler {
     
     public void ProcessRequest (HttpContext context) {
-
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
         {
             SqlCommand command = new SqlCommand("Select [picture] from [Item] where [upc] = '" + context.Request.QueryString["upc"] + "'", connection);

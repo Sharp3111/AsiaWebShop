@@ -29,7 +29,7 @@ public partial class AdminOnly_PersonalReport : System.Web.UI.Page
         if (searchString == "" & !group.Checked)
         {
             SQLCmd = "SELECT [Member].[userName], [Member].[email], [Member].[firstName], [Member].[lastName], [Member].[phoneNumber], [Member].[renewalDate], [Member].[active],"+
-                                "[Address].[userName], [Address].[buildingAddress], [Address].[streetAddress], [Address].[district], " +
+                                "[Address].[userName], [Address].[building], [Address].[floor], [Address].[flatSuite], [Address].[blockTower], [Address].[streetAddress], [Address].[district], " +
                                 "[CreditCard].[userName], [CreditCard].[number], [CreditCard].[type], [CreditCard].[cardHolderName], [CreditCard].[expiryMonth], [CreditCard].[expiryYear]" +
                                 "FROM [Member]" +
                                 "JOIN [Address] on [Address].[userName] = [Member].[userName]"+
@@ -40,7 +40,7 @@ public partial class AdminOnly_PersonalReport : System.Web.UI.Page
         else if (searchString == "" & group.Checked)
         {
             SQLCmd = "SELECT [Member].[userName], [Member].[email], [Member].[firstName], [Member].[lastName], [Member].[phoneNumber], [Member].[renewalDate], [Member].[active]," +
-                                "[Address].[userName], [Address].[buildingAddress], [Address].[streetAddress], [Address].[district], " +
+                                "[Address].[userName], [Address].[building], [Address].[floor], [Address].[flatSuite], [Address].[blockTower], [Address].[streetAddress], [Address].[district], " +
                                 "[CreditCard].[userName], [CreditCard].[number], [CreditCard].[type], [CreditCard].[cardHolderName], [CreditCard].[expiryMonth], [CreditCard].[expiryYear]" +
                                 "FROM [Member]" +
                                 "JOIN [Address] on [Address].[userName] = [Member].[userName]" +
@@ -52,7 +52,7 @@ public partial class AdminOnly_PersonalReport : System.Web.UI.Page
         else if (searchString != "" & !group.Checked)
         {
             SQLCmd = "SELECT [Member].[userName], [Member].[email], [Member].[firstName], [Member].[lastName], [Member].[phoneNumber], [Member].[renewalDate], [Member].[active]," +
-                                "[Address].[userName], [Address].[buildingAddress], [Address].[streetAddress], [Address].[district], " +
+                                "[Address].[userName], [Address].[building], [Address].[floor], [Address].[flatSuite], [Address].[blockTower], [Address].[streetAddress], [Address].[district], " +
                                 "[CreditCard].[userName], [CreditCard].[number], [CreditCard].[type], [CreditCard].[cardHolderName], [CreditCard].[expiryMonth], [CreditCard].[expiryYear]" +
                                 "FROM [Member]" +
                                 "JOIN [Address] on [Address].[userName] = [Member].[userName]" +
@@ -64,7 +64,7 @@ public partial class AdminOnly_PersonalReport : System.Web.UI.Page
         else
         {
             SQLCmd = "SELECT [Member].[userName], [Member].[email], [Member].[firstName], [Member].[lastName], [Member].[phoneNumber], [Member].[renewalDate], [Member].[active]," +
-                                "[Address].[userName], [Address].[buildingAddress], [Address].[streetAddress], [Address].[district], " +
+                                "[Address].[userName], [Address].[building], [Address].[floor], [Address].[flatSuite], [Address].[blockTower], [Address].[streetAddress], [Address].[district], " +
                                 "[CreditCard].[userName], [CreditCard].[number], [CreditCard].[type], [CreditCard].[cardHolderName], [CreditCard].[expiryMonth], [CreditCard].[expiryYear]" +
                                 "FROM [Member]" +
                                 "JOIN [Address] on [Address].[userName] = [Member].[userName]" +
@@ -89,8 +89,6 @@ public partial class AdminOnly_PersonalReport : System.Web.UI.Page
         {
             result.Text = "The following records match your query." + result.Text;
             result.Visible = true;
-        }
-
-    
+        }    
     }
 }
