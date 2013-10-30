@@ -61,7 +61,7 @@
         </td>
         <td>
     <asp:HyperLink ID="BabyChildrenLink" runat="server" 
-                NavigateUrl="~/ItemSearch.aspx?category=BabyandChildren">Baby and Children</asp:HyperLink>
+                NavigateUrl="~/BabyandChildrenList.aspx">Baby and Children</asp:HyperLink>
         </td>
     </tr>
     <tr>
@@ -71,7 +71,7 @@
         </td>
         <td>
     <asp:HyperLink ID="ComputersElectronicsLink" runat="server" 
-                NavigateUrl="~/ItemSearch.aspx?category=ComputersandElectronics">Computers and Electronics</asp:HyperLink>
+                NavigateUrl="~/ComputersandElectronicsList.aspx">Computers and Electronics</asp:HyperLink>
         </td>
     </tr>
     <tr>
@@ -79,7 +79,7 @@
             &nbsp;</td>
         <td class="style5">
     <asp:HyperLink ID="JewelryandWatchesLink" runat="server" 
-                NavigateUrl="~/ItemSearch.aspx?category=JewelryandWatches">Jewelry and Watches</asp:HyperLink>
+                NavigateUrl="~/JewelryandWatchesList.aspx">Jewelry and Watches</asp:HyperLink>
         </td>
     </tr>
     <tr>
@@ -87,14 +87,14 @@
             &nbsp;</td>
         <td>
     <asp:HyperLink ID="LuggageLink" runat="server" 
-                NavigateUrl="~/ItemSearch.aspx?category=Luggage">Luggage</asp:HyperLink>
+                NavigateUrl="~/LuggageList.aspx">Luggage</asp:HyperLink>
         </td>
     </tr>
     <tr>
         <td class="style3">
             &nbsp;</td>
         <td>
-    <asp:HyperLink ID="MenLink" runat="server" NavigateUrl="~/ItemSearch.aspx?category=Men">Men</asp:HyperLink>
+    <asp:HyperLink ID="MenLink" runat="server" NavigateUrl="~/MenList.aspx">Men</asp:HyperLink>
         </td>
     </tr>
     <tr>
@@ -102,7 +102,7 @@
             &nbsp;</td>
         <td>
     <asp:HyperLink ID="ToysGamesLink" runat="server" 
-                NavigateUrl="~/ItemSearch.aspx?category=ToysandGames">Toys and Games</asp:HyperLink>
+                NavigateUrl="~/ToysandGamesList.aspx">Toys and Games</asp:HyperLink>
         </td>
     </tr>
     <tr>
@@ -110,7 +110,7 @@
             &nbsp;</td>
         <td>
     <asp:HyperLink ID="WomenLink" runat="server" 
-                NavigateUrl="~/ItemSearch.aspx?category=Women">Women</asp:HyperLink>
+                NavigateUrl="~/WomenList.aspx">Women</asp:HyperLink>
         </td>
     </tr>
 </table>

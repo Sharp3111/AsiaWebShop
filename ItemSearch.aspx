@@ -41,6 +41,41 @@
         {
             width: 321px;
         }
+        .style11
+        {
+            width: 81px;
+            height: 26px;
+        }
+        .style12
+        {
+            width: 134px;
+            height: 26px;
+        }
+        .style13
+        {
+            width: 38px;
+            height: 26px;
+        }
+        .style14
+        {
+            width: 88px;
+            height: 26px;
+        }
+        .style15
+        {
+            width: 111px;
+            height: 26px;
+        }
+        .style16
+        {
+            width: 74px;
+            height: 26px;
+        }
+        .style17
+        {
+            width: 321px;
+            height: 26px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -48,23 +83,24 @@
         ITEM SEARCH</p>
     <table class="style3">
         <tr>
-            <td class="style4">
+            <td class="style11">
                 Search for:</td>
-            <td class="style5">
+            <td class="style12">
                 <asp:TextBox ID="txtSearchString" runat="server"></asp:TextBox>
             </td>
-            <td class="style6">
+            <td class="style13">
                 in</td>
-            <td class="style7">
+            <td class="style14">
                 <asp:CheckBox ID="cbItemName" runat="server" Text="Name" />
             </td>
-            <td class="style8">
+            <td class="style15">
                 <asp:CheckBox ID="cbItemDescription" runat="server" Text="Description" />
             </td>
-            <td class="style9">
+            <td class="style16">
                 Category:</td>
-            <td class="style10">
-                <asp:DropDownList ID="categoryDropDownList" runat="server">
+            <td class="style17">
+                <asp:DropDownList ID="categoryDropDownList" runat="server" 
+                    onselectedindexchanged="categoryDropDownList_SelectedIndexChanged">
                     <asp:ListItem>All Categories</asp:ListItem>
                     <asp:ListItem>Appliances</asp:ListItem>
                     <asp:ListItem>Baby and Children</asp:ListItem>
