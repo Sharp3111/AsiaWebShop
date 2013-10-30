@@ -100,72 +100,74 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     }
     protected void ContinueButton_Click(object sender, EventArgs e)
     {
-        //Page.Validate("RegisterUserValidationGroup");
-        //if (Page.IsValid)
-        //{
-        //    string connectionString = "AsiaWebShopDBConnectionString";
-        //    string userName = User.Identity.Name;
+        Page.Validate("RegisterUserValidationGroup");
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string connectionString2 = "AsiaWebShopDBConnectionString2";
+            string userName = User.Identity.Name;
 
-        //    // Define the SELECT query to get the member's address.
-        //    string query = "SELECT [userName], [upc], [quantity] FROM [ShoppingCart] WHERE ([userName] =N'" + userName + "')";
+            // Define the SELECT query to get the member's address.
+            string query = "SELECT [userName], [upc], [quantity] FROM [ShoppingCart] WHERE ([userName] =N'" + userName + "')";
 
-        //    // Create the connection and the SQL command.
-        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        //    using (SqlCommand command = new SqlCommand(query, connection))
-        //    {
-        //        // Open the connection.
-        //        command.Connection.Open();
-        //        // Execute the SELECT query and place the result in a DataReader.
-        //        SqlDataReader reader = command.ExecuteReader();
-        //        // Check if a result was returned.
-        //        if (reader.HasRows)
-        //        {
-        //            // Iterate through the table to get the retrieved values.
-        //            while (reader.Read())
-        //            {
-        //                // Assign the data values to the web form labels.
-        //                string upc = reader["upc"].ToString().Trim();
-        //                int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
+            // Create the connection and the SQL command.
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                // Open the connection.
+                command.Connection.Open();
+                // Execute the SELECT query and place the result in a DataReader.
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        // Assign the data values to the web form labels.
+                        string upc = reader["upc"].ToString().Trim();
+                        int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
 
-        //                // Define the INSERT query with parameters.
-        //                string query2 = "INSERT INTO [OrderRecord]([userName], [name], [email], [phoneNumber], [upc], [unitPrice], [quantity], [building], [floor], [flatSuite], " +
-        //                                "[blockTower], [streetAddress], [district], [creditCardNumber], [deliveryDate], [deliveryTime], [confirmationNumber], [isConfirmed]) " +
-        //                                "VALUES (@UserName, @Email, @FirstName, @LastName, @PhoneNumber, @RenewalDate)";
+                        // Define the INSERT query with parameters.
+                        string query2 = "INSERT INTO [OrderRecord]([userName], [name], [email], [phoneNumber], [address], [deliveryDate], [deliveryTime], [isConfirmed]) " +
+                                        "VALUES (@UserName, @Name, @Email, @PhoneNumber, @Address, @DeliveryDate, @DeliveryTime, @IsConfirmed)";
 
-        //                // Create the connection and the SQL command.
-        //                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        //                using (SqlCommand command = new SqlCommand(query, connection))
-        //                {
-        //                    // Define the INSERT query parameters and their values.
-        //                    command.Parameters.AddWithValue("@UserName", userName);
-        //                    command.Parameters.AddWithValue("@Email", email);
-        //                    command.Parameters.AddWithValue("@FirstName", firstName);
-        //                    command.Parameters.AddWithValue("@LastName", lastName);
-        //                    command.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
-        //                    command.Parameters.AddWithValue("@RenewalDate", renewalDate);
+                        // Create the connection and the SQL command.
+                        using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString2].ConnectionString))
+                        using (SqlCommand command2 = new SqlCommand(query2, connection2))
+                        {
+                            // Define the INSERT query parameters and their values.
+                            command2.Parameters.AddWithValue("@UserName", userName);
+                            command2.Parameters.AddWithValue("@Email", Email.Text.Trim());
+                            command2.Parameters.AddWithValue("@Name", FirstName.Text.Trim() + " " + LastName.Text.Trim());
+                            command2.Parameters.AddWithValue("@PhoneNumber", PhoneNumber.Text.Trim());
+                            command2.Parameters.AddWithValue("@Address", AddressDropDownList.SelectedItem.Text.Trim());
+                            command2.Parameters.AddWithValue("@DeliveryDate", DeliveryDateDropDownList.SelectedItem.Text.Trim());
+                            command2.Parameters.AddWithValue("@DeliveryTime", DeliveryTimeDropDownList.SelectedItem.Text.Trim());
+                            command2.Parameters.AddWithValue("@IsConfirmed", false);
 
-        //                    // Open the connection, execute the INSERT query and close the connection.
-        //                    command.Connection.Open();
-        //                    command.ExecuteNonQuery();
-        //                    command.Connection.Close();
-        //                }
-        //            }
-        //        }
+                            // Open the connection, execute the INSERT query and close the connection.
+                            command2.Connection.Open();
+                            command2.ExecuteNonQuery();
+                            command2.Connection.Close();
+                        }
+                    }
+                }
 
-        //        // Close the connection and the DataReader.
-        //        command.Connection.Close();
-        //        reader.Close();
-        //    }
+                // Close the connection and the DataReader.
+                command.Connection.Close();
+                reader.Close();
+            }
 
-        //    FormsAuthentication.SetAuthCookie(UserName.Text, false /* createPersistentCookie */);
+            FormsAuthentication.SetAuthCookie(UserName.Text, false /* createPersistentCookie */);
 
-        //    string continueUrl = "~/MemberOnly/ViewMemberInformation.aspx";
-        //    if (String.IsNullOrEmpty(continueUrl))
-        //    {
-        //        continueUrl = "~/";
-        //    }
-        //    Response.Redirect(continueUrl, false);
-        //}
+            string continueUrl = "~/MemberOnly/PaymentInformation.aspx";
+            if (String.IsNullOrEmpty(continueUrl))
+            {
+                continueUrl = "~/";
+            }
+            Response.Redirect(continueUrl, false);
+        }
     }
     protected void cvDeliveryTime_ServerValidate(object source, ServerValidateEventArgs args)
     {
