@@ -9,58 +9,154 @@
             text-transform: uppercase;
             text-decoration: underline;
         }
-    </style>
+        .style3
+    {
+        width: 91%;
+            height: 28px;
+            color: #000080;
+            font-family: "Segoe UI";
+        }
+        .style32
+        {
+            width: 170px;
+        }
+        .style5
+    {
+        }
+        .style46
+        {
+            width: 143px;
+        }
+        </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p class="style2">
         <strong>SPECIFY Delivery Information</strong></p>
-    <p>
-        &nbsp;</p>
-    <p>
-        <asp:GridView ID="gvAddress" runat="server" AutoGenerateColumns="False" 
-            CellPadding="4" DataSourceID="AsiaWebShopDBSqlDataSource" 
-            ForeColor="#333333" GridLines="None" DataKeyNames="nickname">
-            <AlternatingRowStyle BackColor="White" />
-            <Columns>
-                <asp:BoundField DataField="userName" HeaderText="userName" 
-                    SortExpression="userName" />
-                <asp:BoundField DataField="building" HeaderText="building" 
-                    SortExpression="building" />
-                <asp:BoundField DataField="floor" HeaderText="floor" 
-                    SortExpression="floor" />
-                <asp:BoundField DataField="flatSuite" HeaderText="flatSuite" 
-                    SortExpression="flatSuite" />
-                <asp:BoundField DataField="blockTower" HeaderText="blockTower" 
-                    SortExpression="blockTower" />
-                <asp:BoundField DataField="streetAddress" HeaderText="streetAddress" 
-                    SortExpression="streetAddress" />
-                <asp:BoundField DataField="district" HeaderText="district" 
-                    SortExpression="district" />
-                <asp:BoundField DataField="nickname" HeaderText="nickname" ReadOnly="True" 
-                    SortExpression="nickname" />
-            </Columns>
-            <EditRowStyle BackColor="#2461BF" />
-            <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-            <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
-            <RowStyle BackColor="#EFF3FB" />
-            <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-            <SortedAscendingCellStyle BackColor="#F5F7FB" />
-            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
-            <SortedDescendingCellStyle BackColor="#E9EBEF" />
-            <SortedDescendingHeaderStyle BackColor="#4870BE" />
-        </asp:GridView>
-    </p>
-    <p>
-        &nbsp;</p>
-    <p>
-        <asp:SqlDataSource ID="AsiaWebShopDBSqlDataSource" runat="server" 
-            ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT * FROM [Address]"></asp:SqlDataSource>
-    </p>
+<table class="style3">
+    <tr>
+        <td class="style32">
+            User Name:</td>
+        <td class="style5">
+            <asp:Label ID="UserName" runat="server"></asp:Label>
+        </td>
+        <td class="style46">
+            &nbsp;Email Adress:</td>
+        <td>
+            <asp:TextBox ID="Email" runat="server" Height="22px" Width="200px" 
+                MaxLength="30"></asp:TextBox>
+            <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
+                ControlToValidate="Email" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="Email Address is required." ForeColor="Red" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
+                ControlToValidate="Email" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="Email address has to have the form: example@sampleemail.com" 
+                ForeColor="Red" 
+                ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="style32">
+            First Name:</td>
+        <td class="style5">
+            <asp:TextBox ID="FirstName" runat="server" Height="22px" Width="200px" 
+                MaxLength="20"></asp:TextBox>
+            <asp:RequiredFieldValidator ID="rfvFirstName" runat="server" 
+                ControlToValidate="FirstName" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="First Name is required." ForeColor="Red" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+        </td>
+        <td class="style46">
+            &nbsp;Last Name:</td>
+        <td>
+            <asp:TextBox ID="LastName" runat="server" Height="22px" Width="200px" 
+                MaxLength="30"></asp:TextBox>
+            <asp:RequiredFieldValidator ID="rfvLastName" runat="server" 
+                ControlToValidate="LastName" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="Last Name is required." ForeColor="Red" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="style32">
+            Phone Number:</td>
+        <td class="style5">
+            <asp:TextBox ID="PhoneNumber" runat="server" Height="22px" Width="200px" 
+                MaxLength="8"></asp:TextBox>
+            <asp:RequiredFieldValidator ID="rfvPhoneNumber" runat="server" 
+                ControlToValidate="PhoneNumber" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="Phone Number is required." ForeColor="Red" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:RegularExpressionValidator ID="revPhoneNumber" runat="server" 
+                ControlToValidate="PhoneNumber" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="Phone Number must be numeric and exactly 8 digits." 
+                ForeColor="Red" ValidationExpression="^\d{8}$" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
+        </td>
+        <td class="style46">
+            &nbsp;</td>
+        <td>
+            &nbsp;</td>
+    </tr>
+    <tr>
+        <td class="style32">
+            Delivery Address:</td>
+        <td class="style5" colspan="3">
+            <asp:DropDownList ID="AddressDropDownList" runat="server">
+                <asp:ListItem Value="0">-- Select an Address --</asp:ListItem>
+            </asp:DropDownList>
+            <asp:RequiredFieldValidator ID="rfvAddressDropDownList" runat="server" 
+                ControlToValidate="AddressDropDownList" Display="Dynamic" 
+                EnableClientScript="False" ErrorMessage="Please select an address." 
+                ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="style32">
+            Delivery Date:</td>
+        <td class="style5">
+            <asp:DropDownList ID="DeliveryDateDropDownList" runat="server">
+                <asp:ListItem Value="0">-- Select a Date --</asp:ListItem>
+            </asp:DropDownList>
+            <asp:RequiredFieldValidator ID="rfvDeliveryDate" runat="server" 
+                ControlToValidate="DeliveryDateDropDownList" Display="Dynamic" 
+                EnableClientScript="False" ErrorMessage="Please select a delivery date." 
+                ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+        </td>
+        <td class="style46">
+            Delivery Time:</td>
+        <td>
+            <asp:DropDownList ID="DeliveryTimeDropDownList" runat="server">
+                <asp:ListItem Value="0">-- Select a Time Slot --</asp:ListItem>
+                <asp:ListItem Value="9">09:00-12:00</asp:ListItem>
+                <asp:ListItem Value="12">12:00-15:00</asp:ListItem>
+                <asp:ListItem Value="15">15:00-18:00</asp:ListItem>
+                <asp:ListItem Value="18">18:00-21:00</asp:ListItem>
+            </asp:DropDownList>
+            <asp:RequiredFieldValidator ID="rfvDeliveryTime" runat="server" 
+                ControlToValidate="DeliveryTimeDropDownList" Display="Dynamic" 
+                EnableClientScript="False" ErrorMessage="Please select a delivery time slot." 
+                ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:CustomValidator ID="cvDeliveryTime" runat="server" 
+                ControlToValidate="DeliveryTimeDropDownList" Display="Dynamic" 
+                EnableClientScript="False" 
+                ErrorMessage="The earliest delivery time-slot should be at least 24 hours after the purchase time." 
+                ForeColor="Red" onservervalidate="cvDeliveryTime_ServerValidate" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:CustomValidator>
+        </td>
+    </tr>
+    </table>
     <p>
         <asp:Button ID="ContinueButton" runat="server" onclick="ContinueButton_Click" 
-            Text="Continue" />
+            Text="Next: Specify Payment Information" 
+            ValidationGroup="RegisterUserValidationGroup" />
+    </p>
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        EnableClientScript="False" ForeColor="Red" 
+        HeaderText="The following error(s) occurred:" 
+        ValidationGroup="RegisterUserValidationGroup" />
+    <p>
     </p>
 </asp:Content>
 

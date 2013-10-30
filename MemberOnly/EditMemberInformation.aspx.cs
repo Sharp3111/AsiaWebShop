@@ -88,7 +88,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
-        string query = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "')";
+        string query = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([nickname] =N'Default" + userName + "')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -185,20 +185,23 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
     protected void UpdateAddress(string connectionString, string userName, string building, string floor, string flatSuite, string blockTower, string streetAddress, string district)
     {
         // Define the UPDATE query with parameters.
-        string query = "UPDATE [Address] SET [building] = @Building, [floor] = @Floor, [flatSuite] = @FlatSuite, [BlockTower] = @BlockTower, [streetAddress] = @StreetAddress, [district] = @District WHERE [userName] =@UserName";
+        string query = "UPDATE [Address] SET [building] = @Building, [floor] = @Floor, [flatSuite] = @FlatSuite, [BlockTower] = @BlockTower, [streetAddress] = @StreetAddress, [district] = @District WHERE [nickname] =@Nickname";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
             // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@UserName", userName);
             command.Parameters.AddWithValue("@Building", building);
             command.Parameters.AddWithValue("@Floor", floor);
             command.Parameters.AddWithValue("@FlatSuite", flatSuite);
             command.Parameters.AddWithValue("@BlockTower", blockTower);
             command.Parameters.AddWithValue("@StreetAddress", streetAddress);
             command.Parameters.AddWithValue("@District", district);
+
+            // Define a unique nickname for the default address
+            string nicknameString = "Default" + userName;
+            command.Parameters.AddWithValue("@Nickname", nicknameString);
 
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();
