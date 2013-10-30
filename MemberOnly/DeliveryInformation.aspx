@@ -16,24 +16,31 @@
             color: #000080;
             font-family: "Segoe UI";
         }
-        .style32
-        {
-            width: 170px;
-        }
         .style5
     {
         }
-        .style46
-        {
-            width: 143px;
-        }
-        .style48
-        {
-            width: 268435488px;
-        }
         .style49
         {
-            width: 195px;
+        }
+        .style50
+        {
+            width: 141px;
+        }
+        .style51
+        {
+            width: 337px;
+        }
+        .style53
+        {
+            width: 268435136px;
+        }
+        .style56
+        {
+            width: 206px;
+        }
+        .style57
+        {
+            width: 199px;
         }
         </style>
 </asp:Content>
@@ -42,14 +49,14 @@
         <strong>SPECIFY Delivery Information</strong></p>
 <table class="style3">
     <tr>
-        <td class="style32">
+        <td class="style50">
             User Name:</td>
-        <td class="style5">
+        <td class="style51">
             <asp:Label ID="UserName" runat="server"></asp:Label>
         </td>
-        <td class="style46" colspan="2">
-            &nbsp;Email Adress:</td>
-        <td class="style48">
+        <td class="style56" colspan="2">
+            &nbsp;Email Address:</td>
+        <td class="style53">
             <asp:TextBox ID="Email" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
@@ -65,9 +72,9 @@
         </td>
     </tr>
     <tr>
-        <td class="style32">
+        <td class="style50">
             First Name:</td>
-        <td class="style5">
+        <td class="style51">
             <asp:TextBox ID="FirstName" runat="server" Height="22px" Width="200px" 
                 MaxLength="20"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvFirstName" runat="server" 
@@ -75,9 +82,9 @@
                 ErrorMessage="First Name is required." ForeColor="Red" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style46" colspan="2">
+        <td class="style56" colspan="2">
             &nbsp;Last Name:</td>
-        <td class="style48">
+        <td class="style53">
             <asp:TextBox ID="LastName" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvLastName" runat="server" 
@@ -87,9 +94,9 @@
         </td>
     </tr>
     <tr>
-        <td class="style32">
+        <td class="style50">
             Phone Number:</td>
-        <td class="style5">
+        <td class="style51">
             <asp:TextBox ID="PhoneNumber" runat="server" Height="22px" Width="200px" 
                 MaxLength="8"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvPhoneNumber" runat="server" 
@@ -102,16 +109,17 @@
                 ForeColor="Red" ValidationExpression="^\d{8}$" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
         </td>
-        <td class="style46" colspan="2">
+        <td class="style56" colspan="2">
             &nbsp;</td>
-        <td class="style48">
+        <td class="style53">
             &nbsp;</td>
     </tr>
     <tr>
-        <td class="style32">
+        <td class="style50">
             Delivery Address:</td>
-        <td class="style49" colspan="2">
-            <asp:DropDownList ID="AddressDropDownList" runat="server">
+        <td class="style57" colspan="2">
+            <asp:DropDownList ID="AddressDropDownList" runat="server" AutoPostBack="True" 
+                onselectedindexchanged="AddressDropDownList_SelectedIndexChanged">
                 <asp:ListItem Value="0">-- Select an Address --</asp:ListItem>
             </asp:DropDownList>
             <asp:RequiredFieldValidator ID="rfvAddressDropDownList" runat="server" 
@@ -120,15 +128,22 @@
                 ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
         <td class="style5" colspan="2">
+            <asp:Label ID="Address" runat="server"></asp:Label>
+        </td>
+    </tr>
+    <tr>
+        <td class="style50">
+            &nbsp;</td>
+        <td class="style49" colspan="4">
             Desired address not listed? Click
             <asp:HyperLink ID="ChangeAddressLink" runat="server" 
                 NavigateUrl="~/MemberOnly/EditAddressList.aspx">here</asp:HyperLink>
 &nbsp;to add another and check out later!</td>
     </tr>
     <tr>
-        <td class="style32">
+        <td class="style50">
             Delivery Date:</td>
-        <td class="style5">
+        <td class="style51">
             <asp:DropDownList ID="DeliveryDateDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select a Date --</asp:ListItem>
             </asp:DropDownList>
@@ -137,9 +152,9 @@
                 EnableClientScript="False" ErrorMessage="Please select a delivery date." 
                 ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style46" colspan="2">
+        <td class="style56" colspan="2">
             Delivery Time:</td>
-        <td class="style48">
+        <td class="style53">
             <asp:DropDownList ID="DeliveryTimeDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select a Time Slot --</asp:ListItem>
                 <asp:ListItem Value="9">09:00-12:00</asp:ListItem>

@@ -65,7 +65,8 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
-        string query = "SELECT [nickname], [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "')";
+        //string query = "SELECT [nickname], [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "')";
+        string query = "SELECT [nickname] FROM [Address] WHERE ([userName] =N'" + userName + "')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -82,13 +83,14 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 while (reader.Read())
                 {
                     // Assign the data values to the web form labels.
-                    string addressItem = reader["nickname"].ToString().Trim() + ": " +
-                                        reader["building"].ToString().Trim() + " " +
-                                        reader["floor"].ToString().Trim() + " " +
-                                        reader["flatSuite"].ToString().Trim() + " " +
-                                        reader["blockTower"].ToString().Trim() + ", " +
-                                        reader["streetAddress"].ToString().Trim() + ", " +
-                                        reader["district"].ToString().Trim();
+                    //string addressItem = reader["nickname"].ToString().Trim() + ": " +
+                    //                    reader["building"].ToString().Trim() + " " +
+                    //                    reader["floor"].ToString().Trim() + " " +
+                    //                    reader["flatSuite"].ToString().Trim() + " " +
+                    //                    reader["blockTower"].ToString().Trim() + ", " +
+                    //                    reader["streetAddress"].ToString().Trim() + ", " +
+                    //                    reader["district"].ToString().Trim();
+                    string addressItem = reader["nickname"].ToString().Trim();
                     AddressDropDownList.Items.Add(addressItem);
                 }
             }
@@ -141,7 +143,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                             command2.Parameters.AddWithValue("@Email", Email.Text.Trim());
                             command2.Parameters.AddWithValue("@Name", FirstName.Text.Trim() + " " + LastName.Text.Trim());
                             command2.Parameters.AddWithValue("@PhoneNumber", PhoneNumber.Text.Trim());
-                            command2.Parameters.AddWithValue("@Address", AddressDropDownList.SelectedItem.Text.Trim());
+                            command2.Parameters.AddWithValue("@Address", Address.Text.Trim());
                             command2.Parameters.AddWithValue("@DeliveryDate", DeliveryDateDropDownList.SelectedItem.Text.Trim());
                             command2.Parameters.AddWithValue("@DeliveryTime", DeliveryTimeDropDownList.SelectedItem.Text.Trim());
                             command2.Parameters.AddWithValue("@IsConfirmed", false);
@@ -205,6 +207,43 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         args.IsValid = false;
                     }
                 }
+            }
+        }
+    }
+    protected void AddressDropDownList_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (AddressDropDownList.SelectedValue.Trim() != "0")
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name;
+            string nickname = AddressDropDownList.SelectedItem.Text.Trim();
+            string query = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "' AND [nickname] = N'" + nickname + "')";
+            
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                // Open the connection.
+                command.Connection.Open();
+                // Execute the SELECT query and place the result in a DataReader.
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        // Assign the data values to the web form label.
+                        string addressItem = reader["building"].ToString().Trim() + " " +
+                                            reader["floor"].ToString().Trim() + " " +
+                                            reader["flatSuite"].ToString().Trim() + " " +
+                                            reader["blockTower"].ToString().Trim() + ", " +
+                                            reader["streetAddress"].ToString().Trim() + ", " +
+                                            reader["district"].ToString().Trim();
+                        Address.Text = addressItem;
+                    }
+                }
+                command.Connection.Close();
+                reader.Close();
             }
         }
     }
