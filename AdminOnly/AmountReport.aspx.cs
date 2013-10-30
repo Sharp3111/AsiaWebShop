@@ -9,7 +9,9 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-            
+        result.Visible = false;
+        result.Text = "";
+        report.Visible = false;
         if (!Page.IsPostBack)
         {
             //Fill Years
@@ -105,5 +107,93 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
         }
         else 
             args.IsValid = true;
+    }
+
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        string SQLCmd = "ORDER BY";
+        if (IsValid)
+        {
+            if (userName.Text.Trim() == "") {
+                if (groupDistrict.Checked) {
+                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName], [Member].[lastName], SUM (OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
+                             "FROM [OrderRecord] " +
+                             "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
+                             "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
+                             "WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                             "AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
+                             "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district]" +
+                             "ORDER BY [Address].[district], ";
+                             //    "ORDER BY [Member].[lastName]";
+                }
+                else {
+                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
+                                 "FROM [OrderRecord] " +
+                                 "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName]" +
+                                 "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
+                                 "WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                                 "AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
+                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName]"+
+                                 "ORDER BY ";// [Expr1]";
+                 }
+
+            }
+            else if (userName.Text.Trim() != "") {
+                if (groupDistrict.Checked)
+                { 
+                        SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
+                                 "FROM [OrderRecord] " +
+                                 "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
+                                 "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
+                                 "WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00' " +
+                                 "AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59' " +
+                                 "AND [Member].[userName] = '"+ userName.Text.Trim() +"' "+
+                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district]" +
+                                 "ORDER BY [Address].[district], ";
+                                 //"ORDER BY [Member].[lastName]";
+                }
+                else {
+                        SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
+                                 "FROM [OrderRecord] " +
+                                 "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName]" +
+                                 "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
+                                 "WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                                 "AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
+                                 "AND [Member].[userName] = '" + userName.Text.Trim() + "' " +                               
+                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName]"+
+                                 "ORDER BY ";// [Expr1]";
+                }
+            }
+            if(SQLCmd != "") {
+                if (orderBy.SelectedValue == "name")
+                    SQLCmd = SQLCmd + "[Member].[lastName]";
+                else
+                    SQLCmd = SQLCmd + "[Expr1]";
+            }
+
+
+            result.Text = "";
+            report.Visible = true;
+
+            // Execute the SQL statement; order the result by item name.
+            SqlDataSource1.SelectCommand = SQLCmd;
+            SqlDataSource1.Select(DataSourceSelectArguments.Empty);
+
+            // Bind the search result to the GridView control.
+            report.DataBind();
+
+            // Display a no result message if nothing was retrieved from the database.
+            if (report.Rows.Count == 0)
+            {
+                result.Text = "No records match your query." + result.Text;
+                result.Visible = true;
+            }
+            else
+            {
+                result.Text = "The following records match your query." + result.Text;
+                result.Visible = true;
+            }
+        }
     }
 }
