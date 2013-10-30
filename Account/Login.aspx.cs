@@ -5,9 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Data;
 
 public partial class Account_Login : System.Web.UI.Page
 {
@@ -15,52 +12,17 @@ public partial class Account_Login : System.Web.UI.Page
     {
         RegisterHyperLink.NavigateUrl = "Register.aspx?ReturnUrl=" + HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
     }
-
-
-
     protected void LoginUser_LoggingIn(object sender, LoginCancelEventArgs e)
     {
-
-        // Get the username from the Deactive textbox
-        string username = LoginUser.UserName;
-
-        string query = "SELECT COUNT(*) FROM [Member] WHERE ([userName] = N'" + username + "') ";
-
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
+        e.Cancel = false;
+        if (LoginUser.UserName.Trim() != "")
         {
-            // Count how many existing records using this user name.
-            command.Connection.Open();
-            Int32 count = (Int32)command.ExecuteScalar();
-            command.Connection.Close();
-
-            if (count == 0)
+            MembershipUser user = Membership.GetUser(LoginUser.UserName.Trim());
+            if (user != null && !user.IsApproved)
             {
-                LoginUser.FailureText = "User not found.";
+                ((Literal)LoginUser.FindControl("FailureText")).Text = "Your account is deactivated by administrator. Please contact the administrator for further information. ";
+                e.Cancel = true;
             }
-            else
-            {
-
-                MembershipUser user = Membership.GetUser(LoginUser.UserName);
-
-                if (user.IsApproved == false)
-                {
-                    LoginUser.FailureText = "Your account has been deactivated .";
-                }
-                else 
-                {
-                    LoginUser.FailureText = "Wrong password.";
-                }
-            }
-        }
-
-            
-       
-    
+        }      
     }
-    protected void UserNameExist_ServerValidate(object source, ServerValidateEventArgs args)
-    {
-
-    }
-        
 }

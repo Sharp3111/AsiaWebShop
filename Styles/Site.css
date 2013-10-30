@@ -234,7 +234,7 @@ input.passwordEntry
 
 div.accountInfo
 {
-    width: 42%;
+    width: 92%;
 }
 
 /* MISC  
@@ -290,6 +290,6 @@ div.accountInfo
 
 .submitButton
 {
-    text-align: right;
+    text-align: center;
     padding-right: 10px;
 }

@@ -9,132 +9,52 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 
+
 public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
 {
-
     protected void Page_Load(object sender, EventArgs e)
     {
-        string connectionString = "AsiaWebShopDBConnectionString";
-        string userName = User.Identity.Name;
         if (!Page.IsPostBack)
         {
-            PopulateDropDownLists();
+            // Populate the DistrictDropDownList.
+            DistrictDropDownList.Items.Add("-- Select district --");
+            DistrictDropDownList.Items.Add("Central and Western");
+            DistrictDropDownList.Items.Add("Eastern");
+            DistrictDropDownList.Items.Add("Islands");
+            DistrictDropDownList.Items.Add("Kowloon City");
+            DistrictDropDownList.Items.Add("Kwai Tsing");
+            DistrictDropDownList.Items.Add("Kwun Tong");
+            DistrictDropDownList.Items.Add("North");
+            DistrictDropDownList.Items.Add("Sai Kung");
+            DistrictDropDownList.Items.Add("Sha Tin");
+            DistrictDropDownList.Items.Add("Sham Shui Po");
+            DistrictDropDownList.Items.Add("Southern");
+            DistrictDropDownList.Items.Add("Tai Po");
+            DistrictDropDownList.Items.Add("Tsuen Wan");
+            DistrictDropDownList.Items.Add("Tuen Mun");
+            DistrictDropDownList.Items.Add("Wan Chai");
+            DistrictDropDownList.Items.Add("Wong Tai Sin");
+            DistrictDropDownList.Items.Add("Yau Tsim Mong");
+            DistrictDropDownList.Items.Add("Yuen Long");
+            // Populate the YearDropDownList from current year to plus 10 years.
+            YearDropDownList.Items.Add(new ListItem("Year", "0"));
+            for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 10; year++)
+            {
+                YearDropDownList.Items.Add(year.ToString());
+            }
+
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name;
             GetMemberData(connectionString, userName);
             GetMemberAddress(connectionString, userName);
             GetMemberCreditCard(connectionString, userName);
-        }
-        UserName.Text = userName;
-       
-    }
-
-    protected void EditMember(string connectionString, string userName, string email, string firstName, string lastName, string phoneNumber)
-    {
-        // Define the INSERT query with parameters.
-        string query = "UPDATE [Member] SET [email] = @Email, [firstName] = @FirstName , [lastName] = @LastName , [phoneNumber] = @PhoneNumber  " +
-                       "WHERE ( [username] =N'" + userName + "') ";
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the INSERT query parameters and their values.
-            command.Parameters.AddWithValue("@UserName", userName);
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@FirstName", firstName);
-            command.Parameters.AddWithValue("@LastName", lastName);
-            command.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
-
-            // Open the connection, execute the INSERT query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
-            command.Connection.Close();
-        }
-    }
-
-    protected void EditAddress(string connectionString, string userName, string buildingAddress, string streetAddress, string district)
-    {
-        // Define the INSERT query with parameters.
-        string query = "UPDATE [Address] SET  [buildingAddress] = @BuildingAddress, [streetAddress] = @StreetAddress, [district] = @District " +
-                               "WHERE ( [username] = N'" + userName + "' ) ";
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the INSERT query parameters and their values.
-            command.Parameters.AddWithValue("@UserName", userName);
-            command.Parameters.AddWithValue("@BuildingAddress", buildingAddress);
-            command.Parameters.AddWithValue("@StreetAddress", streetAddress);
-            command.Parameters.AddWithValue("@District", district);
-
-            // Open the connection, execute the INSERT query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
-            command.Connection.Close();
-        }
-    }
-
-    protected void EditCreditCard(string connectionString, string userName, string number, string type, string cardHolderName, string expiryMonth, string expiryYear)
-    {
-        // Define the INSERT query with parameters.
-        string query = "UPDATE [CreditCard] SET [number] = @Number , [type] = @Type , [cardHolderName] = @CardHolderName , [expiryMonth] = @ExpiryMonth , [expiryYear] = @ExpiryYear " +
-                       "WHERE ([username] =N'" + userName + "') ";
-
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the INSERT query parameters and their values.
-            command.Parameters.AddWithValue("@Username", userName);
-            command.Parameters.AddWithValue("@Number", number);
-            command.Parameters.AddWithValue("@Type", type);
-            command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
-            command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
-            command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
-
-            // Open the connection, execute the INSERT query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
-            command.Connection.Close();
-        }
-    }
-
-    protected void PopulateDropDownLists()
-    {
-        // Populate the DistrictDropDownList.
-        DistrictDropDownList.Items.Add("-- Select district --");
-        DistrictDropDownList.Items.Add("Central and Western");
-        DistrictDropDownList.Items.Add("Eastern");
-        DistrictDropDownList.Items.Add("Islands");
-        DistrictDropDownList.Items.Add("Kowloon City");
-        DistrictDropDownList.Items.Add("Kwai Tsing");
-        DistrictDropDownList.Items.Add("Kwun Tong");
-        DistrictDropDownList.Items.Add("North");
-        DistrictDropDownList.Items.Add("Sai Kung");
-        DistrictDropDownList.Items.Add("Sha Tin");
-        DistrictDropDownList.Items.Add("Sham Shui Po");
-        DistrictDropDownList.Items.Add("Southern");
-        DistrictDropDownList.Items.Add("Tai Po");
-        DistrictDropDownList.Items.Add("Tsuen Wan");
-        DistrictDropDownList.Items.Add("Tuen Mun");
-        DistrictDropDownList.Items.Add("Wan Chai");
-        DistrictDropDownList.Items.Add("Wong Tai Sin");
-        DistrictDropDownList.Items.Add("Yau Tsim Mong");
-        DistrictDropDownList.Items.Add("Yuen Long");
-
-        // Populate the YearDropDownList from current year to plus 10 years.
-        YearDropDownList.Items.Add("Year");
-        for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 10; year++)
-        {
-            YearDropDownList.Items.Add(year.ToString());
         }
     }
 
     private void GetMemberData(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's personal data.
-        string query = "SELECT [email], [firstName], [lastName], [phoneNumber], [renewalDate] FROM [Member] WHERE ([username] =N'" + userName + "')";
+        string query = "SELECT [userName], [email], [firstName], [lastName], [phoneNumber] FROM [Member] WHERE ([username] =N'" + userName + "')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -150,7 +70,8 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                 // Iterate through the table to get the retrieved values.
                 while (reader.Read())
                 {
-                    // Assign the data values to the web form labels.
+                    // Assign the data values to the web form label and textboxes.
+                    UserName.Text = reader["userName"].ToString().Trim();
                     Email.Text = reader["email"].ToString().Trim();
                     FirstName.Text = reader["firstName"].ToString().Trim();
                     LastName.Text = reader["lastName"].ToString().Trim();
@@ -167,7 +88,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
-        string query = "SELECT [buildingAddress], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "')";
+        string query = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -184,7 +105,10 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                 while (reader.Read())
                 {
                     // Assign the data values to the web form labels.
-                    Building.Text = reader["buildingAddress"].ToString().Trim();
+                    Building.Text = reader["building"].ToString().Trim();
+                    Floor.Text = reader["floor"].ToString().Trim();
+                    FlatSuite.Text = reader["flatSuite"].ToString().Trim();
+                    BlockTower.Text = reader["blockTower"].ToString().Trim();
                     Street.Text = reader["streetAddress"].ToString().Trim();
                     DistrictDropDownList.Text = reader["district"].ToString().Trim();
                 }
@@ -198,6 +122,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
 
     private void GetMemberCreditCard(string connectionString, string userName)
     {
+        //System.Diagnostics.Debug.WriteLine("Enter GetMemberCreditCard");
         // Define the SELECT query to get the member's credit card.
         string query = "SELECT [number], [type], [cardHolderName], [expiryMonth], [expiryYear] FROM [CreditCard] WHERE ([username] =N'" + userName + "')";
 
@@ -220,6 +145,9 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                     CardNumber.Text = reader["number"].ToString().Trim();
                     CardTypeDropDownList.Text = reader["type"].ToString().Trim();
                     MonthDropDownList.Text = reader["expiryMonth"].ToString().Trim();
+
+                   // System.Diagnostics.Debug.WriteLine("GetMemberCreditCard_MonthDropDownList.SelectedItem.Value:");
+                   // System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
                     YearDropDownList.Text = reader["expiryYear"].ToString().Trim();
                 }
             }
@@ -228,18 +156,101 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
             command.Connection.Close();
             reader.Close();
         }
+        //System.Diagnostics.Debug.WriteLine("Exit GetMemberCreditCard");
     }
+
+    protected void UpdateMember(string connectionString, string userName, string email, string firstName, string lastName, string phoneNumber)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [Member] SET [email] = @Email, [firstName] = @FirstName, [lastName] = @LastName, [phoneNumber] = @PhoneNumber WHERE [userName] = @UserName";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@UserName", userName);
+            command.Parameters.AddWithValue("@Email", email);
+            command.Parameters.AddWithValue("@FirstName", firstName);
+            command.Parameters.AddWithValue("@LastName", lastName);
+            command.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
+
+            // Open the connection, execute the INSERT query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    protected void UpdateAddress(string connectionString, string userName, string building, string floor, string flatSuite, string blockTower, string streetAddress, string district)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [Address] SET [building] = @Building, [floor] = @Floor, [flatSuite] = @FlatSuite, [BlockTower] = @BlockTower, [streetAddress] = @StreetAddress, [district] = @District WHERE [userName] =@UserName";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@UserName", userName);
+            command.Parameters.AddWithValue("@Building", building);
+            command.Parameters.AddWithValue("@Floor", floor);
+            command.Parameters.AddWithValue("@FlatSuite", flatSuite);
+            command.Parameters.AddWithValue("@BlockTower", blockTower);
+            command.Parameters.AddWithValue("@StreetAddress", streetAddress);
+            command.Parameters.AddWithValue("@District", district);
+
+            // Open the connection, execute the UPDATE query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    protected void UpdateCreditCard(string connectionString, string userName, string number, string type, string cardHolderName, string expiryMonth, string expiryYear)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE CreditCard SET number = @Number, type = @Type, cardHolderName = @CardHolderName, expiryMonth = @ExpiryMonth, expiryYear = @ExpiryYear WHERE userName = @UserName";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Username", userName);
+            command.Parameters.AddWithValue("@Number", number);
+            command.Parameters.AddWithValue("@Type", type);
+            command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
+            command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
+
+            //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
+            //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
+
+            command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+
+            // Open the connection, execute the INSERT query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
 
     protected void cvExpiryDate_ServerValidate(object source, ServerValidateEventArgs args)
     {
-        Int16 month = Convert.ToInt16((MonthDropDownList.SelectedValue.Trim()));
-        Int16 year = Convert.ToInt16((YearDropDownList.SelectedValue.Trim()));
-        if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
+        if ((MonthDropDownList.SelectedValue.Trim() != "00") & (YearDropDownList.SelectedValue.Trim() != "0"))
         {
-            args.IsValid = false;
+            Int16 month = Convert.ToInt16(MonthDropDownList.SelectedValue.Trim());
+            Int16 year = Convert.ToInt16(YearDropDownList.SelectedValue.Trim());
+            if ((DateTime.Now.Month > month) & (DateTime.Now.Year >= year))
+            {
+                args.IsValid = false;
+            }  
         }
     }
-    protected void Edit_Click(object sender, EventArgs e)
+
+
+    protected void Update_Click(object sender, EventArgs e)
     {
         Page.Validate("RegisterUserValidationGroup");
         if (Page.IsValid)
@@ -247,40 +258,41 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
 
-
-            // After the registration information is validated, add the member data into the database.
-            EditMember(connectionString,
-                userName,
+            // After the registration information is validated, update the member data in the database.
+            UpdateMember(connectionString,
+                UserName.Text.Trim(),
                 Email.Text.Trim(),
                 FirstName.Text.Trim(),
                 LastName.Text.Trim(),
-                PhoneNumber.Text.Trim()
-               );
+                PhoneNumber.Text.Trim());
 
-            // After the registration information is validated, add the address data into the database.
-            EditAddress(connectionString,
-                userName,
+            // After the registration information is validated, update the address data in the database.
+            UpdateAddress(connectionString,
+                UserName.Text.Trim(),
                 Building.Text.Trim(),
+                Floor.Text.Trim(),
+                FlatSuite.Text.Trim(),
+                BlockTower.Text.Trim(),
                 Street.Text.Trim(),
                 DistrictDropDownList.SelectedItem.Text.Trim());
 
-            // After the registration information is validated, add the credit card data into the database.
-            EditCreditCard(connectionString,
-                userName,
+            // After the registration information is validated, update the credit card data in the database.
+            UpdateCreditCard(connectionString,
+                UserName.Text.Trim(),
                 CardNumber.Text.Trim(),
                 CardTypeDropDownList.SelectedItem.Text.Trim(),
                 CardHolderName.Text.Trim(),
                 MonthDropDownList.SelectedItem.Text.Trim(),
                 YearDropDownList.SelectedItem.Text.Trim());
 
-            FormsAuthentication.SetAuthCookie(userName, false /* createPersistentCookie */);
+            FormsAuthentication.SetAuthCookie(UserName.Text, false /* createPersistentCookie */);
 
-            string continueUrl = "ViewMemberInformation.aspx";
+            string continueUrl = "~/MemberOnly/ViewMemberInformation.aspx";
             if (String.IsNullOrEmpty(continueUrl))
             {
                 continueUrl = "~/";
             }
-            Response.Redirect(continueUrl);
+            Response.Redirect(continueUrl, false);
         }
     }
 }

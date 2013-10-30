@@ -7,11 +7,17 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Drawing;
+using System.IO;
 
 
 public partial class ItemManagement : System.Web.UI.Page
 {
-    
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+
     protected void dvItem_ItemDeleted(object sender, EventArgs e)
     {
         gvItem.DataBind();
@@ -34,7 +40,7 @@ public partial class ItemManagement : System.Web.UI.Page
             // Get the value of the new UPC from the DetailsView control.
             TextBox txtUPC = (TextBox)dvItem.FindControl("InsertUPC");
 
-            // Count how many existing records have the UPC value.
+            // Count how many existing records have the student id value.
             connection.Open();
             SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Item] WHERE ([upc] = N'" + txtUPC.Text + "')", connection);
             Int32 count = (Int32)command.ExecuteScalar();
@@ -49,36 +55,140 @@ public partial class ItemManagement : System.Web.UI.Page
     }
     protected void cvEditCategory_ServerValidate(object source, ServerValidateEventArgs args)
     {
+        args.IsValid = true;
+
+        // Get the value of the new Category from the DetailsView control.
         TextBox txtCategory = (TextBox)dvItem.FindControl("EditCategory");
-        if (!(txtCategory.Text.Equals("Appliances") || txtCategory.Text.Equals("Jewelry and Watches") || txtCategory.Text.Equals("Toys and Games") || txtCategory.Text.Equals("Computers and Electronics") || txtCategory.Text.Equals("Women") || txtCategory.Text.Equals("Men") || txtCategory.Text.Equals("Luggage") || txtCategory.Text.Equals("Baby and Children")))
+
+        // Count the number of matching categories: either 1 or none.
+        string C1 = "Appliances";
+        string C2 = "Baby and Children";
+        string C3 = "Computers and Electronics";
+        string C4 = "Jewelry and Watches";
+        string C5 = "Luggage";
+        string C6 = "Men";
+        string C7 = "Toys and Games";
+        string C8 = "Women";
+
+        if (!(txtCategory.Text.Trim().Equals(C1, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C2, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C3, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C4, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C5, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C6, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C7, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C8, StringComparison.Ordinal)))
         {
             args.IsValid = false;
         }
     }
+
     protected void cvInsertCategory_ServerValidate(object source, ServerValidateEventArgs args)
     {
+        args.IsValid = true;
+
+        // Get the value of the new Category from the DetailsView control.
         TextBox txtCategory = (TextBox)dvItem.FindControl("InsertCategory");
-        if (!(txtCategory.Text.Equals("Appliances") || txtCategory.Text.Equals("Jewelry and Watches") || txtCategory.Text.Equals("Toys and Games") || txtCategory.Text.Equals("Computers and Electronics") || txtCategory.Text.Equals("Women") || txtCategory.Text.Equals("Men") || txtCategory.Text.Equals("Luggage") || txtCategory.Text.Equals("Baby and Children")))
+
+        // Count the number of matching categories: either 1 or none.
+        string C1 = "Appliances";
+        string C2 = "Baby and Children";
+        string C3 = "Computers and Electronics";
+        string C4 = "Jewelry and Watches";
+        string C5 = "Luggage";
+        string C6 = "Men";
+        string C7 = "Toys and Games";
+        string C8 = "Women";
+
+        if (!(txtCategory.Text.Trim().Equals(C1, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C2, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C3, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C4, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C5, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C6, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C7, StringComparison.Ordinal) ||
+             txtCategory.Text.Trim().Equals(C8, StringComparison.Ordinal)))
         {
             args.IsValid = false;
         }
+    }
+
+    protected void cvInsertPicture_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        args.IsValid = false; //Initialize args to false
+
+        FileUpload Picture = (FileUpload)dvItem.FindControl("pictureFileUpload");
+
+        var Extension = Path.GetExtension(Picture.PostedFile.FileName);
+        double filesize = Picture.FileContent.Length;
+
+        string E1 = ".jpg";
+        string E2 = ".JPG";
+
+        if (!(Extension.Equals(E1, StringComparison.Ordinal) ||
+              Extension.Equals(E2, StringComparison.Ordinal)) ||
+             filesize > 512 * 1024)
+        {
+            args.IsValid = false;
+        }
+        else
+        {
+            try
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(Picture.PostedFile.FileName);
+
+                // Two image formats can be compared using the Equals method
+                // See http://msdn.microsoft.com/en-us/library/system.drawing.imaging.imageformat.aspx
+                //
+                args.IsValid = img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            catch (OutOfMemoryException)
+            {
+                // Image.FromFile throws an OutOfMemoryException 
+                // if the file does not have a valid image format or
+                // GDI+ does not support the pixel format of the file.
+                //
+                args.IsValid = false;
+            }
+        }  
     }
     protected void cvEditPicture_ServerValidate(object source, ServerValidateEventArgs args)
     {
+        args.IsValid = false; //Initialize args to false
+
         FileUpload Picture = (FileUpload)dvItem.FindControl("pictureFileUpload");
-        String fileExtension = System.IO.Path.GetExtension(Picture.FileName).ToLower();
-        if (Picture.PostedFile.ContentLength > 512 * 1024 || (!fileExtension.Equals(".jpg")) || (!fileExtension.Equals(".JPG")))
+
+        var Extension = Path.GetExtension(Picture.PostedFile.FileName);
+        double filesize = Picture.FileContent.Length;
+
+        string E1 = ".jpg";
+        string E2 = ".JPG";
+
+        if (!(Extension.Equals(E1, StringComparison.Ordinal) ||
+              Extension.Equals(E2, StringComparison.Ordinal)) ||
+             filesize > 512 * 1024)
         {
             args.IsValid = false;
         }
-    }
-    protected void cvInsertPicture_ServerValidate(object source, ServerValidateEventArgs args)
-    {
-        FileUpload Picture = (FileUpload)dvItem.FindControl("pictureFileUpload");
-        String fileExtension = System.IO.Path.GetExtension(Picture.FileName).ToLower();
-        if (Picture.PostedFile.ContentLength > 512 * 1024 || (!fileExtension.Equals(".jpg")) || (!fileExtension.Equals(".JPG")))
+        else
         {
-            args.IsValid = false;
-        }
+            try
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(Picture.PostedFile.FileName);
+
+                // Two image formats can be compared using the Equals method
+                // See http://msdn.microsoft.com/en-us/library/system.drawing.imaging.imageformat.aspx
+                //
+                args.IsValid = img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            catch (OutOfMemoryException)
+            {
+                // Image.FromFile throws an OutOfMemoryException 
+                // if the file does not have a valid image format or
+                // GDI+ does not support the pixel format of the file.
+                //
+                args.IsValid = false;
+            }
+        }  
     }
 }
