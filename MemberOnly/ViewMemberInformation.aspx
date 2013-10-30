@@ -13,11 +13,6 @@
     .style5
     {
         }
-    .style15
-    {
-        width: 333px;
-            height: 23px;
-        }
     .style21
     {
         width: 185px;
@@ -45,39 +40,18 @@
             width: 170px;
             text-align: left;
         }
-        .style37
-        {
-            width: 114px;
-            height: 23px;
-        }
         .style41
         {
             width: 311px;
             height: 21px;
-        }
-        .style44
-        {
-            width: 311px;
-            height: 23px;
         }
         .style46
         {
             width: 175px;
             text-align: right;
         }
-        .style47
-        {
-            width: 185px;
-            height: 23px;
-            text-align: left;
-        }
-        .style52
-        {
-            height: 43px;
-        }
         .style53
         {
-            width: 126px;
             height: 43px;
         }
         .style54
@@ -99,6 +73,23 @@
         {
             width: 175px;
             text-align: left;
+        }
+        .style58
+        {
+            width: 185px;
+            text-align: left;
+        }
+        .style59
+        {
+            width: 311px;
+        }
+        .style60
+        {
+            width: 114px;
+        }
+        .style61
+        {
+            width: 333px;
         }
     </style>
 </asp:Content>
@@ -184,25 +175,17 @@
         </td>
     </tr>
     <tr>
-        <td class="style47">
+        <td class="style58">
             Card Number:</td>
-        <td class="style44">
+        <td class="style59">
             <asp:Label ID="CardNumber" runat="server"></asp:Label>
         </td>
-        <td class="style37">
+        <td class="style60">
             Expiry Date:</td>
-        <td class="style15">
-            <table class="style3">
-                <tr>
-                    <td class="style53">
+        <td class="style61">
                         <asp:Label ID="Month" runat="server"></asp:Label>
-                    </td>
-                    <td class="style52">
-                        / 
+                    &nbsp;/ 
                         <asp:Label ID="Year" runat="server"></asp:Label>
-                    </td>
-                </tr>
-            </table>
         </td>
     </tr>
 </table>
