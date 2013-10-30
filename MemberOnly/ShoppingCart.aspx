@@ -52,7 +52,7 @@
                     </EditItemTemplate>
                     <ItemTemplate>
                         <asp:TextBox ID="QuantityTextBox" runat="server"  
-                            ValidationGroup="ShoppingCartValidation" ></asp:TextBox>
+                            ValidationGroup="ShoppingCartValidation" MaxLength="10" ></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" 
                             ErrorMessage="Quantity is required." ControlToValidate="QuantityTextBox" 
                             Display="Dynamic" EnableClientScript="False" ForeColor="Red" 
@@ -66,7 +66,9 @@
                         <asp:CustomValidator ID="cvQuantity" runat="server" 
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
                             EnableClientScript="False" ForeColor="Red" 
-                            onservervalidate="cvQuantity_ServerValidate">*</asp:CustomValidator>
+                            onservervalidate="cvQuantity_ServerValidate" 
+                            ErrorMessage="Quantity must range from 1 to max quantity available" 
+                            ValidationGroup="ShoppingCartValidation">*</asp:CustomValidator>
                         <br />
                     </ItemTemplate>
                 </asp:TemplateField>
@@ -106,8 +108,7 @@
         &nbsp;</p>
     <p class="style2">
         <asp:Button ID="Next" runat="server" Text="Next: Specify Delivery Information" 
-            ValidationGroup="ShoppingCartValidation" 
-            PostBackUrl="~/MemberOnly/DeliveryInformation.aspx" />
+            ValidationGroup="ShoppingCartValidation" onclick="Next_Click" />
     </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" 
         HeaderText="The following errors occur:" 

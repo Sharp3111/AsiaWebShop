@@ -55,7 +55,7 @@
             <td>
                 Cardholder Name:
                 <asp:TextBox ID="CardholderName" runat="server" 
-                    ValidationGroup="RegisterUserValidationGroup"></asp:TextBox>
+                    ValidationGroup="RegisterUserValidationGroup" MaxLength="50"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvCardHolderName" runat="server" 
                 ControlToValidate="CardholderName" Display="Dynamic" EnableClientScript="False" 
                 ErrorMessage="Cardholder Name is required." ForeColor="Red" 
@@ -83,7 +83,7 @@
             <td>
                 Card Number:
                 <asp:TextBox ID="CardNumber" runat="server" 
-                    ValidationGroup="RegisterUserValidationGroup"></asp:TextBox>
+                    ValidationGroup="RegisterUserValidationGroup" MaxLength="16"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvCardNumber" runat="server" 
                 ControlToValidate="CardNumber" Display="Dynamic" EnableClientScript="False" 
                 ErrorMessage="Card Number is required." ForeColor="Red" 

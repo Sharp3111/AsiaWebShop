@@ -71,6 +71,19 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     }
     protected void cvQuantity_ServerValidate(object source, ServerValidateEventArgs args)
     {
-
+        GridViewRow gridViewRow = (GridViewRow)(source as Control).Parent.Parent;
+        Int32 Row_index = gridViewRow.RowIndex;
+        TextBox tbQuantity = (TextBox)gvShoppingCart.Rows[Row_index].FindControl("QuantityTextBox");
+        Label lbMax = (Label)gvShoppingCart.Rows[Row_index].FindControl("MaxQuantityAvailableLabel");
+        //Response.Write("<script>alert('" + Convert.ToInt32(tbQuantity.Text) + "   " + Convert.ToInt32(lbMax.Text) + "')</script>");
+        if (Convert.ToInt64(tbQuantity.Text) > Convert.ToInt64(lbMax.Text)) 
+            args.IsValid = false;
+    }
+    protected void Next_Click(object sender, EventArgs e)
+    {
+        if (IsValid)
+        {
+            Response.Redirect("~/MemberOnly/DeliveryInformation.aspx");
+        }     
     }
 }
