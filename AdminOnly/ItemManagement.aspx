@@ -29,11 +29,11 @@
                             ImageUrl='<%# Eval("upc", "GetDBImage.ashx?upc={0}") %>' Width="60px" />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="normalPrice" HeaderText="NormalPrice" 
+                <asp:BoundField DataField="normalPrice" HeaderText="Normal Price" 
                     SortExpression="normalPrice" />
-                <asp:BoundField DataField="discountPrice" HeaderText="DiscountPrice" 
+                <asp:BoundField DataField="discountPrice" HeaderText="Discount Price" 
                     SortExpression="discountPrice" />
-                <asp:BoundField DataField="quantityAvailable" HeaderText="QuantityAvailable" 
+                <asp:BoundField DataField="quantityAvailable" HeaderText="Quantity Available" 
                     SortExpression="quantityAvailable" />
                 <asp:CheckBoxField DataField="visible" HeaderText="Visible" 
                     SortExpression="visible" />
@@ -175,7 +175,7 @@
                         <asp:Label ID="Label1" runat="server" Text='<%# Bind("Picture") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="NormalPrice" SortExpression="normalPrice">
+                <asp:TemplateField HeaderText="Normal Price" SortExpression="normalPrice">
                     <EditItemTemplate>
                         <asp:TextBox ID="EditNormalPrice" runat="server" MaxLength="12" 
                             Text='<%# Bind("normalPrice") %>'></asp:TextBox>
@@ -206,7 +206,7 @@
                         <asp:Label ID="Label6" runat="server" Text='<%# Bind("normalPrice") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="DiscountPrice" SortExpression="discountPrice">
+                <asp:TemplateField HeaderText="Discount Price" SortExpression="discountPrice">
                     <EditItemTemplate>
                         <asp:TextBox ID="EditDiscountPrice" runat="server" MaxLength="12" 
                             Text='<%# Bind("discountPrice") %>'></asp:TextBox>
@@ -237,7 +237,7 @@
                         <asp:Label ID="Label7" runat="server" Text='<%# Bind("discountPrice") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="QuantityAvailable" 
+                <asp:TemplateField HeaderText="Quantity Available" 
                     SortExpression="quantityAvailable">
                     <EditItemTemplate>
                         <asp:TextBox ID="EditQuantityAvailable" runat="server" MaxLength="4" 
@@ -269,7 +269,7 @@
                 </asp:TemplateField>
                 <asp:CheckBoxField DataField="visible" HeaderText="Visible" 
                     SortExpression="visible" />
-                <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" 
+                <asp:CommandField ShowEditButton="True" 
                     ShowInsertButton="True" />
             </Fields>
         </asp:DetailsView>

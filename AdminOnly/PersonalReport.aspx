@@ -28,14 +28,14 @@
         <table class="style2">
             <tr>
                 <td class="style6">
-                    General report of certain user whose username contains:</td>
+                    Generate report of certain user whose username contains:</td>
                 <td class="style7">
                     <asp:TextBox ID="userName" runat="server" Width="85px"></asp:TextBox>
                 </td>
                 <td class="style5">
                     (empty for all user),</td>
                 <td>
-                    <asp:CheckBox ID="group" runat="server" Text=" group by district" />
+                    <asp:CheckBox ID="group" runat="server" Text="Group by district" />
                 </td>
             </tr>
             <tr>
