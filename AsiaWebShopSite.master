@@ -47,6 +47,8 @@
                         <asp:MenuItem NavigateUrl="~/About.aspx" Text="About"/>
                     </Items>
                 </asp:Menu>
+                <asp:HyperLink ID="GoToShoppingCart" runat="server" ForeColor="White" 
+                    NavigateUrl="~/MemberOnly/ShoppingCart.aspx" style="text-align: right">Shopping Cart</asp:HyperLink>
             </div>
         </div>
         <div class="main">
@@ -56,8 +58,7 @@
         </div>
     </div>
     <div class="style1">
-        &copy; <%: DateTime.Now.Year %> 
-        - Sharp</div>
+        &copy; <%: DateTime.Now.Year %>- Sharp</div>
     </form>
 </body>
 </html>
