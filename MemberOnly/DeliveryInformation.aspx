@@ -11,7 +11,7 @@
         }
         .style3
     {
-        width: 91%;
+        width: 97%;
             height: 28px;
             color: #000080;
             font-family: "Segoe UI";
@@ -27,6 +27,14 @@
         {
             width: 143px;
         }
+        .style48
+        {
+            width: 268435488px;
+        }
+        .style49
+        {
+            width: 195px;
+        }
         </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -39,9 +47,9 @@
         <td class="style5">
             <asp:Label ID="UserName" runat="server"></asp:Label>
         </td>
-        <td class="style46">
+        <td class="style46" colspan="2">
             &nbsp;Email Adress:</td>
-        <td>
+        <td class="style48">
             <asp:TextBox ID="Email" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
@@ -67,9 +75,9 @@
                 ErrorMessage="First Name is required." ForeColor="Red" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style46">
+        <td class="style46" colspan="2">
             &nbsp;Last Name:</td>
-        <td>
+        <td class="style48">
             <asp:TextBox ID="LastName" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvLastName" runat="server" 
@@ -94,15 +102,15 @@
                 ForeColor="Red" ValidationExpression="^\d{8}$" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
         </td>
-        <td class="style46">
+        <td class="style46" colspan="2">
             &nbsp;</td>
-        <td>
+        <td class="style48">
             &nbsp;</td>
     </tr>
     <tr>
         <td class="style32">
             Delivery Address:</td>
-        <td class="style5" colspan="3">
+        <td class="style49" colspan="2">
             <asp:DropDownList ID="AddressDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select an Address --</asp:ListItem>
             </asp:DropDownList>
@@ -111,6 +119,11 @@
                 EnableClientScript="False" ErrorMessage="Please select an address." 
                 ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
+        <td class="style5" colspan="2">
+            Desired address not listed? Click
+            <asp:HyperLink ID="ChangeAddressLink" runat="server" 
+                NavigateUrl="~/MemberOnly/EditAddressList.aspx">here</asp:HyperLink>
+&nbsp;to add another and check out later!</td>
     </tr>
     <tr>
         <td class="style32">
@@ -124,9 +137,9 @@
                 EnableClientScript="False" ErrorMessage="Please select a delivery date." 
                 ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style46">
+        <td class="style46" colspan="2">
             Delivery Time:</td>
-        <td>
+        <td class="style48">
             <asp:DropDownList ID="DeliveryTimeDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select a Time Slot --</asp:ListItem>
                 <asp:ListItem Value="9">09:00-12:00</asp:ListItem>
