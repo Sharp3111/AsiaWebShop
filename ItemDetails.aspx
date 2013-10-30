@@ -5,6 +5,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p style="font-family: Arial, Helvetica, sans-serif; text-decoration: underline; font-size: large; font-weight: bold; color: #000080">
         ITEM INFORMATION</p>
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        EnableClientScript="False" ForeColor="Red" 
+        ValidationGroup="QuantityValidationGroup" />
     <p>
         <asp:DetailsView ID="dvItemDetails" runat="server" AutoGenerateRows="False" 
             CellPadding="4" DataKeyNames="upc" DataSourceID="AsiaWebShopDBSqlDataSource" 
@@ -39,6 +42,29 @@
                     SortExpression="discountPrice" />
                 <asp:BoundField DataField="quantityAvailable" HeaderText="QuantityAvailable" 
                     SortExpression="quantityAvailable" />
+                <asp:TemplateField HeaderText="Quantity">
+                    <ItemTemplate>
+                        <asp:TextBox ID="tbQuantity" runat="server" Height="22px" 
+                            ValidationGroup="QuantityValidationGroup" Width="30px">1</asp:TextBox>
+                        <asp:RegularExpressionValidator ID="revQuantity" runat="server" 
+                            ControlToValidate="tbQuantity" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Please input the correct quantity" ForeColor="Red" 
+                            ValidationExpression="^[1-9]([0-9]+)?" 
+                            ValidationGroup="QuantityValidationGroup">*</asp:RegularExpressionValidator>
+                        <asp:CustomValidator ID="cvQuantity" runat="server" 
+                            ControlToValidate="tbQuantity" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Available quantity for this item is not enough." ForeColor="Red" 
+                            onservervalidate="cvQuantity_ServerValidate" 
+                            ValidationGroup="QuantityValidationGroup">*</asp:CustomValidator>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:Button ID="btn_ShoppingCart" runat="server" Height="25px" 
+                            onclick="btn_ShoppingCart_Click" Text="Add To Shopping Cart" 
+                            ValidationGroup="QuantityValidationGroup" Width="150px" />
+                    </ItemTemplate>
+                </asp:TemplateField>
             </Fields>
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
             <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />

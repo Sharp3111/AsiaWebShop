@@ -135,6 +135,9 @@
     <br />
     <asp:Label ID="lblSearchResultMessage" runat="server" Font-Bold="True" 
         ForeColor="Red"></asp:Label>
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        EnableClientScript="False" ForeColor="Red" 
+        ValidationGroup="QuantityValidationGroup" />
     <br />
     <br />
     <asp:GridView ID="gvItemSearchResult" runat="server" 
@@ -163,11 +166,28 @@
             <asp:HyperLinkField DataNavigateUrlFields="upc" 
                 DataNavigateUrlFormatString="ItemDetails.aspx?upc={0}" 
                 Text="View item details" />
+            <asp:TemplateField HeaderText="Quantity">
+                <ItemTemplate>
+                    <asp:TextBox ID="tbQuantity" runat="server" Height="22px" 
+                        ValidationGroup="QuantityValidationGroup" Width="30px">1</asp:TextBox>
+                    <asp:RegularExpressionValidator ID="revQuantity" runat="server" 
+                        ControlToValidate="tbQuantity" Display="Dynamic" EnableClientScript="False" 
+                        ErrorMessage="Please input the correct quantity" ForeColor="Red" 
+                        ValidationExpression="^[1-9]([0-9]+)?" 
+                        ValidationGroup="QuantityValidationGroup">*</asp:RegularExpressionValidator>
+                    <asp:CustomValidator ID="cvQuantity" runat="server" 
+                        ControlToValidate="tbQuantity" Display="Dynamic" EnableClientScript="False" 
+                        ErrorMessage="Available quantity for this item is not enough." ForeColor="Red" 
+                        onservervalidate="cvQuantity_ServerValidate" 
+                        ValidationGroup="QuantityValidationGroup">*</asp:CustomValidator>
+                </ItemTemplate>
+            </asp:TemplateField>
             <asp:TemplateField ShowHeader="False">
                 <ItemTemplate>
                     <asp:Button ID="btn_ShoppingCart" runat="server" Height="25px" 
                         Text="Add To Shopping Cart" Width="150px" 
-                        onclick="btn_ShoppingCart_Click" />
+                        onclick="btn_ShoppingCart_Click" 
+                        ValidationGroup="QuantityValidationGroup" />
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
