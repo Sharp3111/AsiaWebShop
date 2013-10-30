@@ -157,8 +157,8 @@
             <td class="style16" colspan="2" rowspan="2">
                 <asp:RadioButtonList ID="orderBy" runat="server" Width="132px" 
                     ValidationGroup="purchaseAmount">
-                    <asp:ListItem Value="lastName">Last name</asp:ListItem>
-                    <asp:ListItem Value="purchaseAmount">Purchase amount</asp:ListItem>
+                    <asp:ListItem Value="name">Last name</asp:ListItem>
+                    <asp:ListItem Value="amount">Purchase amount</asp:ListItem>
                 </asp:RadioButtonList>
             </td>
             <td class="style24" colspan="3">
@@ -184,13 +184,44 @@
             </td>
             <td class="style20" colspan="2">
                 <asp:Button ID="Button1" runat="server" Text="General Report" 
-                    ValidationGroup="purchaseAmount" Width="97px" />
+                    ValidationGroup="purchaseAmount" Width="97px" onclick="Button1_Click" />
             </td>
             <td>
                 &nbsp;</td>
         </tr>
     </table>
+    <asp:Label ID="result" runat="server" Font-Bold="True" Font-Size="Medium" 
+        ForeColor="Red"></asp:Label>
     <br />
+    <asp:GridView ID="report" runat="server" CellPadding="4" 
+        DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="None" 
+        AutoGenerateColumns="False" DataKeyNames="userName">
+        <AlternatingRowStyle BackColor="White" />
+        <Columns>
+            <asp:BoundField DataField="userName" HeaderText="User" ReadOnly="True" 
+                SortExpression="userName" />
+            <asp:BoundField DataField="firstName" HeaderText="First Name" 
+                SortExpression="firstName" />
+            <asp:BoundField DataField="lastName" HeaderText="Last Name" 
+                SortExpression="lastName" />
+            <asp:BoundField DataField="Expr1" HeaderText="Total purchase amount." 
+                ReadOnly="True" SortExpression="Expr1" />
+        </Columns>
+        <EditRowStyle BackColor="#2461BF" />
+        <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+        <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+        <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+        <RowStyle BackColor="#EFF3FB" />
+        <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+        <SortedAscendingCellStyle BackColor="#F5F7FB" />
+        <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+        <SortedDescendingCellStyle BackColor="#E9EBEF" />
+        <SortedDescendingHeaderStyle BackColor="#4870BE" />
+    </asp:GridView>
+    <br />
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
+        SelectCommand="SELECT Member.userName, Member.firstName, Member.lastName, SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS Expr1 FROM OrderRecord INNER JOIN Member ON OrderRecord.userName = Member.userName GROUP BY OrderRecord.confirmationNumber, Member.userName, Member.firstName, Member.lastName"></asp:SqlDataSource>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
         HeaderText="Following error occured:" ValidationGroup="purchaseAmount" />
