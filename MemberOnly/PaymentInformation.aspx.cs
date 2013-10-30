@@ -135,8 +135,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
     protected void updateCreditCardInOrderRecord(string connectionString, string userName, string creditCardNumber)
     {
         // Define the INSERT query with parameters.
-        string query = "INSERT INTO [OrderRecord]([userName], [creditCardNumber])" +
-                       "VALUES (@Username, @CreditCardNumber)";
+        string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName";
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
