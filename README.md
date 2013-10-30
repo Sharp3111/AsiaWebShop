@@ -10,3 +10,5 @@ Disk Address:  \\\\ugsmb.cse.ust.hk\cs3111t115
 admin: employee (employee##)
 
 user: sharper (sharper##)
+
+Database last update: 30/10/2013 11:44 PM
