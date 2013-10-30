@@ -110,10 +110,8 @@ public partial class ItemDetails : System.Web.UI.Page
                         }
                     }
                 }
-
-
-
-                Response.Redirect("~/MemberOnly/ShoppingCart.aspx");
+                Response.Write("<script>alert('Successfully add to shopping cart')</script>");
+               
             }
             else // if the user does not log, send a error message
             {

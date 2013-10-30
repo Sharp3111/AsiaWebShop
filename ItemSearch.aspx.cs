@@ -134,10 +134,23 @@ public partial class _Default : System.Web.UI.Page
             lblSearchResultMessage.Visible = true;
         }
 
+        for (int i = 0; i < gvItemSearchResult.Rows.Count; i++)
+        {
+            ((TextBox)gvItemSearchResult.Rows[i].FindControl("tbQuantity")).ValidationGroup = "QuantityValidationGroup" + i;
+            ((RegularExpressionValidator)gvItemSearchResult.Rows[i].FindControl("revQuantity")).ValidationGroup = "QuantityValidationGroup" + i;
+            ((CustomValidator)gvItemSearchResult.Rows[i].FindControl("cvQuantity")).ValidationGroup = "QuantityValidationGroup" + i;
+            ((Button)gvItemSearchResult.Rows[i].FindControl("btn_ShoppingCart")).ValidationGroup = "QuantityValidationGroup" + i;
+        }
+
     }
 
     protected void btn_ShoppingCart_Click(object sender, EventArgs e)
     {
+        GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
+        Int32 Row_index = gridViewRow.RowIndex;
+        
+        ValidationSummary1.ValidationGroup = "QuantityValidationGroup" +Row_index;
+        //Response.Write("<script>alert('" + Row_index + "  " + ((Button)(sender as Control)).ValidationGroup + "')</script>");
         //check if the user has logined
         if (IsValid)
         {
@@ -145,8 +158,6 @@ public partial class _Default : System.Web.UI.Page
             {
                 string connectionString = "AsiaWebShopDBConnectionString";
                 string userName = User.Identity.Name;
-                GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
-                int Row_index = gridViewRow.RowIndex;
                 string upc = gvItemSearchResult.DataKeys[Row_index][0].ToString().Trim();
                 TextBox quantity_textbox = (TextBox)gvItemSearchResult.Rows[Row_index].FindControl("tbQuantity");
                 Int32 quantity = Convert.ToInt32(quantity_textbox.Text.Trim());
@@ -236,7 +247,7 @@ public partial class _Default : System.Web.UI.Page
 
 
 
-                Response.Redirect("~/MemberOnly/ShoppingCart.aspx");
+                Response.Write("<script>alert('Successfully add to shopping cart')</script>");
             }
             else // if the user does not log, send a error message
             {
