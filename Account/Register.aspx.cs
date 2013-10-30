@@ -100,7 +100,7 @@ public partial class Account_Register : System.Web.UI.Page
     {
         // Define the INSERT query with parameters.
         string query = "INSERT INTO [Address]([userName], [building], [floor], [flatSuite], [BlockTower], [streetAddress], [district], [nickname])" +
-                               "VALUES (@UserName, @Building, @Floor, @FlatSuite, @BlockTower, @StreetAddress, @District, @Nickname)";
+                               "VALUES (@UserName, @Building, @Floor, @FlatSuite, @BlockTower, @StreetAddress, @District, 'Home')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -114,10 +114,6 @@ public partial class Account_Register : System.Web.UI.Page
             command.Parameters.AddWithValue("@BlockTower", blockTower);
             command.Parameters.AddWithValue("@StreetAddress", streetAddress);
             command.Parameters.AddWithValue("@District", district);
-            
-            // Define a unique nickname for the default address
-            string nicknameString = "Default" + userName;
-            command.Parameters.AddWithValue("@Nickname", nicknameString);
 
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();

@@ -57,7 +57,7 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
-        string query = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([nickname] =N'Default" + userName + "')";
+        string query = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "' AND [nickname]='Home')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
