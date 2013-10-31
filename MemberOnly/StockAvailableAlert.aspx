@@ -8,29 +8,44 @@
     }
     .style3
     {
-        width: 231px;
+        width: 293px;
     }
     .style5
     {
-        width: 112px;
+        width: 16px;
     }
         .style6
         {
-            width: 134px;
+            width: 98px;
             text-align: right;
         }
         .style7
         {
-            width: 231px;
+            width: 293px;
             height: 21px;
         }
         .style8
         {
-            width: 134px;
+            width: 98px;
             height: 21px;
         }
         .style9
         {
+            height: 21px;
+        }
+        .style13
+        {
+            width: 16px;
+            height: 21px;
+        }
+        .style14
+        {
+            width: 78px;
+            height: 21px;
+        }
+        .style15
+        {
+            width: 150px;
             height: 21px;
         }
     </style>
@@ -44,31 +59,50 @@
         <td class="style7">
             Request notification for item available:</td>
         <td class="style8">
-            <asp:Label ID="itemLabel" runat="server"></asp:Label>
+            <asp:TextBox ID="itemBox" runat="server"></asp:TextBox>
         </td>
-        <td class="style9" colspan="2">
-            (You are not allowed to change item here.)</td>
-    </tr>
-    <tr>
-        <td class="style3">
-            &nbsp;</td>
-        <td class="style6">
+        <td class="style13">
+            <asp:CustomValidator ID="CustomValidator2" runat="server" 
+                ControlToValidate="itemBox" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="Item doesn't exist!" ForeColor="Red" 
+                onservervalidate="CustomValidator2_ServerValidate" 
+                ValidationGroup="requestemail">*</asp:CustomValidator>
+        </td>
+        <td class="style14">
             using email:</td>
-        <td class="style5">
+        <td class="style15">
             <asp:DropDownList ID="email" runat="server" ValidationGroup="requestemail">
             </asp:DropDownList>
+            </td>
+        <td class="style9">
             <asp:CustomValidator ID="CustomValidator1" runat="server" 
                 ControlToValidate="email" Display="Dynamic" EnableClientScript="False" 
                 ErrorMessage="Please select a email address." ForeColor="Red" 
                 onservervalidate="CustomValidator1_ServerValidate" 
                 ValidationGroup="requestemail">*</asp:CustomValidator>
+            <asp:CustomValidator ID="CustomValidator3" runat="server" Display="Dynamic" 
+                EnableClientScript="False" ErrorMessage="Record already exist!" ForeColor="Red" 
+                onservervalidate="CustomValidator3_ServerValidate" 
+                ValidationGroup="requestemail">*</asp:CustomValidator>
         </td>
-        <td>
+    </tr>
+    <tr>
+        <td class="style3">
+            &nbsp;</td>
+        <td class="style6">
+            &nbsp;</td>
+        <td class="style5">
+            &nbsp;</td>
+        <td colspan="3" style="text-align: left">
             <asp:Button ID="request" runat="server" Text="Request notification" 
-                onclick="request_Click" ValidationGroup="requestemail" />
+                onclick="request_Click" ValidationGroup="requestemail" 
+                style="text-align: left" />
         </td>
     </tr>
 </table>
+    <br />
+    <asp:Label ID="result" runat="server" Font-Bold="True" 
+        ForeColor="Red"></asp:Label>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
         HeaderText="Following error occurred:" ValidationGroup="requestemail" />
