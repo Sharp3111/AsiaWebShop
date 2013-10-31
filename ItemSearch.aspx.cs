@@ -52,7 +52,7 @@ public partial class _Default : System.Web.UI.Page
                     break;
             }
         }
-        ValidationSummary1.Enabled = false;
+        
     }
 
     protected void btnSearch_Click(object sender, EventArgs e)
@@ -150,7 +150,7 @@ public partial class _Default : System.Web.UI.Page
     {
         GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
         Int32 Row_index = gridViewRow.RowIndex;
-        ValidationSummary1.Enabled = true;
+        //ValidationSummary1.Enabled = true;
         ValidationSummary1.ValidationGroup = "QuantityValidationGroup" +Row_index;
         //Response.Write("<script>alert('" + Row_index + "  " + ((Button)(sender as Control)).ValidationGroup + "')</script>");
         //check if the user has logined
@@ -165,6 +165,46 @@ public partial class _Default : System.Web.UI.Page
                 Int32 quantity = Convert.ToInt32(quantity_textbox.Text.Trim());
                 Int32 count;
 
+                //get the current quantityAvailable in Item BD
+                Int32 currentQuantityAvailable = 0;
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = '" + upc + "')", connection))
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            // Assign the data values to itemUPC
+                            currentQuantityAvailable = reader.GetInt32(0);
+                        }
+                    }
+
+                    // Close the connection and the DataReader.
+                    command.Connection.Close();
+                    reader.Close();
+                }
+                //get the updated currentQuantityAvailable
+                currentQuantityAvailable -= quantity;
+                //update quantityAvailable in Item DB with quantity and currentQuantityAvailable
+                string query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + upc + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    {
+                        //Define the UPDATE query parameters with corresponding values
+                        command.Parameters.AddWithValue("@QuantityAvailable", currentQuantityAvailable.ToString());
+
+                        // Open the connection, execute the INSERT query and close the connection.
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }
+                
                 //check if the item has already added into the shopping cart
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
                 {
@@ -200,7 +240,7 @@ public partial class _Default : System.Web.UI.Page
                 {
                     //read the quantity in the database
                     {
-                        string query = "SELECT [quantity] FROM [ShoppingCart] WHERE ([upc] = N'" + upc + "' AND [userName] = N'" + userName + "')";
+                        query = "SELECT [quantity] FROM [ShoppingCart] WHERE ([upc] = N'" + upc + "' AND [userName] = N'" + userName + "')";
 
                         // Create the connection and the SQL command.
                         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -228,7 +268,7 @@ public partial class _Default : System.Web.UI.Page
                     //update the quantity to database
                     {
                         // Define the UPDATE query with parameters.
-                        string query = "UPDATE [ShoppingCart] SET [quantity] = @quantity, [addDateTime] = CURRENT_TIMESTAMP WHERE ([userName] = @UserName AND [upc] = @Upc ) ";
+                        query = "UPDATE [ShoppingCart] SET [quantity] = @quantity, [addDateTime] = CURRENT_TIMESTAMP WHERE ([userName] = @UserName AND [upc] = @Upc ) ";
 
                         // Create the connection and the SQL command.
                         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -250,6 +290,7 @@ public partial class _Default : System.Web.UI.Page
 
                 //lblSearchResultMessage.Text="Successfully add to shopping cart";
                 Response.Write("<script>alert('Successfully add to shopping cart')</script>");
+                btnSearch_Click(sender, e);
             }
             else // if the user does not log, send a error message
             {
@@ -274,36 +315,10 @@ public partial class _Default : System.Web.UI.Page
             Int32 quantity =Convert.ToInt32(quantity_textbox.Text.Trim());
             Int32 avaiableQuantity = 0;
         
-            //read the quantity in the shopping cart database
-                    
-            string query = "SELECT [quantity] FROM [ShoppingCart] WHERE ([upc] = N'" + upc + "' AND [userName] = N'" + userName + "')";
-
-            // Create the connection and the SQL command.
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                // Open the connection.
-                command.Connection.Open();
-                // Execute the SELECT query and place the result in a DataReader.
-                SqlDataReader reader = command.ExecuteReader();
-                // Check if a result was returned.
-                if (reader.HasRows)
-                {
-                    // Iterate through the table to get the retrieved values.
-                    while (reader.Read())
-                    {
-                        quantity += reader.GetInt32(0);
-                    }
-                }
-
-                // Close the connection and the DataReader.
-                command.Connection.Close();
-                reader.Close();
-            }
-
+            
             //read the available quantity in the item database
 
-            query = "SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = N'" + upc + "')";
+            string query = "SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = N'" + upc + "')";
 
             // Create the connection and the SQL command.
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -327,6 +342,9 @@ public partial class _Default : System.Web.UI.Page
                 command.Connection.Close();
                 reader.Close();
             }
+
+            //if(quantity == avaiableQuantity)
+            //    ValidationSummary1.Enabled = false;
 
             if (quantity > avaiableQuantity)
                 args.IsValid = false;
