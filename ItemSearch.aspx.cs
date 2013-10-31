@@ -154,9 +154,9 @@ public partial class _Default : System.Web.UI.Page
         ValidationSummary1.ValidationGroup = "QuantityValidationGroup" +Row_index;
         //Response.Write("<script>alert('" + Row_index + "  " + ((Button)(sender as Control)).ValidationGroup + "')</script>");
         //check if the user has logined
-        if (IsValid)
+        if (User.Identity.Name != "")
         {
-            if (User.Identity.Name != "")
+            if (IsValid)
             {
                 string connectionString = "AsiaWebShopDBConnectionString";
                 string userName = User.Identity.Name;
@@ -289,13 +289,17 @@ public partial class _Default : System.Web.UI.Page
 
 
                 //lblSearchResultMessage.Text="Successfully add to shopping cart";
-                Response.Write("<script>alert('Successfully add to shopping cart')</script>");
+                //Response.Write("<script>alert('Successfully add to shopping cart')</script>");
+               
                 btnSearch_Click(sender, e);
+                lblSearchResultMessage.Text = "Successfully add to shopping cart";
             }
-            else // if the user does not log, send a error message
-            {
-                Response.Write("<script>alert('Please Login')</script>");
-            }
+
+        }
+        else // if the user does not log, send a error message
+        {
+            //Response.Write("<script>alert('Please Login')</script>");
+            lblSearchResultMessage.Text = "Please Login";
         }
     }
     protected void categoryDropDownList_SelectedIndexChanged(object sender, EventArgs e)
@@ -304,50 +308,53 @@ public partial class _Default : System.Web.UI.Page
     }
     protected void cvQuantity_ServerValidate(object source, ServerValidateEventArgs args)
     {
-        if(IsValid)
+        if (User.Identity.Name != "")
         {
-            string connectionString = "AsiaWebShopDBConnectionString";
-            string userName = User.Identity.Name;
-            GridViewRow gridViewRow = (GridViewRow)(source as Control).Parent.Parent;
-            int Row_index = gridViewRow.RowIndex;
-            string upc = gvItemSearchResult.DataKeys[Row_index][0].ToString().Trim();
-            TextBox quantity_textbox = (TextBox)gvItemSearchResult.Rows[Row_index].FindControl("tbQuantity");
-            Int32 quantity =Convert.ToInt32(quantity_textbox.Text.Trim());
-            Int32 avaiableQuantity = 0;
-        
-            
-            //read the available quantity in the item database
-
-            string query = "SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = N'" + upc + "')";
-
-            // Create the connection and the SQL command.
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand(query, connection))
+            if (IsValid)
             {
-                // Open the connection.
-                command.Connection.Open();
-                // Execute the SELECT query and place the result in a DataReader.
-                SqlDataReader reader = command.ExecuteReader();
-                // Check if a result was returned.
-                if (reader.HasRows)
+                string connectionString = "AsiaWebShopDBConnectionString";
+                string userName = User.Identity.Name;
+                GridViewRow gridViewRow = (GridViewRow)(source as Control).Parent.Parent;
+                int Row_index = gridViewRow.RowIndex;
+                string upc = gvItemSearchResult.DataKeys[Row_index][0].ToString().Trim();
+                TextBox quantity_textbox = (TextBox)gvItemSearchResult.Rows[Row_index].FindControl("tbQuantity");
+                Int32 quantity = Convert.ToInt32(quantity_textbox.Text.Trim());
+                Int32 avaiableQuantity = 0;
+
+
+                //read the available quantity in the item database
+
+                string query = "SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = N'" + upc + "')";
+
+                // Create the connection and the SQL command.
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    // Iterate through the table to get the retrieved values.
-                    while (reader.Read())
+                    // Open the connection.
+                    command.Connection.Open();
+                    // Execute the SELECT query and place the result in a DataReader.
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
                     {
-                        avaiableQuantity = reader.GetInt32(0);
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            avaiableQuantity = reader.GetInt32(0);
+                        }
                     }
+
+                    // Close the connection and the DataReader.
+                    command.Connection.Close();
+                    reader.Close();
                 }
 
-                // Close the connection and the DataReader.
-                command.Connection.Close();
-                reader.Close();
+                //if(quantity == avaiableQuantity)
+                //    ValidationSummary1.Enabled = false;
+
+                if (quantity > avaiableQuantity)
+                    args.IsValid = false;
             }
-
-            //if(quantity == avaiableQuantity)
-            //    ValidationSummary1.Enabled = false;
-
-            if (quantity > avaiableQuantity)
-                args.IsValid = false;
         }
    }
 }
