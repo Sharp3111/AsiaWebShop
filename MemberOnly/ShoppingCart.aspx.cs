@@ -32,7 +32,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 connection.Close();
             }
 
-            //If there is no record in the current user's shopping cart
+            //If there are records in the current user's shopping cart
             if (count != 0)
             {
                 //Display "The following items have been added to your shopping cart"
@@ -72,8 +72,9 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                         reader.Close();
                     }
                 }
+                AccumulateTotalPrice(connectionString, userName);
             }
-            else
+            else //if there is no record in ShoppingCartDB
             {
                 lblMessage.Text = "You do not have any item in shopping cart. Please click this to go shopping: ";
                 if (lblMessage.ForeColor != System.Drawing.Color.Red)
@@ -85,6 +86,57 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                     lblMessage.ForeColor = new System.Drawing.Color();
                 }
             }
+
+            
+        }
+    }
+
+    private void AccumulateTotalPrice(string connectionString, string userName)
+    {
+        //Check whether there is any item to be displayed in ShoppingCart DB for the current user
+        string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
+        Int32 count = 0;
+        //check if the item has already added into the shopping cart
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        {
+            connection.Open();
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([userName] = N'" + userName + "')", connection);
+            count = (Int32)command.ExecuteScalar();
+            connection.Close();
+        }
+
+        if (count != 0)
+        {
+            //Accumulate total price
+            decimal Price = 0;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand("SELECT [ShoppingCart].[quantity], [Item].[discountPrice] FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE ([ShoppingCart].[userName] = '" + userName + "')", connection))
+            {
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        // Assign the data values to itemUPC
+                        int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
+                        decimal unitPurchasePrice = Convert.ToDecimal(reader["discountPrice"].ToString().Trim());
+
+                        Price += quantity * unitPurchasePrice;
+                    }
+                }
+
+                // Close the connection and the DataReader.
+                command.Connection.Close();
+                reader.Close();
+            }
+            TotalPriceLabel.Text = Price.ToString();
+        }
+        else
+        {
+            TotalPriceLabel.Text = "- -";
         }
     }
 
@@ -199,5 +251,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 command.Connection.Close();
             }            
         }
+
+       // AccumulateTotalPrice(connectionString, userName);
     }
 }
