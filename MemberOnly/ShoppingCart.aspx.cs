@@ -40,38 +40,6 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
                 //Populate the GridView on the webpage ShoppingCart.aspx
                 GetItemInformation(connectionString, userName);
-
-                //Populate the amendable quantity textboxes in GridView
-                int i = 0;
-                {
-                    //SELECT quantity FROM ShoppingCart query
-                    string query = "SELECT [quantity] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
-
-                    int intQuantity = 0;
-                    // Create the connection and the SQL command.
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        // Open the connection.
-                        command.Connection.Open();
-                        // Execute the SELECT query and place the result in a DataReader.
-                        SqlDataReader reader = command.ExecuteReader();
-                        // Check if a result was returned.
-                        if (reader.HasRows)
-                        {
-                            // Iterate through the table to get the retrieved values.
-                            while (reader.Read())
-                            {
-                                intQuantity = reader.GetInt32(0);
-                                ((TextBox)gvShoppingCart.Rows[i++].FindControl("QuantityTextBox")).Text = intQuantity.ToString();
-                            }
-                        }
-
-                        // Close the connection and the DataReader.
-                        command.Connection.Close();
-                        reader.Close();
-                    }
-                }
                 AccumulateTotalPrice(connectionString, userName);
             }
             else //if there is no record in ShoppingCartDB
@@ -149,6 +117,39 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         SqlDataSource1.Select(DataSourceSelectArguments.Empty);
 
         gvShoppingCart.DataBind();
+
+        //Populate the amendable quantity textboxes in GridView
+        int i = 0;
+        {
+            //SELECT quantity FROM ShoppingCart query
+            string query2 = "SELECT [quantity] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
+
+            int intQuantity = 0;
+            // Create the connection and the SQL command.
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query2, connection))
+            {
+                // Open the connection.
+                command.Connection.Open();
+                // Execute the SELECT query and place the result in a DataReader.
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        intQuantity = reader.GetInt32(0);
+                        ((TextBox)gvShoppingCart.Rows[i++].FindControl("QuantityTextBox")).Text = intQuantity.ToString();
+                    }
+                }
+
+                // Close the connection and the DataReader.
+                command.Connection.Close();
+                reader.Close();
+            }
+        }
+
     }
     protected void cvQuantity_ServerValidate(object source, ServerValidateEventArgs args)
     {
@@ -251,7 +252,9 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 command.Connection.Close();
             }            
         }
-
-       // AccumulateTotalPrice(connectionString, userName);
+        //Response.Write("<script>alert('Hehe')</script>");
+        GetItemInformation(connectionString, userName);
+        //Response.Write("<script>alert('Haha')</script>");
+        AccumulateTotalPrice(connectionString, userName);
     }
 }
