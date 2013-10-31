@@ -135,7 +135,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
     protected void updateCreditCardInOrderRecord(string connectionString, string userName, string creditCardNumber)
     {
         // Define the INSERT query with parameters.
-        string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName";
+        string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
@@ -143,6 +143,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             // Define the UPDATE query parameters and their values.
             command.Parameters.AddWithValue("@Username", userName);
             command.Parameters.AddWithValue("@CreditCardNumber", creditCardNumber);
+            command.Parameters.AddWithValue("@IsConfirmed", false);
             /*command.Parameters.AddWithValue("@Type", type);
             command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
             command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
