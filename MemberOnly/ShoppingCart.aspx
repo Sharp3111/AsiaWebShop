@@ -19,15 +19,24 @@
     <p class="style3">
         shopping cart</p>
     <p class="style2">
-        &nbsp;</p>
+        <asp:Label ID="lblMessage" runat="server" Text="Label"></asp:Label>
+&nbsp;<asp:HyperLink ID="ShopAround" runat="server" ForeColor="#FF9900" 
+            NavigateUrl="~/ItemSearch.aspx" style="text-decoration: underline">Go shopping around</asp:HyperLink>
+    </p>
     <p class="style2">
         <asp:GridView ID="gvShoppingCart" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" 
             GridLines="None">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:ButtonField ButtonType="Button" CommandName="Delete" HeaderText="Delete" 
-                    ShowHeader="True" Text="Delete" />
+                <asp:TemplateField HeaderText="Delete">
+                    <ItemTemplate>
+                        <asp:Button ID="deleteButton" runat="server" BackColor="Silver" 
+                            BorderColor="Silver" BorderStyle="Solid" CausesValidation="false" 
+                            CommandName="Delete" Height="30px" onclick="deleteButton_Click" Text="Delete" 
+                            Width="60px" />
+                    </ItemTemplate>
+                </asp:TemplateField>
                 <asp:TemplateField HeaderText="Name" SortExpression="name">
                     <EditItemTemplate>
                         <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("name") %>'></asp:TextBox>
@@ -108,7 +117,8 @@
         &nbsp;</p>
     <p class="style2">
         <asp:Button ID="Next" runat="server" Text="Next: Specify Delivery Information" 
-            ValidationGroup="ShoppingCartValidation" onclick="Next_Click" />
+            ValidationGroup="ShoppingCartValidation" onclick="Next_Click" 
+            BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
     </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" 
         HeaderText="The following errors occur:" 
