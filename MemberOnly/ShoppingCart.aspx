@@ -29,6 +29,14 @@
             GridLines="None">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
+                <asp:TemplateField HeaderText="upc" SortExpression="upc" Visible="False">
+                    <ItemTemplate>
+                        <asp:Label ID="lbUPC" runat="server" Text='<%# Bind("upc") %>'></asp:Label>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:Label ID="Label2" runat="server" Text='<%# Eval("upc") %>'></asp:Label>
+                    </EditItemTemplate>
+                </asp:TemplateField>
                 <asp:TemplateField HeaderText="Delete">
                     <ItemTemplate>
                         <asp:Button ID="deleteButton" runat="server" BackColor="Silver" 
@@ -61,7 +69,8 @@
                     </EditItemTemplate>
                     <ItemTemplate>
                         <asp:TextBox ID="QuantityTextBox" runat="server"  
-                            ValidationGroup="ShoppingCartValidation" MaxLength="10" ></asp:TextBox>
+                            ValidationGroup="ShoppingCartValidation" MaxLength="10" 
+                            AutoPostBack="True" ontextchanged="QuantityTextBox_TextChanged" ></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" 
                             ErrorMessage="Quantity is required." ControlToValidate="QuantityTextBox" 
                             Display="Dynamic" EnableClientScript="False" ForeColor="Red" 
@@ -76,7 +85,7 @@
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
                             EnableClientScript="False" ForeColor="Red" 
                             onservervalidate="cvQuantity_ServerValidate" 
-                            ErrorMessage="Quantity must range from 1 to max quantity available" 
+                            ErrorMessage="Quantity is not enough." 
                             ValidationGroup="ShoppingCartValidation">*</asp:CustomValidator>
                         <br />
                     </ItemTemplate>
@@ -87,7 +96,7 @@
                         <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("quantityAvailable") %>'></asp:TextBox>
                     </EditItemTemplate>
                     <ItemTemplate>
-                        <asp:Label ID="MaxQuantityAvailableLabel" runat="server" 
+                        <asp:Label ID="QuantityAvailableLabel" runat="server" 
                             Text='<%# Bind("quantityAvailable") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
@@ -135,7 +144,7 @@
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
             
-            SelectCommand="SELECT Item.name, Item.discountPrice, ShoppingCart.quantity, Item.quantityAvailable, Item.discountPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc" 
+            SelectCommand="SELECT Item.upc, Item.name, Item.discountPrice, ShoppingCart.quantity, Item.quantityAvailable, Item.discountPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc" 
             DeleteCommand="DELETE FROM ShoppingCart WHERE userName = ''">
         </asp:SqlDataSource>
     </p>
