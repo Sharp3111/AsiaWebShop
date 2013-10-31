@@ -81,7 +81,7 @@
                         <br />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Max Quantity Available" 
+                <asp:TemplateField HeaderText="Quantity Available" 
                     SortExpression="quantityAvailable">
                     <EditItemTemplate>
                         <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("quantityAvailable") %>'></asp:TextBox>
