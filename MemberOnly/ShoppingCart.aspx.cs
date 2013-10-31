@@ -126,7 +126,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         //get upc of this item
         string itemUPC = "";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("SELECT [upc] FROM [Item] WHERE ([name] = N'" + itemName + "')", connection))
+        using (SqlCommand command = new SqlCommand("SELECT [upc] FROM [Item] WHERE ([name] = '" + itemName + "')", connection))
         {
             connection.Open();
             SqlDataReader reader = command.ExecuteReader();
@@ -152,7 +152,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
         //delete the item in ShoppingCart DB
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("DELETE FROM [ShoppingCart] WHERE ([upc] = N'" + itemUPC + "' AND [userName] = N'" + userName + "')", connection))
+        using (SqlCommand command = new SqlCommand("DELETE FROM [ShoppingCart] WHERE ([upc] = '" + itemUPC + "' AND [userName] = '" + userName + "')", connection))
         {
             connection.Open();
             command.ExecuteNonQuery();
@@ -162,7 +162,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         //get the current quantityAvailable in Item BD
         Int32 currentQuantityAvailable = 0;        
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = N'" + itemUPC + "')", connection))
+        using (SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = '" + itemUPC + "')", connection))
         {
             connection.Open();
             SqlDataReader reader = command.ExecuteReader();
@@ -185,7 +185,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         //get the updated currentQuantityAvailable
         currentQuantityAvailable += quantity;
         //update quantityAvailable in Item DB with quantity and currentQuantityAvailable
-        string query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = N'" + itemUPC + "')";
+        string query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + itemUPC + "')";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         {
             SqlCommand command = new SqlCommand(query, connection);
