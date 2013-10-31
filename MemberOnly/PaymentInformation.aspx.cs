@@ -29,9 +29,11 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             // Hide and clear the edit result message.
             SelectOneCardOnlyMessage.Visible = false;
             SelectOneCardOnlyMessage.Text = "";
-    
-            //GetMemberCreditCard(connectionString, userName);
+            SelectCardMessage.Visible = false;
+            SelectCardMessage.Text = "";
+            btNextStep.Visible = false;
 
+            //GetMemberCreditCard(connectionString, userName);
         }
     }
 
@@ -187,7 +189,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
                 userName.Trim(),
                 CardNumber.Text.Trim(),
                 CardTypeDropDownList.SelectedItem.Text.Trim(),
-                CardholderName.Text.Trim(),
+                CardHolderName.Text.Trim(),
                 MonthDropDownList.SelectedItem.Text.Trim(),
                 YearDropDownList.SelectedItem.Text.Trim());
             // After the information is added, add the credit card data in the order record database.
@@ -219,42 +221,53 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             }
             if (j > 1)
             {
-                SelectOneCardOnlyMessage.Text = "Please select one credit card only." + SelectOneCardOnlyMessage.Text;
+                SelectOneCardOnlyMessage.Text = "Please select one credit card only.";
                 SelectOneCardOnlyMessage.Visible = true;
-            }
-                
-
+                Response.Redirect(Request.RawUrl);
+            }            
         }
-    
+
     }
     protected void btContinue_Click(object sender, EventArgs e)
     {
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
             string cardNumberSelected = "";
-            foreach (GridViewRow row in this.gvCreditCard.Rows)
+            CheckBox1_CheckedChanged(sender, e);
+
+            if (SelectOneCardOnlyMessage.Visible == false)
             {
-                Control ctrl = row.FindControl("CheckBox1");
-                if ((ctrl as CheckBox).Checked)
+                foreach (GridViewRow row in this.gvCreditCard.Rows)
                 {
-                    TableCellCollection cell = row.Cells;
-                    cardNumberSelected = cell[3].Text.Trim();
-                    break;
+                    Control ctrl = row.FindControl("CheckBox1");
+                    if ((ctrl as CheckBox).Checked)
+                    {
+                        TableCellCollection cell = row.Cells;
+                        cardNumberSelected = cell[3].Text.Trim();
+                        break;
+                    }
                 }
+
+                // After the information is added, add the credit card data in the order record database.
+                updateCreditCardInOrderRecord(connectionString,
+                userName.Trim(),
+                cardNumberSelected);
+                
+                SelectCardMessage.Text = "Your selection has been made. Please proceed to the next step.";
+                SelectCardMessage.Visible = true;
+                btNextStep.Visible = true;
             }
-            // After the information is added, add the credit card data in the order record database.
-            updateCreditCardInOrderRecord(connectionString,
-            userName.Trim(),
-            cardNumberSelected);
 
-            FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
+           
 
-            string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
+            //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
+
+            /*string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
             if (String.IsNullOrEmpty(continueUrl))
             {
                 continueUrl = "~/";
             }
-            Response.Redirect(continueUrl, false);
+            Response.Redirect(continueUrl, false);*/
     }
 
 }

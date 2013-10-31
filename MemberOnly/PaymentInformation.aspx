@@ -21,6 +21,7 @@
             font-size: medium;
             color: #0000FF;
             text-decoration: underline;
+            text-transform: uppercase;
         }
         .style5
         {
@@ -35,6 +36,12 @@
         .style7
         {
             text-decoration: underline;
+            color: #0000FF;
+            font-size: medium;
+            text-transform: uppercase;
+        }
+        .style8
+        {
             color: #0000FF;
         }
     </style>
@@ -54,7 +61,7 @@
         <tr>
             <td>
                 Cardholder Name:
-                <asp:TextBox ID="CardholderName" runat="server" 
+                <asp:TextBox ID="CardHolderName" runat="server" 
                     ValidationGroup="RegisterUserValidationGroup" MaxLength="50"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvCardHolderName" runat="server" 
                 ControlToValidate="CardholderName" Display="Dynamic" EnableClientScript="False" 
@@ -144,7 +151,7 @@
         </tr>
     </table>
     <p class="style7">
-        Or Select From Your Credit Card List
+        Or Select a card from your credit card List
     </p>
     <p>
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
@@ -158,13 +165,15 @@
                             oncheckedchanged="CheckBox1_CheckedChanged" Text=" " />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="cardHolderName" HeaderText="cardHolderName" 
+                <asp:BoundField DataField="cardHolderName" HeaderText="Card Holder Name" 
                     SortExpression="cardHolderName" />
-                <asp:BoundField DataField="type" HeaderText="type" SortExpression="type" />
-                <asp:BoundField DataField="number" HeaderText="number" ReadOnly="True" 
+                <asp:BoundField DataField="type" HeaderText="Type" SortExpression="type" />
+                <asp:BoundField DataField="number" HeaderText="Number" ReadOnly="True" 
                     SortExpression="number" />
-                <asp:BoundField DataField="expiryMonth" HeaderText="expiryMonth" 
+                <asp:BoundField DataField="expiryMonth" HeaderText="Expiry Month" 
                     SortExpression="expiryMonth" />
+                <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
+                    SortExpression="expiryYear" />
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -189,15 +198,23 @@
     <p>
         <asp:Label ID="SelectOneCardOnlyMessage" runat="server" ForeColor="Red"></asp:Label>
 &nbsp;</p>
+    <p>
+        <asp:Label ID="SelectCardMessage" runat="server" ForeColor="Red"></asp:Label>
+    </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" HeaderText="The following errors:" 
         ValidationGroup="RegisterUserValidationGroup" />
     <p>
     </p>
-    <p class="style7">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Button ID="btContinue" runat="server" onclick="btContinue_Click" 
-            Text="Continue" CausesValidation="False" />
+    <p class="style8">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:Button ID="btSelectThisCard" runat="server" onclick="btContinue_Click" 
+            Text="Select This Card" CausesValidation="False" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:Button ID="btNextStep" runat="server" onclick="btContinue_Click" 
+            Text="Next Step" CausesValidation="False" 
+            PostBackUrl="~/MemberOnly/FinalConfirmation.aspx" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </p>
 </asp:Content>
 

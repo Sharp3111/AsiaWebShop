@@ -107,11 +107,11 @@
             GridLines="None">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:BoundField DataField="number" HeaderText="Card Number" 
-                    SortExpression="number" />
-                <asp:BoundField DataField="type" HeaderText="Card Type" SortExpression="type" />
                 <asp:BoundField DataField="cardHolderName" HeaderText="Card Holder Name" 
                     SortExpression="cardHolderName" />
+                <asp:BoundField DataField="type" HeaderText="Card Type" SortExpression="type" />
+                <asp:BoundField DataField="number" HeaderText="Card Number" 
+                    SortExpression="number" />
                 <asp:BoundField DataField="expiryMonth" HeaderText="Expiry Month" 
                     SortExpression="expiryMonth" />
                 <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
