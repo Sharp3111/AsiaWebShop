@@ -256,6 +256,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
                 SelectCardMessage.Text = "Your selection has been made. Please proceed to the next step.";
                 SelectCardMessage.Visible = true;
                 btNextStep.Visible = true;
+                btSelectThisCard.Visible = false;
             }
 
            
