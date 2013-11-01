@@ -11,6 +11,6 @@ admin: employee (employee##)
 
 user: sharper (sharper##)
 
-Database last update: 1/11/2013 11:56 AM
+Database last update: 1/11/2013 2:34 PM
 
 Please manually delete non-existing users from ASP.NET besides deleting them from DB to avoid SQL runtime errors.
