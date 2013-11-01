@@ -126,8 +126,9 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         //string query3 = "SELECT [userName] FROM [OrderRecord] WHERE ([userName] = '" + userName + "' AND [upc] = ";
 
                         // Define the INSERT query with parameters.
-                        string query2 = "INSERT INTO [OrderRecord]([userName], [name], [email], [phoneNumber], [address], [deliveryDate], [deliveryTime], [isConfirmed]) " +
-                                        "VALUES (@UserName, @Name, @Email, @PhoneNumber, @Address, @DeliveryDate, @DeliveryTime, @IsConfirmed)";
+                        /*string query2 = "INSERT INTO [OrderRecord]([userName], [name], [email], [phoneNumber], [address], [deliveryDate], [deliveryTime], [isConfirmed]) " +
+                                        "VALUES (@UserName, @Name, @Email, @PhoneNumber, @Address, @DeliveryDate, @DeliveryTime, @IsConfirmed)";*/
+                        string query2 = "UPDATE [OrderRecord] SET [name] = @Name, [email] = @Email, [phoneNumber] = @PhoneNumber, [address] = @Address, [deliveryDate] = @DeliveryDate, [deliveryTime] = @DeliveryTime WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed AND [upc] = @UPC";
 
                         // Create the connection and the SQL command.
                         using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString2].ConnectionString))
@@ -142,6 +143,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                             command2.Parameters.AddWithValue("@DeliveryDate", DeliveryDateDropDownList.SelectedItem.Text.Trim());
                             command2.Parameters.AddWithValue("@DeliveryTime", DeliveryTimeDropDownList.SelectedItem.Text.Trim());
                             command2.Parameters.AddWithValue("@IsConfirmed", false);
+                            command2.Parameters.AddWithValue("@UPC", upc);
 
                             // Open the connection, execute the INSERT query and close the connection.
                             command2.Connection.Open();
