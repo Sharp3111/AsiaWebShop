@@ -176,10 +176,15 @@
     </tr>
     </table>
     <p>
+        &nbsp;</p>
+    <p>
         <asp:Button ID="ContinueButton" runat="server" onclick="ContinueButton_Click" 
             Text="Next: Specify Payment Information" 
-            ValidationGroup="RegisterUserValidationGroup" />
+            ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
+            BorderColor="Silver" BorderStyle="Solid" />
     </p>
+    <p>
+        &nbsp;</p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
         HeaderText="The following error(s) occurred:" 

@@ -44,6 +44,15 @@
         {
             color: #0000FF;
         }
+        .style9
+        {
+            width: 469px;
+        }
+        .style10
+        {
+            font-family: "Segoe UI";
+            color: #000080;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -59,8 +68,8 @@
         Enter your card information:</p>
     <table class="style6">
         <tr>
-            <td>
-                Cardholder Name:
+            <td class="style9">
+                <span class="style10">Cardholder Name:&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:TextBox ID="CardHolderName" runat="server" 
                     ValidationGroup="RegisterUserValidationGroup" MaxLength="50"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvCardHolderName" runat="server" 
@@ -69,7 +78,8 @@
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
             </td>
             <td>
-                Card Type:
+                <span class="style10">Card Type:
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:DropDownList ID="CardTypeDropDownList" runat="server" 
                 Width="250px" Height="22px" ValidationGroup="RegisterUserValidationGroup">
                 <asp:ListItem>-- Select credit card --</asp:ListItem>
@@ -87,8 +97,8 @@
             </td>
         </tr>
         <tr>
-            <td>
-                Card Number:
+            <td class="style9">
+                <span class="style10">Card Number:&nbsp;&nbsp;&nbsp; </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:TextBox ID="CardNumber" runat="server" 
                     ValidationGroup="RegisterUserValidationGroup" MaxLength="16"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvCardNumber" runat="server" 
@@ -102,7 +112,7 @@
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
             </td>
             <td>
-                Expiry Date:
+                <span class="style10">Expiry Date:&nbsp; </span>&nbsp;&nbsp;&nbsp;
                         <asp:DropDownList ID="MonthDropDownList" runat="server" 
                             Height="22px" Width="110px" CausesValidation="True" 
                             ValidationGroup="RegisterUserValidationGroup">
@@ -125,7 +135,7 @@
                             EnableClientScript="False" ErrorMessage="Please select a month." 
                             ForeColor="Red" InitialValue="00" 
                             ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
-                    &nbsp;/ 
+                    &nbsp;<span class="style10">/</span> 
                         <asp:DropDownList ID="YearDropDownList" runat="server" 
                             Height="22px" Width="110px" 
                     ValidationGroup="RegisterUserValidationGroup">
@@ -142,11 +152,11 @@
                     </td>
         </tr>
         <tr>
-            <td>
-                &nbsp;</td>
-            <td>
+            <td colspan="2" style="text-align: center">
+                <br />
         <asp:Button ID="btAddYourCard" runat="server" onclick="btAddYourCard_Click" 
-            Text="Add Your Card" ValidationGroup="RegisterUserValidationGroup" />
+            Text="Add Your Card" ValidationGroup="RegisterUserValidationGroup" 
+                    BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
                     </td>
         </tr>
     </table>
@@ -156,7 +166,7 @@
     <p>
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" 
-            ForeColor="#333333" GridLines="None"> 
+            ForeColor="#333333" GridLines="None" Width="918px"> 
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:TemplateField>
@@ -168,16 +178,16 @@
                         <asp:CheckBox ID="CheckBox1" runat="server" />
                     </EditItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="cardHolderName" HeaderText="cardHolderName" 
+                <asp:BoundField DataField="cardHolderName" HeaderText="Cardholder Name" 
                     SortExpression="cardHolderName" />
-                <asp:BoundField DataField="type" HeaderText="type" SortExpression="type" />
-                <asp:BoundField DataField="number" HeaderText="number" 
+                <asp:BoundField DataField="type" HeaderText="Type" SortExpression="type" />
+                <asp:BoundField DataField="number" HeaderText="Number" 
                     SortExpression="number" />
-                <asp:BoundField DataField="expiryMonth" HeaderText="expiryMonth" 
+                <asp:BoundField DataField="expiryMonth" HeaderText="Expiry Month" 
                     SortExpression="expiryMonth" />
-                <asp:BoundField DataField="expiryYear" HeaderText="expiryYear" 
+                <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
                     SortExpression="expiryYear" />
-                <asp:CheckBoxField DataField="creditCardDefault" HeaderText="creditCardDefault" 
+                <asp:CheckBoxField DataField="creditCardDefault" HeaderText="Default" 
                     SortExpression="creditCardDefault" />
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
@@ -191,6 +201,8 @@
             <SortedDescendingCellStyle BackColor="#E9EBEF" />
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
+    </p>
+    <p>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
@@ -215,11 +227,13 @@
     <p class="style8">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="btSelectThisCard" runat="server" onclick="btContinue_Click" 
-            Text="Select This Card" CausesValidation="False" />
+            Text="Select This Card" CausesValidation="False" BackColor="Silver" 
+            BorderColor="Silver" BorderStyle="Solid" />
     &nbsp;&nbsp;&nbsp;
         <asp:Button ID="btNextStep" runat="server" onclick="btContinue_Click" 
-            Text="Next Step" CausesValidation="False" 
-            PostBackUrl="~/MemberOnly/FinalConfirmation.aspx" />
+            Text="Next: Final Confirmation" CausesValidation="False" 
+            PostBackUrl="~/MemberOnly/FinalConfirmation.aspx" BackColor="Silver" 
+            BorderColor="Silver" BorderStyle="Solid" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </p>
 </asp:Content>
