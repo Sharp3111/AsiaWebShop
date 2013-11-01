@@ -155,25 +155,30 @@
     </p>
     <p>
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
-            CellPadding="4" DataKeyNames="number" DataSourceID="SqlDataSource1" 
+            CellPadding="4" DataSourceID="SqlDataSource1" 
             ForeColor="#333333" GridLines="None"> 
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:TemplateField>
                     <ItemTemplate>
                         <asp:CheckBox ID="CheckBox1" runat="server" 
-                            oncheckedchanged="CheckBox1_CheckedChanged" Text=" " />
+                            oncheckedchanged="CheckBox1_CheckedChanged1" Text=" " />
                     </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:CheckBox ID="CheckBox1" runat="server" />
+                    </EditItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="cardHolderName" HeaderText="Card Holder Name" 
+                <asp:BoundField DataField="cardHolderName" HeaderText="cardHolderName" 
                     SortExpression="cardHolderName" />
-                <asp:BoundField DataField="type" HeaderText="Type" SortExpression="type" />
-                <asp:BoundField DataField="number" HeaderText="Number" ReadOnly="True" 
+                <asp:BoundField DataField="type" HeaderText="type" SortExpression="type" />
+                <asp:BoundField DataField="number" HeaderText="number" 
                     SortExpression="number" />
-                <asp:BoundField DataField="expiryMonth" HeaderText="Expiry Month" 
+                <asp:BoundField DataField="expiryMonth" HeaderText="expiryMonth" 
                     SortExpression="expiryMonth" />
-                <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
+                <asp:BoundField DataField="expiryYear" HeaderText="expiryYear" 
                     SortExpression="expiryYear" />
+                <asp:CheckBoxField DataField="creditCardDefault" HeaderText="creditCardDefault" 
+                    SortExpression="creditCardDefault" />
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -188,7 +193,8 @@
         </asp:GridView>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT [cardHolderName], [type], [number], [expiryMonth], [expiryYear] FROM [CreditCard] WHERE ([userName] = @userName)">
+            
+            SelectCommand="SELECT [cardHolderName], [type], [number], [expiryMonth], [expiryYear], [creditCardDefault] FROM [CreditCard] WHERE ([userName] = @userName)">
             <SelectParameters>
                 <asp:ControlParameter ControlID="UserName" Name="userName" PropertyName="Text" 
                     Type="String" />

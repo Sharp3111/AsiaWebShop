@@ -224,9 +224,8 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
                 SelectOneCardOnlyMessage.Text = "Please select one credit card only.";
                 SelectOneCardOnlyMessage.Visible = true;
                 Response.Redirect(Request.RawUrl);
-            }            
+            }
         }
-
     }
     protected void btContinue_Click(object sender, EventArgs e)
     {
@@ -270,5 +269,22 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             }
             Response.Redirect(continueUrl, false);*/
     }
-
+    protected void CheckBox1_CheckedChanged1(object sender, EventArgs e)
+    {
+        int j = 0;
+        foreach (GridViewRow row in this.gvCreditCard.Rows)
+        {
+            Control ctrl = row.FindControl("CheckBox1");
+            if ((ctrl as CheckBox).Checked)
+            {
+                j++;
+            }
+            if (j > 1)
+            {
+                SelectOneCardOnlyMessage.Text = "Please select one credit card only.";
+                SelectOneCardOnlyMessage.Visible = true;
+                Response.Redirect(Request.RawUrl);
+            }
+        }
+    }
 }
