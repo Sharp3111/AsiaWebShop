@@ -65,7 +65,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
-        //string query = "SELECT [nickname], [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "')";
         string query = "SELECT [nickname] FROM [Address] WHERE ([userName] =N'" + userName + "')";
 
         // Create the connection and the SQL command.
@@ -82,14 +81,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 // Iterate through the table to get the retrieved values.
                 while (reader.Read())
                 {
-                    // Assign the data values to the web form labels.
-                    //string addressItem = reader["nickname"].ToString().Trim() + ": " +
-                    //                    reader["building"].ToString().Trim() + " " +
-                    //                    reader["floor"].ToString().Trim() + " " +
-                    //                    reader["flatSuite"].ToString().Trim() + " " +
-                    //                    reader["blockTower"].ToString().Trim() + ", " +
-                    //                    reader["streetAddress"].ToString().Trim() + ", " +
-                    //                    reader["district"].ToString().Trim();
                     string addressItem = reader["nickname"].ToString().Trim();
                     AddressDropDownList.Items.Add(addressItem);
                 }
@@ -107,6 +98,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
         {
             string connectionString = "AsiaWebShopDBConnectionString";
             string connectionString2 = "AsiaWebShopDBConnectionString2";
+            string connectionString3 = "AsiaWebShopDBConnectionString3";
             string userName = User.Identity.Name;
 
             // Define the SELECT query to get the member's address.
@@ -129,6 +121,9 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         // Assign the data values to the web form labels.
                         string upc = reader["upc"].ToString().Trim();
                         int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
+
+                        // Check if entries with the same upc and userName already exist in OrderRecord
+                        //string query3 = "SELECT [userName] FROM [OrderRecord] WHERE ([userName] = '" + userName + "' AND [upc] = ";
 
                         // Define the INSERT query with parameters.
                         string query2 = "INSERT INTO [OrderRecord]([userName], [name], [email], [phoneNumber], [address], [deliveryDate], [deliveryTime], [isConfirmed]) " +
