@@ -96,7 +96,7 @@ public partial class MemberOnly_StockAvailableAlert : System.Web.UI.Page
          */
             int count = 0;
 //            Response.Write("<script>alert('" + itemBox.Text.Trim() + "')</script>");
-            string SQLCmd = "SELECT COUNT(1) FROM [Subscription] WHERE ([name] = '" + itemBox.Text.Trim() + "' AND [email] = '" + email.SelectedValue + "') ";
+            string SQLCmd = "SELECT COUNT(1) FROM [Subscription] WHERE ([name] LIKE '%" + itemBox.Text.Trim() + "%' AND [email] = '" + email.SelectedValue + "') ";
             string connectionString = "AsiaWebShopDBConnectionString";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand(SQLCmd, connection))
@@ -105,7 +105,7 @@ public partial class MemberOnly_StockAvailableAlert : System.Web.UI.Page
                 count = (Int32)command.ExecuteScalar();
                 command.Connection.Close();
             }
-            Response.Write("<script>alert('" + count + "')</script>");
+            //Response.Write("<script>alert('" + count + "')</script>");
             if (count != 0)
             {
                 args.IsValid = false;

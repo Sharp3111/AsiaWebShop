@@ -80,10 +80,6 @@
                 ErrorMessage="Please select a email address." ForeColor="Red" 
                 onservervalidate="CustomValidator1_ServerValidate" 
                 ValidationGroup="requestemail">*</asp:CustomValidator>
-            <asp:CustomValidator ID="CustomValidator3" runat="server" Display="Dynamic" 
-                EnableClientScript="False" ErrorMessage="Record already exist!" ForeColor="Red" 
-                onservervalidate="CustomValidator3_ServerValidate" 
-                ValidationGroup="requestemail">*</asp:CustomValidator>
         </td>
     </tr>
     <tr>
@@ -97,6 +93,10 @@
             <asp:Button ID="request" runat="server" Text="Request notification" 
                 onclick="request_Click" ValidationGroup="requestemail" 
                 style="text-align: left" />
+            <asp:CustomValidator ID="CustomValidator3" runat="server" Display="Dynamic" 
+                EnableClientScript="False" ErrorMessage="Record already exist!" ForeColor="Red" 
+                onservervalidate="CustomValidator3_ServerValidate" 
+                ValidationGroup="requestemail">*</asp:CustomValidator>
         </td>
     </tr>
 </table>
