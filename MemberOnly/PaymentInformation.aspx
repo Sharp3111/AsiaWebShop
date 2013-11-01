@@ -170,13 +170,13 @@
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:TemplateField>
-                    <EditItemTemplate>
-                        <asp:CheckBox ID="CheckBox1" runat="server" />
-                    </EditItemTemplate>
                     <ItemTemplate>
                         <asp:RadioButton ID="CheckBox1" runat="server" 
                             oncheckedchanged="CheckBox1_CheckedChanged2" Text=" " />
                     </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:CheckBox ID="CheckBox1" runat="server" />
+                    </EditItemTemplate>
                 </asp:TemplateField>
                 <asp:BoundField DataField="cardHolderName" HeaderText="Cardholder Name" 
                     SortExpression="cardHolderName" />
@@ -187,7 +187,7 @@
                     SortExpression="expiryMonth" />
                 <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
                     SortExpression="expiryYear" />
-                <asp:CheckBoxField DataField="creditCardDefault" HeaderText="Default" 
+                <asp:CheckBoxField DataField="creditCardDefault" HeaderText="IsDefault" 
                     SortExpression="creditCardDefault" />
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
