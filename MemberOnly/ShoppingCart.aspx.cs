@@ -14,7 +14,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
-        {
+        {            
             //create connectionString
             string connectionString = "AsiaWebShopDBConnectionString";
             //create userName for current session
@@ -23,7 +23,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             int maxRowIndex = gvShoppingCart.Rows.Count;
 
             //Check whether there is any item to be displayed in ShoppingCart DB for the current user by counting userName record
-            string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
+            //string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
             Int32 count = 0;     
             //check if the item has already added into the shopping cart
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -33,7 +33,6 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 count = (Int32)command.ExecuteScalar();
                 command.Connection.Close();
             }
-
 
             //If there are records in the current user's shopping cart
             if (count != 0)
@@ -64,58 +63,52 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     private void AccumulateTotalPrice(string connectionString, string userName)
     {
         //Check whether there is any item to be displayed in ShoppingCart DB for the current user
-        string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
+        //string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
         Int32 count = 0;
-        //check if the item has already added into the shopping cart
+        //check if the item has already been added into the shopping cart
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([userName] = '" + userName + "')", connection))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([userName] = N'" + userName + "')", connection))
         {
             command.Connection.Open();          
             count = (Int32)command.ExecuteScalar();
             command.Connection.Close();
         }
 
-
         //If there are records in the current user's shopping cart, proceed to accumulate total price
         if (count != 0)
         {
-            //Accumulate total price
-            decimal Price = 0;
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand("SELECT [ShoppingCart].[quantity], [Item].[discountPrice] FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE ([ShoppingCart].[userName] = '" + userName + "')", connection))
-            {
-                command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                // Check if a result was returned.
-                if (reader.HasRows)
-                {
-                    // Iterate through the table to get the retrieved values.
-                    while (reader.Read())
-                    {
-                        // Assign the data values to itemUPC
-                        int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
-                        decimal unitPurchasePrice = Convert.ToDecimal(reader["discountPrice"].ToString().Trim());
+            //Accumulate total price and selected total price
+            decimal TotalPrice = 0;
+            decimal SelectedTotalPrice = 0;
+            Int32 MaxRows = gvShoppingCart.Rows.Count;
 
-                        Price += quantity * unitPurchasePrice;
-                    }
+            for (int i = 0; i < MaxRows; i++)
+            {
+                bool selected = ((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked;
+                decimal totalPriceOfEachItem = Convert.ToDecimal(((Label)gvShoppingCart.Rows[i].FindControl("TotalPriceOfEachItemLabel")).Text.ToString().Trim());
+
+                if (selected)
+                {
+                    SelectedTotalPrice += totalPriceOfEachItem;
                 }
 
-                // Close the connection and the DataReader.
-                command.Connection.Close();
-                reader.Close();
+                TotalPrice += totalPriceOfEachItem;
             }
-            TotalPriceLabel.Text = Price.ToString();
+
+            SelectedPriceLabel.Text = SelectedTotalPrice.ToString();
+            TotalPriceLabel.Text = TotalPrice.ToString();
         }
         //if there is no record in ShoppingCartDB
         else
         {
+            SelectedPriceLabel.Text = "- -";
             TotalPriceLabel.Text = "- -";
         }
     }
 
     private void GetItemInformation(string connectionString, string userName)
     {
-        string queryPopulate = "SELECT [Item].[upc], [Item].[name], [Item].[discountPrice], [Item].[quantityAvailable], ([Item].[discountPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
+        string queryPopulate = "SELECT [ShoppingCart].[isChecked], [Item].[upc], [Item].[name], [Item].[discountPrice], [Item].[quantityAvailable], ([Item].[discountPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
 
         // Execute the SQL statement; order the result by item name.
         SqlDataSource1.SelectCommand = queryPopulate;
@@ -154,7 +147,6 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 reader.Close();
             }
         }
-
     }
     protected void cvQuantity_ServerValidate(object source, ServerValidateEventArgs args)
     {
@@ -206,7 +198,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         string userName = User.Identity.Name;
 
         //Check whether there is any item to be displayed in ShoppingCart DB for the current user
-        string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
+        //string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
         Int32 count = 0;
         //check if the item has already added into the shopping cart
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -219,7 +211,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
         if (IsValid && count != 0)
         {
-            UpdateItemInformationInDB(connectionString, userName);
+            //UpdateItemInformationInDB(connectionString, userName);
+            UpdateOrderRecord(connectionString, userName);
             Response.Redirect("~/MemberOnly/DeliveryInformation.aspx");
         }
         else if (IsValid && count == 0)
@@ -231,12 +224,15 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     private void UpdateItemInformationInDB(string connectionString, string userName)
     {
         Int32 MaxIndex = gvShoppingCart.Rows.Count;
-        for(int i = 1; i < MaxIndex; i++)
+        for(int i = 0; i < MaxIndex; i++)
         {
+            //get selected checkBox.Checked
+            bool selected = ((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked;
+
             //get textBoxQuantity
             TextBox tbQuantity = (TextBox)gvShoppingCart.Rows[i].FindControl("QuantityTextBox");
             Int32 textBoxQuantity = Convert.ToInt32(tbQuantity.Text);
-
+           
             //get labelQuantityAvailable
             Label lbMax = (Label)gvShoppingCart.Rows[i].FindControl("QuantityAvailableLabel");
             Int32 labelQuantityAvailable = Convert.ToInt32(lbMax.Text);
@@ -265,7 +261,6 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                     command.Connection.Close();
                     reader.Close();
                 }
-
 
                 //get initialItemQuantity in Item DB
                 Int32 initialItemQuantity = 0;
@@ -305,19 +300,230 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             }
 
             //update ShoppingCart DB
-            string queryUpdateShoppingCart = "UPDATE [ShoppingCart] SET [quantity] = @Quantity WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')";
+            string queryUpdateShoppingCart = "UPDATE [ShoppingCart] SET [quantity] = @Quantity, [isChecked] = @IsChecked WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand(queryUpdateShoppingCart, connection))
             {
                 //Define the UPDATE query parameters with corresponding values
                 command.Parameters.AddWithValue("@Quantity", (initialShoppingCartQuantity + difference).ToString());
+                command.Parameters.AddWithValue("@IsChecked", selected);
 
-                // Open the connection, execute the UPDATE query and close the connection.
+                //Open the connection, execute the UPDATE query and close the connection.
                 command.Connection.Open();
                 command.ExecuteNonQuery();
                 command.Connection.Close();
             }
         }        
+    }
+
+    private void UpdateOrderRecord(string connectionString, string userName) //userName is for userName in OrderRecord
+    {
+        //for each selected item update OrderRecord DB
+        Int32 MaxRows = gvShoppingCart.Rows.Count;
+
+        for (int i = 0; i < MaxRows; i++)
+        {
+                bool selected = ((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked;
+
+                string itemName = ((Label)gvShoppingCart.Rows[i].FindControl("NameLabel")).Text.Trim(); //for name in OrderRecord
+                string itemUPC = ((Label)gvShoppingCart.Rows[i].FindControl("lbUPC")).Text.Trim(); //for upc in OrderRecord
+                string quantity = ((TextBox)gvShoppingCart.Rows[i].FindControl("QuantityTextBox")).Text.Trim(); //for quantity in OrderRecord
+                string unitPuchasePrice = ((Label)gvShoppingCart.Rows[i].FindControl("UnitPurchasePriceLabel")).Text.Trim(); //for unitPrice in OrderRecord
+
+                string IsConfirmed = "0"; //for isConfirmed in OrderRecord
+                //string currentTime = "CURRENT_TIMESTAMP"; //for orderDateTime in OrderRecord
+
+
+                string userEmail = ""; //for email in OrderRecord
+                string userPhoneNumber = ""; //for phoneNumber in OrderRecord
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [email], [phoneNumber] FROM [Member] WHERE ([userName] = '" + userName + "')", connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            // Assign the data values to userEmail, userPhoneNumber
+                            userEmail = reader["email"].ToString().Trim();
+                            userPhoneNumber = reader["phoneNumber"].ToString().Trim();
+                        }
+                    }
+
+                    // Close the connection and the DataReader.
+                    command.Connection.Close();
+                    reader.Close();
+                }
+
+                string userAddress = ""; //for address in OrderRecord
+                string Default = "Home";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] = '" + userName + "' AND [nickname] = N'" + Default + "')", connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            // Assign the data values to userAddress
+                            userAddress = reader["flatSuite"].ToString().Trim() + "  "
+                                        + reader["floor"].ToString().Trim() + "  "
+                                        + reader["blockTower"].ToString().Trim() + "  "
+                                        + reader["building"].ToString().Trim() + "  "
+                                        + reader["streetAddress"].ToString().Trim() + "  "
+                                        + reader["district"].ToString().Trim();
+                        }
+                    }
+
+                    // Close the connection and the DataReader.
+                    command.Connection.Close();
+                    reader.Close();
+                }
+
+                string userCreditCardNumber = ""; //for creditCardNumber in OrderRecord
+                Default = "1";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [number] FROM [CreditCard] WHERE ([userName] = '" + userName + "' AND [creditCardDefault] = N'" + Default + "')", connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            // Assign the data values to userCreditCardNumber
+                            userCreditCardNumber = reader["number"].ToString().Trim();
+                        }
+                    }
+
+                    // Close the connection and the DataReader.
+                    command.Connection.Close();
+                    reader.Close();
+                }
+
+                //Check whether there is any order for this item in OrderRecord
+                //string checkQuery = "SELECT [userName] FROM [OrderRecord] WHERE ([userName] = N'" + userName + "' AND [upc] = N'" + itemUPC + "')";
+                Int32 count = 0;
+                //check if the item has already added into the shopping cart
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [OrderRecord] WHERE ([userName] = N'" + userName + "' AND [upc] = N'" + itemUPC + "')", connection))
+                {
+                    command.Connection.Open();
+                    count = (Int32)command.ExecuteScalar();
+                    command.Connection.Close();
+                }
+
+                //if checkBox.Checked && Order does not exist, Insert Order
+                if (selected && count == 0)
+                {
+                    string queryInsert = "INSERT INTO [OrderRecord] ("
+                                       + "[userName], "
+                                       + "[name], "
+                                       + "[email], "
+                                       + "[phoneNumber], "
+                                       + "[upc], "
+                                       + "[unitPrice], "
+                                       + "[quantity], "
+                                       + "[address], "
+                                       + "[creditCardNumber], "
+                                       + "[orderDateTime], "
+                                       + "[isConfirmed]"
+                                       + ")"
+
+                                       + "VALUES ("
+                                       + "@UserName, "
+                                       + "@Name, "
+                                       + "@Email, "
+                                       + "@PhoneNumber, "
+                                       + "@Upc, "
+                                       + "@UnitPrice, "
+                                       + "@Quantity, "
+                                       + "@Address, "
+                                       + "@CreditCardNumber, "
+                                       + "CURRENT_TIMESTAMP, "
+                                       + "@IsConfirmed"
+                                       + ")";
+
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryInsert, connection))
+                    {
+                        // Define the INSERT query parameters and their values.
+                        command.Parameters.AddWithValue("@UserName", userName);
+                        command.Parameters.AddWithValue("@Name", itemName);
+                        command.Parameters.AddWithValue("@Email", userEmail);
+                        command.Parameters.AddWithValue("@PhoneNumber", userPhoneNumber);
+                        command.Parameters.AddWithValue("@Upc", itemUPC);
+                        command.Parameters.AddWithValue("@UnitPrice", unitPuchasePrice);
+                        command.Parameters.AddWithValue("@Quantity", quantity);
+                        command.Parameters.AddWithValue("@Address", userAddress);
+                        command.Parameters.AddWithValue("@CreditCardNumber", userCreditCardNumber);
+                        command.Parameters.AddWithValue("@IsConfirmed", IsConfirmed);
+
+                        // Open the connection, execute the INSERT query and close the connection.
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }
+                //else if checkBox.Checked && count != 0 Update Order
+                else if (selected && count != 0)
+                {
+                    string queryUpdate = "UPDATE [OrderRecord] SET "
+                                       + "[name] = @Name, "
+                                       + "[email] = @Email, "
+                                       + "[phoneNumber] = @PhoneNumber, "
+                                       + "[unitPrice] = @UnitPrice, "
+                                       + "[quantity] = @Quantity, "
+                                       + "[address] = @Address, "
+                                       + "[creditCardNumber] = @CreditCardNumber, "
+                                       + "[orderDateTime] = CURRENT_TIMESTAMP, "
+                                       + "[isConfirmed] = @IsConfirmed "
+                                       + " WHERE ([userName] = N'" + userName + "' AND [upc] = N'" + itemUPC + "')";
+
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                    {
+                        // Define the UPDATE query parameters and their values.
+                        command.Parameters.AddWithValue("@UserName", userName);
+                        command.Parameters.AddWithValue("@Name", itemName);
+                        command.Parameters.AddWithValue("@Email", userEmail);
+                        command.Parameters.AddWithValue("@PhoneNumber", userPhoneNumber);
+                        command.Parameters.AddWithValue("@Upc", itemUPC);
+                        command.Parameters.AddWithValue("@UnitPrice", unitPuchasePrice);
+                        command.Parameters.AddWithValue("@Quantity", quantity);
+                        command.Parameters.AddWithValue("@Address", userAddress);
+                        command.Parameters.AddWithValue("@CreditCardNumber", userCreditCardNumber);
+
+                        command.Parameters.AddWithValue("@IsConfirmed", IsConfirmed);
+
+                        // Open the connection, execute the INSERT query and close the connection.
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }
+                //delete corresponding items in OrderRecord
+                else if (!selected && count != 0) 
+                {
+                    string queryDelete = "DELETE FROM [OrderRecord] WHERE ([userName] = N'" + userName + "' AND [upc] = '" + itemUPC + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryDelete, connection))
+                    {
+                        // Open the connection, execute the INSERT query and close the connection.
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }            
+        }
     }
 
     protected void deleteButton_Click(object sender, EventArgs e)
@@ -416,14 +622,25 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         Page.Validate("ShoppingCartValidation");
         //Response.Write("<script>alert('Hehe')</script>");
         if(Page.IsValid)
-        {
-            
+        {            
             string connectionString = "AsiaWebShopDBConnectionString";
-            string userName = User.Identity.Name;
-            GetItemInformation(connectionString, userName);
-            AccumulateTotalPrice(connectionString, userName);
-            //UpdateItemInformationInDB(connectionString, userName);
+            string userName = User.Identity.Name; //Response.Write("<script>alert('Before Update')</script>");
+            UpdateItemInformationInDB(connectionString, userName); //Response.Write("<script>alert('After Update; Before Populate')</script>");
+            GetItemInformation(connectionString, userName); //Response.Write("<script>alert('After Populate; Before Calc')</script>");
+            AccumulateTotalPrice(connectionString, userName); //Response.Write("<script>alert('After Calc')</script>");
         }
         //Response.Write("<script>alert('Hehe')</script>");
+    }
+    protected void SelectLabel_CheckedChanged(object sender, EventArgs e)
+    {
+        Page.Validate("ShoppingCartValidation");
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name; Response.Write("<script>alert('Before Update')</script>");
+            UpdateItemInformationInDB(connectionString, userName); Response.Write("<script>alert('After Update; Before Populate')</script>");
+            GetItemInformation(connectionString, userName); Response.Write("<script>alert('After Populate; Before Calc')</script>");
+            AccumulateTotalPrice(connectionString, userName); Response.Write("<script>alert('After Calc')</script>");
+        }
     }
 }
