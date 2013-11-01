@@ -41,8 +41,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 lblMessage.Text = "The following items have been added to your shopping cart. Please click this to continue to shop around: ";
 
                 //Populate the GridView on the webpage ShoppingCart.aspx
-                GetItemInformation(connectionString, userName);
-                AccumulateTotalPrice(connectionString, userName);
+                GetItemInformation(connectionString, userName);                
             }
             //if there is no record in ShoppingCartDB
             else 
@@ -56,7 +55,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 {
                     lblMessage.ForeColor = new System.Drawing.Color();
                 }
-            }            
+            }
+            AccumulateTotalPrice(connectionString, userName);
         }
     }
 
@@ -108,7 +108,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
     private void GetItemInformation(string connectionString, string userName)
     {
-        string queryPopulate = "SELECT [ShoppingCart].[isChecked], [Item].[upc], [Item].[name], [Item].[discountPrice], [Item].[quantityAvailable], ([Item].[discountPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
+        string queryPopulate = "SELECT [Item].[upc], [Item].[name], [Item].[discountPrice], [Item].[quantityAvailable], ([Item].[discountPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
 
         // Execute the SQL statement; order the result by item name.
         SqlDataSource1.SelectCommand = queryPopulate;
@@ -120,9 +120,10 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         int i = 0;
         {
             //SELECT quantity FROM ShoppingCart query
-            string querySelect = "SELECT [quantity] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
+            string querySelect = "SELECT [quantity], [isChecked] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
 
             int intQuantity = 0;
+            Boolean IsChecked = true;
             // Create the connection and the SQL command.
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand(querySelect, connection))
@@ -138,7 +139,11 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                     while (reader.Read())
                     {
                         intQuantity = reader.GetInt32(0);
-                        ((TextBox)gvShoppingCart.Rows[i++].FindControl("QuantityTextBox")).Text = intQuantity.ToString();
+                        ((TextBox)gvShoppingCart.Rows[i].FindControl("QuantityTextBox")).Text = intQuantity.ToString();
+
+                        IsChecked = reader.GetBoolean(1);
+                        ((CheckBox)gvShoppingCart.Rows[i++].FindControl("SelectLabel")).Checked = IsChecked;
+                        //Response.Write("<script>alert('" + IsChecked.ToString().Trim() + "')</script>");
                     }
                 }
 
@@ -192,32 +197,64 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     }
     protected void Next_Click(object sender, EventArgs e)
     {
-        //create connectionString
-        string connectionString = "AsiaWebShopDBConnectionString";
-        //create userName for current session
-        string userName = User.Identity.Name;
+        if (IsValid)
+        {
+            //create connectionString
+            string connectionString = "AsiaWebShopDBConnectionString";
+            //create userName for current session
+            string userName = User.Identity.Name;
 
-        //Check whether there is any item to be displayed in ShoppingCart DB for the current user
-        //string checkQuery = "SELECT [userName] FROM [ShoppingCart] WHERE [userName] = '" + userName + "'";
-        Int32 count = 0;
-        //check if the item has already added into the shopping cart
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([userName] = N'" + userName + "')", connection))
-        {
-            command.Connection.Open();
-            count = (Int32)command.ExecuteScalar();
-            command.Connection.Close();
-        }
+            //Check whether there is any item to be displayed in ShoppingCart DB for the current user            
+            Int32 countShoppingCart = 0;
+            //check if the item has already added into the shopping cart
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([userName] = N'" + userName + "')", connection))
+            {
+                command.Connection.Open();
+                countShoppingCart = (Int32)command.ExecuteScalar();
+                command.Connection.Close();
+            }
 
-        if (IsValid && count != 0)
-        {
-            //UpdateItemInformationInDB(connectionString, userName);
-            UpdateOrderRecord(connectionString, userName);
-            Response.Redirect("~/MemberOnly/DeliveryInformation.aspx");
-        }
-        else if (IsValid && count == 0)
-        {
-            lblMessage.Text = "Your shopping cart is currently empty. You have to have at least one item in your shopping cart in order to proceed. Please shop around: ";
+            //Check the number of checkBoxes that are checked
+            Int32 MaxRow = gvShoppingCart.Rows.Count;
+            Int32 countCheckBox = 0;
+            for (int i = 0; i < MaxRow; i++)
+            {
+                CheckBox currentCheck = (CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel");
+                Boolean currentIsChecked = currentCheck.Checked;
+
+                if (currentIsChecked)
+                {
+                    countCheckBox++;
+                }
+            }
+
+            //ShoppingCart is nonempty
+            if (countShoppingCart != 0)
+            {
+                //UpdateItemInformationInDB(connectionString, userName);
+                UpdateOrderRecord(connectionString, userName);
+                //All checkBox.Checked == false;
+                if (countCheckBox != 0)
+                {
+                    ShopAround.Visible = true;
+                    Response.Redirect("~/MemberOnly/DeliveryInformation.aspx");
+                }
+                //There is at least one checkBox.Checked == true;
+                else
+                {
+                    lblMessage.Text = "You have not select items to check out. To check out, please select at least one item. ";
+                    ShopAround.Visible = false;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+            //ShoppingCart is empty
+            else if (countShoppingCart == 0)
+            {
+                AccumulateTotalPrice(connectionString, userName);
+                lblMessage.Text = "Your shopping cart is currently empty. You have to have at least one item in your shopping cart in order to proceed. Please shop around: ";
+                ShopAround.Visible = true;
+            }
         }
     }
 
@@ -227,7 +264,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         for(int i = 0; i < MaxIndex; i++)
         {
             //get selected checkBox.Checked
-            bool selected = ((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked;
+            Int32 selected = Convert.ToInt32(((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked);
+
 
             //get textBoxQuantity
             TextBox tbQuantity = (TextBox)gvShoppingCart.Rows[i].FindControl("QuantityTextBox");
@@ -306,7 +344,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             {
                 //Define the UPDATE query parameters with corresponding values
                 command.Parameters.AddWithValue("@Quantity", (initialShoppingCartQuantity + difference).ToString());
-                command.Parameters.AddWithValue("@IsChecked", selected);
+                command.Parameters.AddWithValue("@IsChecked", selected.ToString().Trim());
+                //Response.Write("<script>alert('" + selected.ToString() + "')</script>");
 
                 //Open the connection, execute the UPDATE query and close the connection.
                 command.Connection.Open();
@@ -637,10 +676,10 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         if (Page.IsValid)
         {
             string connectionString = "AsiaWebShopDBConnectionString";
-            string userName = User.Identity.Name; Response.Write("<script>alert('Before Update')</script>");
-            UpdateItemInformationInDB(connectionString, userName); Response.Write("<script>alert('After Update; Before Populate')</script>");
-            GetItemInformation(connectionString, userName); Response.Write("<script>alert('After Populate; Before Calc')</script>");
-            AccumulateTotalPrice(connectionString, userName); Response.Write("<script>alert('After Calc')</script>");
+            string userName = User.Identity.Name; //Response.Write("<script>alert('Before Update')</script>");
+            UpdateItemInformationInDB(connectionString, userName); //Response.Write("<script>alert('After Update; Before Populate')</script>");
+            GetItemInformation(connectionString, userName); //Response.Write("<script>alert('After Populate; Before Calc')</script>");
+            AccumulateTotalPrice(connectionString, userName); //Response.Write("<script>alert('After Calc')</script>");
         }
     }
 }

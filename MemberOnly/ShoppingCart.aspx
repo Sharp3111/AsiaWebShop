@@ -11,7 +11,13 @@
         {
             color: #000080;
             font-weight: bold;
-            font-size: large;
+            font-size: xx-large;
+        }
+        .style4
+        {
+            color: #000080;
+            font-weight: bold;
+            text-align: right;
         }
     </style>
 </asp:Content>
@@ -21,12 +27,13 @@
     <p class="style2">
         <asp:Label ID="lblMessage" runat="server" Text="Label"></asp:Label>
 &nbsp;<asp:HyperLink ID="ShopAround" runat="server" ForeColor="#FF9900" 
-            NavigateUrl="~/ItemSearch.aspx" style="text-decoration: underline">Go shopping around</asp:HyperLink>
+            NavigateUrl="~/ItemSearch.aspx" 
+            style="text-decoration: underline; color: #800080; font-weight: 400;">Go shopping around</asp:HyperLink>
     </p>
     <p class="style2">
         <asp:GridView ID="gvShoppingCart" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" 
-            GridLines="None">
+            GridLines="None" Width="922px">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:TemplateField HeaderText="upc" SortExpression="upc" Visible="False">
@@ -131,11 +138,15 @@
         </asp:GridView>
         </p>
     <p class="style2">
+        &nbsp;</p>
+    <p class="style2">
+        &nbsp;</p>
+    <p class="style4">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
         Selected Total Price:
         <asp:Label ID="SelectedPriceLabel" runat="server"></asp:Label>
         </p>
-    <p class="style2">
+    <p class="style4">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
         Total Price:
         <asp:Label ID="TotalPriceLabel" runat="server"></asp:Label>
@@ -145,6 +156,10 @@
             ValidationGroup="ShoppingCartValidation" onclick="Next_Click" 
             BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
     </p>
+    <p class="style2">
+        &nbsp;</p>
+    <p class="style2">
+        &nbsp;</p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" 
         HeaderText="The following errors occur:" 
         ValidationGroup="ShoppingCartValidation" />
@@ -155,7 +170,7 @@
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
             
-            SelectCommand="SELECT Item.upc, Item.name, Item.discountPrice, ShoppingCart.quantity, Item.quantityAvailable, Item.discountPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc" 
+            SelectCommand="SELECT ShoppingCart.isChecked, Item.upc, Item.name, Item.discountPrice, ShoppingCart.quantity, Item.quantityAvailable, Item.discountPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc" 
             DeleteCommand="DELETE FROM ShoppingCart WHERE userName = ''">
         </asp:SqlDataSource>
     </p>
