@@ -275,6 +275,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
         int j = 0;
         foreach (GridViewRow row in this.gvCreditCard.Rows)
         {
+
             Control ctrl = row.FindControl("CheckBox1");
             if ((ctrl as CheckBox).Checked)
             {
