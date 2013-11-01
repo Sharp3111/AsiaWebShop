@@ -170,13 +170,13 @@
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:TemplateField>
-                    <ItemTemplate>
-                        <asp:CheckBox ID="CheckBox1" runat="server" 
-                            oncheckedchanged="CheckBox1_CheckedChanged1" Text=" " />
-                    </ItemTemplate>
                     <EditItemTemplate>
                         <asp:CheckBox ID="CheckBox1" runat="server" />
                     </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:RadioButton ID="CheckBox1" runat="server" 
+                            oncheckedchanged="CheckBox1_CheckedChanged2" Text=" " />
+                    </ItemTemplate>
                 </asp:TemplateField>
                 <asp:BoundField DataField="cardHolderName" HeaderText="Cardholder Name" 
                     SortExpression="cardHolderName" />

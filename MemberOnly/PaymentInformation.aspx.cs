@@ -76,7 +76,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
         //System.Diagnostics.Debug.WriteLine("Exit GetMemberCreditCard");
     }*/
 
-    private void GetMemberData(string connectionString, string userName)
+   private void GetMemberData(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's personal data.
         string query = "SELECT [userName] FROM [Member] WHERE ([username] =N'" + userName + "')";
@@ -209,7 +209,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
     }
 
 
-    protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
+   /* protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
     {
         int j = 0;
         foreach (GridViewRow row in this.gvCreditCard.Rows)
@@ -226,13 +226,13 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
                 Response.Redirect(Request.RawUrl);
             }
         }
-    }
+    }*/
     protected void btContinue_Click(object sender, EventArgs e)
     {
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
             string cardNumberSelected = "";
-            CheckBox1_CheckedChanged(sender, e);
+            CheckBox1_CheckedChanged2(sender, e);
 
             if (SelectOneCardOnlyMessage.Visible == false)
             {
@@ -269,7 +269,8 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             }
             Response.Redirect(continueUrl, false);*/
     }
-    protected void CheckBox1_CheckedChanged1(object sender, EventArgs e)
+
+    protected void CheckBox1_CheckedChanged2(object sender, EventArgs e)
     {
         int j = 0;
         foreach (GridViewRow row in this.gvCreditCard.Rows)
