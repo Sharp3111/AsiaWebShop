@@ -125,8 +125,8 @@ public partial class Account_Register : System.Web.UI.Page
     protected void InsertCreditCard(string connectionString, string userName, string number, string type, string cardHolderName, string expiryMonth, string expiryYear)
     {
         // Define the INSERT query with parameters.
-        string query = "INSERT INTO [CreditCard]([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear])" +
-                       "VALUES (@Username, @Number, @Type, @CardHolderName, @ExpiryMonth, @ExpiryYear)";
+        string query = "INSERT INTO [CreditCard]([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear], [creditCardDefault])" +
+                       "VALUES (@Username, @Number, @Type, @CardHolderName, @ExpiryMonth, @ExpiryYear, @creditCardDefault)";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -139,6 +139,7 @@ public partial class Account_Register : System.Web.UI.Page
             command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
             command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
             command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+            command.Parameters.AddWithValue("@creditCardDefault", true);
 
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();
