@@ -111,7 +111,7 @@
                 ForeColor="Red" ValidationExpression="^\d{14,16}$" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
                 <asp:CustomValidator ID="cvCardNumber" runat="server" 
-                    ErrorMessage="This card has existed in our database. Please try another one." 
+                    ErrorMessage="This card has existed in your credit card list. Please try another one." 
                     ForeColor="Red" onservervalidate="cvCardNumber_ServerValidate" 
                     ValidationGroup="RegisterUserValidationGroup">*</asp:CustomValidator>
             </td>
@@ -157,7 +157,6 @@
         </tr>
         <tr>
             <td colspan="2" style="text-align: center">
-                <br />
         <asp:Button ID="btAddYourCard" runat="server" onclick="btAddYourCard_Click" 
             Text="Add Your Card" ValidationGroup="RegisterUserValidationGroup" 
                     BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
@@ -170,29 +169,57 @@
     <p>
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" 
-            ForeColor="#333333" GridLines="None" Width="918px"> 
+            ForeColor="#333333" GridLines="None" Width="928px"> 
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:TemplateField>
+                <asp:TemplateField HeaderText="Delete">
                     <ItemTemplate>
-                        <asp:RadioButton ID="CheckBox1" runat="server" 
-                            oncheckedchanged="CheckBox1_CheckedChanged2" Text=" " />
+                        <asp:Button ID="deleteButton" runat="server" BackColor="Silver" 
+                            BorderColor="Silver" BorderStyle="Solid" onclick="deleteButton_Click" 
+                            Text="Delete" Width="60px" />
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Edit">
+                    <ItemTemplate>
+                        <asp:Button ID="editButton" runat="server" BackColor="Silver" 
+                            BorderColor="Silver" BorderStyle="Solid" Text="Edit" Width="60px" />
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField SortExpression="creditCardDefault">
+                    <ItemTemplate>
+                        <asp:CheckBox ID="checkBoxSelect" runat="server" AutoPostBack="True" 
+                            oncheckedchanged="checkBoxSelect_CheckedChanged" />
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:BoundField DataField="userName" HeaderText="User Name" 
+                    SortExpression="userName" Visible="False" />
+                <asp:TemplateField HeaderText="Number" SortExpression="number">
+                    <ItemTemplate>
+                        <asp:Label ID="numberLabel" runat="server" Text='<%# Bind("number") %>'></asp:Label>
                     </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:CheckBox ID="CheckBox1" runat="server" />
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("number") %>'></asp:TextBox>
                     </EditItemTemplate>
                 </asp:TemplateField>
+                <asp:BoundField DataField="type" HeaderText="Type" 
+                    SortExpression="type" />
                 <asp:BoundField DataField="cardHolderName" HeaderText="Cardholder Name" 
                     SortExpression="cardHolderName" />
-                <asp:BoundField DataField="type" HeaderText="Type" SortExpression="type" />
-                <asp:BoundField DataField="number" HeaderText="Number" 
-                    SortExpression="number" />
                 <asp:BoundField DataField="expiryMonth" HeaderText="Expiry Month" 
                     SortExpression="expiryMonth" />
                 <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
                     SortExpression="expiryYear" />
-                <asp:CheckBoxField DataField="creditCardDefault" HeaderText="IsDefault" 
-                    SortExpression="creditCardDefault" />
+                <asp:TemplateField HeaderText="Credit Card Default" 
+                    SortExpression="creditCardDefault" Visible="False">
+                    <ItemTemplate>
+                        <asp:CheckBox ID="checkBoxDefault" runat="server" 
+                            Checked='<%# Bind("creditCardDefault") %>' Enabled="false" />
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:CheckBox ID="CheckBox1" runat="server" 
+                            Checked='<%# Bind("creditCardDefault") %>' />
+                    </EditItemTemplate>
+                </asp:TemplateField>
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -207,38 +234,29 @@
         </asp:GridView>
     </p>
     <p>
+        &nbsp;</p>
+    <p>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
-            SelectCommand="SELECT [cardHolderName], [type], [number], [expiryMonth], [expiryYear], [creditCardDefault] FROM [CreditCard] WHERE ([userName] = @userName)">
-            <SelectParameters>
-                <asp:ControlParameter ControlID="UserName" Name="userName" PropertyName="Text" 
-                    Type="String" />
-            </SelectParameters>
+            SelectCommand="SELECT * FROM [CreditCard]">
         </asp:SqlDataSource>
     </p>
     <p>
-        <asp:Label ID="SelectOneCardOnlyMessage" runat="server" ForeColor="Red"></asp:Label>
-&nbsp;</p>
-    <p>
-        <asp:Label ID="SelectCardMessage" runat="server" ForeColor="Red"></asp:Label>
-    </p>
+        <asp:Label ID="defaultCardMessage" runat="server" ForeColor="Green" 
+            Visible="False"></asp:Label>
+        &nbsp;</p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" HeaderText="The following errors:" 
         ValidationGroup="RegisterUserValidationGroup" />
-    <p>
-    </p>
     <p class="style8">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Button ID="btSelectThisCard" runat="server" onclick="btContinue_Click" 
-            Text="Select This Card" CausesValidation="False" BackColor="Silver" 
-            BorderColor="Silver" BorderStyle="Solid" />
-    &nbsp;&nbsp;&nbsp;
-        <asp:Button ID="btNextStep" runat="server" onclick="btContinue_Click" 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="btNextStep" runat="server" onclick="btContinue_Click" 
             Text="Next: Final Confirmation" CausesValidation="False" 
             PostBackUrl="~/MemberOnly/FinalConfirmation.aspx" BackColor="Silver" 
             BorderColor="Silver" BorderStyle="Solid" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <p class="style8">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </p>
 </asp:Content>
 

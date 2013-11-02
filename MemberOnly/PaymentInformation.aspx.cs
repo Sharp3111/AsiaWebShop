@@ -25,58 +25,21 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
             GetMemberData(connectionString, userName);
-
-            // Hide and clear the edit result message.
-            SelectOneCardOnlyMessage.Visible = false;
-            SelectOneCardOnlyMessage.Text = "";
-            SelectCardMessage.Visible = false;
-            SelectCardMessage.Text = "";
-            btNextStep.Visible = false;
-
-            //GetMemberCreditCard(connectionString, userName);
+            PopulateCheckBoxSelect(connectionString, userName);            
         }
     }
 
-    /*private void GetMemberCreditCard(string connectionString, string userName)
-    {
-        //System.Diagnostics.Debug.WriteLine("Enter GetMemberCreditCard");
-        // Define the SELECT query to get the member's credit card.
-        string query = "SELECT [number], [type], [cardHolderName], [expiryMonth], [expiryYear] FROM [CreditCard] WHERE ([username] =N'" + userName + "')";
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
+    private void PopulateCheckBoxSelect(string connectionString, string userName)
+    {        
+        Int32 MaxRow = gvCreditCard.Rows.Count;
+        for (int i = 0; i < MaxRow; i++)
         {
-            // Open the connection.
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            SqlDataReader reader = command.ExecuteReader();
-            // Check if a result was returned.
-            if (reader.HasRows)
-            {
-                // Iterate through the table to get the retrieved values.
-                while (reader.Read())
-                {
-                    // Assign the data values to the web form labels.
-                    CardHolderName.Text = reader["cardHolderName"].ToString().Trim();
-                    CardNumber.Text = reader["number"].ToString().Trim();
-                    CardTypeDropDownList.Text = reader["type"].ToString().Trim();
-                    MonthDropDownList.Text = reader["expiryMonth"].ToString().Trim();
-
-                    // System.Diagnostics.Debug.WriteLine("GetMemberCreditCard_MonthDropDownList.SelectedItem.Value:");
-                    // System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
-                    YearDropDownList.Text = reader["expiryYear"].ToString().Trim();
-                }
-            }
-
-            // Close the connection and the DataReader.
-            command.Connection.Close();
-            reader.Close();
+            Boolean currentDefault = ((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxDefault")).Checked;
+            ((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked = currentDefault;
         }
-        //System.Diagnostics.Debug.WriteLine("Exit GetMemberCreditCard");
-    }*/
+    }
 
-   private void GetMemberData(string connectionString, string userName)
+    private void GetMemberData(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's personal data.
         string query = "SELECT [userName] FROM [Member] WHERE ([username] =N'" + userName + "')";
@@ -209,54 +172,23 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
     }
 
 
-   /* protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
-    {
-        int j = 0;
-        foreach (GridViewRow row in this.gvCreditCard.Rows)
-        {
-            Control ctrl = row.FindControl("CheckBox1");
-            if ((ctrl as CheckBox).Checked)
-            {
-                j++;
-            }
-            if (j > 1)
-            {
-                SelectOneCardOnlyMessage.Text = "Please select one credit card only.";
-                SelectOneCardOnlyMessage.Visible = true;
-                Response.Redirect(Request.RawUrl);
-            }
-        }
-    }*/
+ 
     protected void btContinue_Click(object sender, EventArgs e)
     {
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
-            string cardNumberSelected = "";
-            CheckBox1_CheckedChanged2(sender, e);
-
-            if (SelectOneCardOnlyMessage.Visible == false)
-            {
-                foreach (GridViewRow row in this.gvCreditCard.Rows)
-                {
-                    Control ctrl = row.FindControl("CheckBox1");
-                    if ((ctrl as CheckBox).Checked)
-                    {
-                        TableCellCollection cell = row.Cells;
-                        cardNumberSelected = cell[3].Text.Trim();
-                        break;
-                    }
-                }
+            string cardNumberSelected = "";            
 
                 // After the information is added, add the credit card data in the order record database.
                 updateCreditCardInOrderRecord(connectionString,
                 userName.Trim(),
                 cardNumberSelected);
                 
-                SelectCardMessage.Text = "Your selection has been made. Please proceed to the next step.";
-                SelectCardMessage.Visible = true;
+                //OnlyOneCardMessgae.Text = "Your selection has been made. Please proceed to the next step.";
+                //OnlyOneCardMessgae.Visible = true;
                 btNextStep.Visible = true;
-                btSelectThisCard.Visible = false;
-            }
+                //btSelectThisCard.Visible = false;
+            
 
            
 
@@ -270,25 +202,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             Response.Redirect(continueUrl, false);*/
     }
 
-    protected void CheckBox1_CheckedChanged2(object sender, EventArgs e)
-    {
-        int j = 0;
-        foreach (GridViewRow row in this.gvCreditCard.Rows)
-        {
 
-            Control ctrl = row.FindControl("CheckBox1");
-            if ((ctrl as CheckBox).Checked)
-            {
-                j++;
-            }
-            if (j > 1)
-            {
-                SelectOneCardOnlyMessage.Text = "Please select one credit card only.";
-                SelectOneCardOnlyMessage.Visible = true;
-                Response.Redirect(Request.RawUrl);
-            }
-        }
-    }
     protected void cvCardNumber_ServerValidate(object source, ServerValidateEventArgs args)
     {
         string connectionString = "AsiaWebShopDBConnectionString";
@@ -299,7 +213,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
         Int32 count = 0;
         //check if the item has already added into the shopping cart
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([number] = '" + currentNumber + "')", connection))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([number] = '" + currentNumber + "' AND [userName] = '" + userName + "')", connection))
         {
             command.Connection.Open();
             count = (Int32)command.ExecuteScalar();
@@ -313,6 +227,137 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
         else
         {
             args.IsValid = true;
+        }
+    }
+    protected void deleteButton_Click(object sender, EventArgs e)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+        Int32 MaxRows = gvCreditCard.Rows.Count;
+
+        Int32 count = 0;
+        //check if there is only one credit card in user's credit card list
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "')", connection))
+        {
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+
+        if (count > 1)
+        {
+            //Response.Write("<script>alert('enter delete button')</script>");
+            GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
+            Boolean currentDefault = ((CheckBox)gridViewRow.FindControl("checkBoxDefault")).Checked;
+            string currentNumber = ((Label)gridViewRow.FindControl("numberLabel")).Text.Trim();
+
+            string queryDelete = "DELETE FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentNumber + "')";
+            //Response.Write("<script>alert('" + currentNumber + "')</script>");
+            if (!currentDefault)
+            {
+                defaultCardMessage.Visible = false;
+            }
+            else
+            {
+                defaultCardMessage.Visible = true;
+                defaultCardMessage.Text = "The selected card is your default card. After deletion, your default card will be the first one appearing in your credit card list";
+
+
+                string firstValidInGridViewNumber = "";
+                for (int i = 0; i < MaxRows; i++)
+                {
+                    if (((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text.Trim() != currentNumber)
+                    {
+                        firstValidInGridViewNumber = ((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text.Trim();
+                        break;
+                    }
+                }
+
+                string queryUpdate = "UPDATE [CreditCard] SET creditCardDefault = @CreditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + firstValidInGridViewNumber + "')";
+
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                {
+                    command.Parameters.AddWithValue("@CreditCardDefault", true);
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(queryDelete, connection))
+            {
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+
+            string selectedCardNumber = "";
+            //Remember checkBoxSelect
+            for (int i = 0; i < MaxRows; i++)
+            {
+                if (((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked)
+                {
+                    selectedCardNumber = ((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text.Trim();
+                    break;
+                }
+            }
+
+            //Data rebind
+            gvCreditCard.DataBind();
+            MaxRows = gvCreditCard.Rows.Count;
+
+            Boolean stillExist = false;
+            //Populate checkBoxSelect
+            for (int i = 0; i < MaxRows; i++)
+            {
+                if (((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text == selectedCardNumber)
+                {
+                    stillExist = true;
+                    ((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked = true;
+                    break;
+                }
+            }
+
+            //First-time population unsuccessful
+            if (!stillExist)
+            {
+                PopulateCheckBoxSelect(connectionString, userName);
+            }
+
+            //Response.Write("<script>alert('exit delete button')</script>");
+        }
+        else
+        {
+            defaultCardMessage.Visible = true;
+            defaultCardMessage.ForeColor = System.Drawing.Color.Red;
+            defaultCardMessage.Text = "You cannot delete the only credit card in your credit card list";
+        }
+    }
+    protected void checkBoxSelect_CheckedChanged(object sender, EventArgs e)
+    {
+        GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
+        //Boolean currentCheck = ((CheckBox)gridViewRow.FindControl("checkBoxSelect")).Checked;
+        string currentNumber = ((Label)gridViewRow.FindControl("numberLabel")).Text.Trim();
+        //Response.Write("<script>alert('" + currentNumber + "')</script>");
+
+        Int32 MaxRows = gvCreditCard.Rows.Count;
+        for (int i = 0; i < MaxRows; i++)
+        {
+            if (((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text != currentNumber)
+            {
+                //make all others false
+                ((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked = false;
+            }
+            else
+            {
+                //make the checked true
+                ((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked = true;
+
+                //Response.Write("<script>alert('" + Convert.ToString(((CheckBox)gridViewRow.FindControl("checkBoxSelect")).Checked) + "')</script>");
+            }
         }
     }
 }
