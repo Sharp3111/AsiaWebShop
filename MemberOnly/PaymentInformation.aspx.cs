@@ -289,4 +289,30 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             }
         }
     }
+    protected void cvCardNumber_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+
+        string currentNumber = CardNumber.Text.Trim();
+
+        Int32 count = 0;
+        //check if the item has already added into the shopping cart
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([number] = '" + currentNumber + "')", connection))
+        {
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+
+        if (count != 0)
+        {
+            args.IsValid = false;
+        }
+        else
+        {
+            args.IsValid = true;
+        }
+    }
 }

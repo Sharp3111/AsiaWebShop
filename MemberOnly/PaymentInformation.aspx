@@ -61,7 +61,7 @@
     <p class="style3">
         Dear
         <asp:Label ID="UserName" runat="server"></asp:Label>
-        , Asia Web Shop only accept major credit cards:</p>
+        , Asia Web Shop only accepts major credit cards:</p>
     <p class="style4">
         Add a card</p>
     <p class="style5">
@@ -110,6 +110,10 @@
                 ErrorMessage="Card Number must be numeric and between 14 and 16 digits." 
                 ForeColor="Red" ValidationExpression="^\d{14,16}$" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
+                <asp:CustomValidator ID="cvCardNumber" runat="server" 
+                    ErrorMessage="This card has existed in our database. Please try another one." 
+                    ForeColor="Red" onservervalidate="cvCardNumber_ServerValidate" 
+                    ValidationGroup="RegisterUserValidationGroup">*</asp:CustomValidator>
             </td>
             <td>
                 <span class="style10">Expiry Date:&nbsp; </span>&nbsp;&nbsp;&nbsp;
