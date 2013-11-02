@@ -88,57 +88,73 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
 
     protected void CustomValidator1_ServerValidate(object source, ServerValidateEventArgs args)
     {
-
-        if (int.Parse(yearFrom.SelectedValue) > int.Parse(yearTo.SelectedValue))
-            args.IsValid = false;
-        else if(int.Parse(yearFrom.SelectedValue) == int.Parse(yearTo.SelectedValue))
+        if (date.SelectedValue == "certain")
         {
-            if (int.Parse(monthFrom.SelectedValue) > int.Parse(monthTo.SelectedValue))
+
+            if (int.Parse(yearFrom.SelectedValue) > int.Parse(yearTo.SelectedValue))
                 args.IsValid = false;
-            else if (int.Parse(monthFrom.SelectedValue) == int.Parse(monthTo.SelectedValue))
+            else if (int.Parse(yearFrom.SelectedValue) == int.Parse(yearTo.SelectedValue))
             {
-                if (int.Parse(dayFrom.SelectedValue) > int.Parse(dayTo.SelectedValue))
+                if (int.Parse(monthFrom.SelectedValue) > int.Parse(monthTo.SelectedValue))
                     args.IsValid = false;
+                else if (int.Parse(monthFrom.SelectedValue) == int.Parse(monthTo.SelectedValue))
+                {
+                    if (int.Parse(dayFrom.SelectedValue) > int.Parse(dayTo.SelectedValue))
+                        args.IsValid = false;
+                    else
+                        args.IsValid = true;
+                }
                 else
                     args.IsValid = true;
             }
             else
                 args.IsValid = true;
         }
-        else 
-            args.IsValid = true;
+        
     }
 
 
     protected void Button1_Click(object sender, EventArgs e)
     {
-        string SQLCmd = "ORDER BY";
+        string SQLCmd = "";
+        string SQLCmd2 = "";
+        string SQLCmd3 = "";
         if (IsValid)
         {
-            if (userName.Text.Trim() == "") {
+            if (date.SelectedValue == "certain")
+                SQLCmd2 = "WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                             "AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'";
+            if (userName.Text.Trim() != "")
+                SQLCmd3 = "AND [Member].[userName] = '" + userName.Text.Trim() + "' ";
+
+ //           if (userName.Text.Trim() == "") {
                 if (groupDistrict.Checked) {
-                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName], [Member].[lastName], SUM (OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
+                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName], [Member].[lastName],[OrderRecord].[orderDateTime], SUM (OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
                              "FROM [OrderRecord] " +
                              "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
                              "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
-                             "WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
-                             "AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
-                             "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district]" +
+                             SQLCmd2 +
+                             SQLCmd3 +
+                             //"WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                             //"AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
+                             "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district],[OrderRecord].[orderDateTime]" +
                              "ORDER BY [Address].[district], ";
                              //    "ORDER BY [Member].[lastName]";
                 }
                 else {
-                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
+                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName],[OrderRecord].[orderDateTime], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
                                  "FROM [OrderRecord] " +
                                  "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName]" +
                                  "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
-                                 "WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
-                                 "AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
-                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName]"+
+                                 SQLCmd2 +
+                                 SQLCmd3 +
+                                 //"WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                                 //"AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
+                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[OrderRecord].[orderDateTime]" +
                                  "ORDER BY ";// [Expr1]";
                  }
 
-            }
+ /*           }
             else if (userName.Text.Trim() != "") {
                 if (groupDistrict.Checked)
                 { 
@@ -146,9 +162,9 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                                  "FROM [OrderRecord] " +
                                  "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
                                  "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
-                                 "WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00' " +
-                                 "AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59' " +
-                                 "AND [Member].[userName] = '"+ userName.Text.Trim() +"' "+
+                                 //"WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00' " +
+                                 //"AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59' " +
+                                 //3"AND [Member].[userName] = '"+ userName.Text.Trim() +"' "+
                                  "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district]" +
                                  "ORDER BY [Address].[district], ";
                                  //"ORDER BY [Member].[lastName]";
@@ -158,13 +174,14 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                                  "FROM [OrderRecord] " +
                                  "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName]" +
                                  "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
-                                 "WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
-                                 "AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
-                                 "AND [Member].[userName] = '" + userName.Text.Trim() + "' " +                               
+                                 //"WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                                 //"AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
+                                 //3"AND [Member].[userName] = '" + userName.Text.Trim() + "' " +                               
                                  "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName]"+
                                  "ORDER BY ";// [Expr1]";
                 }
             }
+  */
             if(SQLCmd != "") {
                 if (orderBy.SelectedValue == "name")
                     SQLCmd = SQLCmd + "[Member].[lastName]";
