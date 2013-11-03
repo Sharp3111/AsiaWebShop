@@ -70,7 +70,7 @@
             GridLines="None">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:BoundField DataField="name" HeaderText="Customer Name" 
+                <asp:BoundField DataField="name" HeaderText="Name" 
                     SortExpression="name" />
                 <asp:BoundField DataField="email" HeaderText="Email" SortExpression="email" />
                 <asp:BoundField DataField="phoneNumber" HeaderText="Phone Number" 
@@ -107,11 +107,11 @@
             GridLines="None">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:BoundField DataField="cardHolderName" HeaderText="Card Holder Name" 
-                    SortExpression="cardHolderName" />
-                <asp:BoundField DataField="type" HeaderText="Card Type" SortExpression="type" />
                 <asp:BoundField DataField="number" HeaderText="Card Number" 
                     SortExpression="number" />
+                <asp:BoundField DataField="type" HeaderText="Card Type" SortExpression="type" />
+                <asp:BoundField DataField="cardHolderName" HeaderText="Holder Name" 
+                    SortExpression="cardHolderName" />
                 <asp:BoundField DataField="expiryMonth" HeaderText="Expiry Month" 
                     SortExpression="expiryMonth" />
                 <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
@@ -174,7 +174,8 @@
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         <asp:SqlDataSource ID="AsiaWebDataSource2" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT name, email, phoneNumber, address, deliveryDate, deliveryTime FROM OrderRecord WHERE (userName = @userName)">
+            
+            SelectCommand="SELECT name, email, phoneNumber, address, deliveryDate, deliveryTime FROM OrderRecord WHERE (userName = @userName) GROUP BY name, email, phoneNumber, address, deliveryDate, deliveryTime">
             <SelectParameters>
                 <asp:ControlParameter ControlID="userName" Name="userName" 
                     PropertyName="Text" />
@@ -184,7 +185,8 @@
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         <asp:SqlDataSource ID="AsiaWebDataSource3" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT CreditCard.number, CreditCard.type, CreditCard.cardHolderName, CreditCard.expiryMonth, CreditCard.expiryYear FROM OrderRecord INNER JOIN CreditCard ON OrderRecord.creditCardNumber = CreditCard.number WHERE (OrderRecord.userName = @userName)">
+            
+            SelectCommand="SELECT CreditCard.number, CreditCard.type, CreditCard.cardHolderName, CreditCard.expiryMonth, CreditCard.expiryYear FROM OrderRecord INNER JOIN CreditCard ON OrderRecord.creditCardNumber = CreditCard.number WHERE (OrderRecord.userName = @userName) GROUP BY CreditCard.number, CreditCard.type, CreditCard.cardHolderName, CreditCard.expiryMonth, CreditCard.expiryYear">
             <SelectParameters>
                 <asp:ControlParameter ControlID="userName" Name="userName" 
                     PropertyName="Text" />
