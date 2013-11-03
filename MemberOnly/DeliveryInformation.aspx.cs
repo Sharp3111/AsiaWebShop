@@ -98,7 +98,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
         {
             string connectionString = "AsiaWebShopDBConnectionString";
             string connectionString2 = "AsiaWebShopDBConnectionString2";
-            string connectionString3 = "AsiaWebShopDBConnectionString3";
             string userName = User.Identity.Name;
 
             // Define the SELECT query to get the member's address.
@@ -122,12 +121,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         string upc = reader["upc"].ToString().Trim();
                         int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
 
-                        // Check if entries with the same upc and userName already exist in OrderRecord
-                        //string query3 = "SELECT [userName] FROM [OrderRecord] WHERE ([userName] = '" + userName + "' AND [upc] = ";
-
-                        // Define the INSERT query with parameters.
-                        /*string query2 = "INSERT INTO [OrderRecord]([userName], [name], [email], [phoneNumber], [address], [deliveryDate], [deliveryTime], [isConfirmed]) " +
-                                        "VALUES (@UserName, @Name, @Email, @PhoneNumber, @Address, @DeliveryDate, @DeliveryTime, @IsConfirmed)";*/
+                        // Define the UPDATE query with parameters.
                         string query2 = "UPDATE [OrderRecord] SET [name] = @Name, [email] = @Email, [phoneNumber] = @PhoneNumber, [address] = @Address, [deliveryDate] = @DeliveryDate, [deliveryTime] = @DeliveryTime WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed AND [upc] = @UPC";
 
                         // Create the connection and the SQL command.
@@ -145,7 +139,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                             command2.Parameters.AddWithValue("@IsConfirmed", false);
                             command2.Parameters.AddWithValue("@UPC", upc);
 
-                            // Open the connection, execute the INSERT query and close the connection.
+                            // Open the connection, execute the UPDATE query and close the connection.
                             command2.Connection.Open();
                             command2.ExecuteNonQuery();
                             command2.Connection.Close();
