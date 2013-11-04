@@ -8,7 +8,8 @@
     <br />
     <br />
     <asp:HyperLink ID="MemberSearch" runat="server" 
-    NavigateUrl="MemberSearch.aspx" Font-Bold="True" Font-Size="Large">Member Information Edit</asp:HyperLink>
+    NavigateUrl="~/AdminOnly/MemberLoginManagement.aspx" Font-Bold="True" 
+        Font-Size="Large">Member Management</asp:HyperLink>
 <br />
 <br />
     <asp:HyperLink ID="PersonalReport" runat="server" 
