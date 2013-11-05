@@ -14,11 +14,15 @@
 <br />
     <asp:HyperLink ID="PersonalReport" runat="server" 
     NavigateUrl="~/AdminOnly/PersonalReport.aspx" Font-Bold="True" 
-    Font-Size="Large">Generate personal details report</asp:HyperLink>
+    Font-Size="Large">Generate Personal Details Report</asp:HyperLink>
 <br />
 <br />
     <asp:HyperLink ID="AmountReport" runat="server" 
-    NavigateUrl="~/AdminOnly/AmountReport.aspx" Font-Bold="True" Font-Size="Large">Generate purchase amount report</asp:HyperLink>
+    NavigateUrl="~/AdminOnly/AmountReport.aspx" Font-Bold="True" Font-Size="Large">Generate Purchase Amount Report</asp:HyperLink>
+    <br />
+    <br />
+    <asp:HyperLink ID="ItemPurchaseReport" runat="server" Font-Bold="True" 
+        Font-Size="Large" NavigateUrl="~/AdminOnly/ItemPurchaseReport.aspx">General Item Purchase Report</asp:HyperLink>
 <br />
 <br />
 </asp:Content>

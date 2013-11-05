@@ -66,8 +66,8 @@
     </tr>
     <tr>
         <td class="style4">
-    <asp:HyperLink ID="AdminLink" runat="server" 
-        NavigateUrl="~/AdminOnly/AdminManagement.aspx">Admin Use Only</asp:HyperLink>
+            <asp:HyperLink ID="ItemPurchaseReport" runat="server" 
+                NavigateUrl="~/MemberOnly/ItemPurchaseReport.aspx">View Your Item Purchase Report</asp:HyperLink>
         </td>
         <td>
     <asp:HyperLink ID="ComputersElectronicsLink" runat="server" 
@@ -76,7 +76,9 @@
     </tr>
     <tr>
         <td class="style4">
-            &nbsp;</td>
+    <asp:HyperLink ID="AdminLink" runat="server" 
+        NavigateUrl="~/AdminOnly/AdminManagement.aspx">Admin Use Only</asp:HyperLink>
+        </td>
         <td class="style5">
     <asp:HyperLink ID="JewelryandWatchesLink" runat="server" 
                 NavigateUrl="~/ItemSearch.aspx?category=JewelryandWatches">Jewelry and Watches</asp:HyperLink>
