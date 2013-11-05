@@ -176,6 +176,26 @@
             width: 88px;
             text-align: left;
         }
+        .style82
+        {
+            width: 143px;
+        }
+        .style83
+        {
+            width: 143px;
+            height: 16px;
+        }
+        .style84
+        {
+            width: 143px;
+            height: 21px;
+            text-align: right;
+        }
+        .style85
+        {
+            width: 143px;
+            height: 24px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -184,8 +204,8 @@
         Purchase Amount Report</p>
     <table class="style3">
         <tr>
-            <td class="style5">
-                Item bought by user:</td>
+            <td class="style82">
+                Purcahse done by user:</td>
             <td class="style5">
                 <asp:TextBox ID="userName" runat="server"></asp:TextBox>
             </td>
@@ -195,7 +215,7 @@
                 <asp:RadioButtonList ID="date" runat="server" Width="111px" Height="71px" 
                     style="text-align: center; margin-top: 12px; margin-right: 0px;" 
                     RepeatLayout="Flow" ValidationGroup="purchaseAmount">
-                    <asp:ListItem Value="certain">in certain time <br><br></asp:ListItem>
+                    <asp:ListItem Value="certain">in certain date <br><br></asp:ListItem>
                     
                     <asp:ListItem Value="any">at any time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      </asp:ListItem>
                 </asp:RadioButtonList>
@@ -228,7 +248,7 @@
                 &nbsp;</td>
         </tr>
         <tr>
-            <td class="style50">
+            <td class="style83">
                 </td>
             <td class="style50">
                 </td>
@@ -266,7 +286,7 @@
             </td>
         </tr>
         <tr>
-            <td class="style30">
+            <td class="style84">
                 </td>
             <td class="style30">
                 </td>
@@ -275,7 +295,7 @@
             <td class="style76">
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                     ControlToValidate="date" Display="Dynamic" EnableClientScript="False" 
-                    ErrorMessage="You need to select one time range" ForeColor="Red" 
+                    ErrorMessage="You need to select a time range." ForeColor="Red" 
                     ValidationGroup="purchaseAmount">*</asp:RequiredFieldValidator>
                 </td>
             <td class="style69">
@@ -294,7 +314,7 @@
             </td>
         </tr>
         <tr>
-            <td class="style22">
+            <td class="style85">
             </td>
             <td class="style22">
             </td>
@@ -317,7 +337,7 @@
             </td>
         </tr>
         <tr>
-            <td class="style5">
+            <td class="style82">
                 &nbsp;</td>
             <td class="style5">
                 &nbsp;</td>
@@ -374,7 +394,7 @@
         SelectCommand="SELECT Member.userName, Member.firstName, Member.lastName,OrderRecord.orderDateTime, SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS Expr1 FROM OrderRecord INNER JOIN Member ON OrderRecord.userName = Member.userName GROUP BY OrderRecord.confirmationNumber, Member.userName, Member.firstName, Member.lastName,OrderRecord.orderDateTime"></asp:SqlDataSource>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
-        HeaderText="Following error occured:" ValidationGroup="purchaseAmount" />
+        HeaderText="Following error occurred:" ValidationGroup="purchaseAmount" />
     <br />
 </asp:Content>
 
