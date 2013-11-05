@@ -137,7 +137,7 @@
         <td class="style49" colspan="4">
             Desired address not listed? Click
             <asp:HyperLink ID="ChangeAddressLink" runat="server" 
-                NavigateUrl="~/MemberOnly/EditAddressList.aspx">here</asp:HyperLink>
+                NavigateUrl="~/MemberOnly/ManageDeliveryAddress.aspx">here</asp:HyperLink>
 &nbsp;to add another and check out later!</td>
     </tr>
     <tr>
