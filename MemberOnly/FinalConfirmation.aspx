@@ -4,20 +4,20 @@
     <style type="text/css">
         .style2
         {
-            width: 58%;
+            width: 62%;
             margin-bottom: 3px;
         }
         .style3
         {
-            width: 263px;
+            width: 182px;
         }
         .style4
         {
-            width: 87px;
+            width: 310px;
         }
         .style5
         {
-            width: 48px;
+            width: 96px;
         }
     </style>
 </asp:Content>
@@ -138,23 +138,15 @@
 &nbsp;<table class="style2">
             <tr>
                 <td class="style3">
-                    Choose an email address to receive receipt:</td>
-                <td class="style4">
-                    <asp:DropDownList ID="emailAddress" runat="server" 
-                        ValidationGroup="finalConfirm">
-                    </asp:DropDownList>
-                </td>
-                <td class="style5">
-                    <asp:CustomValidator ID="CustomValidator1" runat="server" 
-                        ControlToValidate="emailAddress" Display="Dynamic" EnableClientScript="False" 
-                        ErrorMessage="You must select an email address." ForeColor="Red" 
-                        onservervalidate="CustomValidator1_ServerValidate" 
-                        ValidationGroup="finalConfirm">*</asp:CustomValidator>
-                    and</td>
-                <td>
-                    <asp:Button ID="confirm" runat="server" onclick="confirm_Click" Text="Confirm" 
+                    <asp:Button ID="confirm" runat="server" onclick="confirm_Click" Text="Confirm Your Order" 
                         ValidationGroup="finalConfirm" />
                 </td>
+                <td class="style4">
+                    (The receipt will be sent to your email address:
+                </td>
+                <td class="style5">
+                    <asp:Label ID="emailAddress" runat="server"></asp:Label>
+                    )</td>
             </tr>
         </table>
     </p>

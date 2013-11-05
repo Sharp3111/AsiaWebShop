@@ -36,7 +36,6 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         userName.Text = User.Identity.Name;
-        emailAddress.Items.Add("-- Select email --");
 
         string SQLCmd = "SELECT SUM([unitPrice]*[quantity])AS [totalPrice] FROM [OrderRecord] WHERE [userName] = '" + User.Identity.Name + "' GROUP BY [userName]";
         string connectionString = "AsiaWebShopDBConnectionString";
@@ -69,20 +68,14 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 {
                     while (reader.Read())
                     {
-                        emailAddress.Items.Add(reader["email"].ToString().Trim());
+                        emailAddress.Text = (reader["email"].ToString().Trim());
                     }
                 }
                 command.Connection.Close();
                 reader.Close();
             }
     }
-    protected void CustomValidator1_ServerValidate(object source, ServerValidateEventArgs args)
-    {
-        if (emailAddress.SelectedValue == "-- Select email --")
-            args.IsValid = false;
-        else
-            args.IsValid = true;
-    }
+
     protected void confirm_Click(object sender, EventArgs e)
     {
         if (IsValid)
