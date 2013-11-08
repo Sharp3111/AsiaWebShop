@@ -108,8 +108,9 @@
     <p class="style3">
         <asp:DetailsView ID="dvCreditCard" runat="server" AutoGenerateRows="False" 
             CellPadding="4" DataSourceID="SqlDataSource2" ForeColor="#333333" 
-            GridLines="None" Height="50px" Width="914px" 
-            oniteminserted="dvCreditCard_ItemInserted">
+            GridLines="None" Height="50px" Width="696px" 
+            oniteminserted="dvCreditCard_ItemInserted1" 
+            onitemupdated="dvCreditCard_ItemUpdated">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
@@ -117,193 +118,177 @@
             <Fields>
                 <asp:TemplateField HeaderText="User Name" SortExpression="userName">
                     <EditItemTemplate>
-                        <asp:TextBox ID="TextBox1" runat="server" ReadOnly="True" 
-                            Text='<%# Bind("userName") %>'></asp:TextBox>
+                        <asp:TextBox ID="EditUserName" runat="server" MaxLength="10" ReadOnly="True" 
+                            Text='<%# Bind("userName") %>' ></asp:TextBox>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:TextBox ID="insertUserName" runat="server" onload="insertUserName_Load" 
-                            ReadOnly="True" Text='<%# Bind("userName") %>'></asp:TextBox>
+                        <asp:TextBox ID="InsertUserName" runat="server" MaxLength="10" 
+                            Text='<%# Bind("userName") %>' onload="InsertUserName_Load"></asp:TextBox>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label1" runat="server" Text='<%# Bind("userName") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Card Number" SortExpression="number">
-                    <ItemTemplate>
-                        <asp:Label ID="cardNumber" runat="server" Text='<%# Bind("number") %>'></asp:Label>
-                    </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:TextBox ID="editCardNumber" runat="server" MaxLength="16" 
+                        <asp:TextBox ID="EditCardNumber" runat="server" MaxLength="16" 
                             Text='<%# Bind("number") %>'></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvCardNumber" runat="server" 
-                            ControlToValidate="editCardNumber" Display="Dynamic" EnableClientScript="False" 
+                            ControlToValidate="EditCardNumber" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Card Number is required." ForeColor="Red">*</asp:RequiredFieldValidator>
                         <asp:RegularExpressionValidator ID="revCardNumber" runat="server" 
-                            ControlToValidate="editCardNumber" Display="Dynamic" EnableClientScript="False" 
+                            ControlToValidate="EditCardNumber" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Card Number must be numeric and between 14 and 16 digits." 
                             ForeColor="Red" ValidationExpression="^\d{14,16}$">*</asp:RegularExpressionValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:TextBox ID="insertCreditCard" runat="server" MaxLength="16" 
+                        <asp:TextBox ID="InsertCardNumber" runat="server" MaxLength="16" 
                             Text='<%# Bind("number") %>'></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvCardNumber" runat="server" 
-                            ControlToValidate="insertCreditCard" Display="Dynamic" 
+                            ControlToValidate="InsertCardNumber" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Card Number is required." 
                             ForeColor="Red">*</asp:RequiredFieldValidator>
                         <asp:RegularExpressionValidator ID="revCardNumber" runat="server" 
-                            ControlToValidate="insertCreditCard" Display="Dynamic" 
+                            ControlToValidate="InsertCardNumber" Display="Dynamic" 
                             EnableClientScript="False" 
                             ErrorMessage="Card Number must be numeric and between 14 and 16 digits." 
                             ForeColor="Red" ValidationExpression="^\d{14,16}$">*</asp:RegularExpressionValidator>
                     </InsertItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label2" runat="server" Text='<%# Bind("number") %>'></asp:Label>
+                    </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Card Type" SortExpression="type">
-                    <ItemTemplate>
-                        <asp:Label ID="Label2" runat="server" Text='<%# Bind("type") %>'></asp:Label>
-                    </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:DropDownList ID="editCardTypeDropDownList" runat="server" Height="22px" 
-                            Width="250px" onload="editCardTypeDropDownList_Load" 
-                            SelectedValue='<%# Bind("type") %>'>
-                            <asp:ListItem>-- Select credit card --</asp:ListItem>
-                            <asp:ListItem>American Express</asp:ListItem>
-                            <asp:ListItem>Diners Club</asp:ListItem>
-                            <asp:ListItem>Discover</asp:ListItem>
-                            <asp:ListItem>MasterCard</asp:ListItem>
-                            <asp:ListItem>Visa</asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvCardTypeDropDownList" runat="server" 
-                            ControlToValidate="editCardTypeDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a credit card." 
-                            ForeColor="Red" InitialValue="-- Select credit card --">*</asp:RequiredFieldValidator>
+                        <asp:TextBox ID="EditCardType" runat="server" Text='<%# Bind("type") %>'></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvEditCardType" runat="server" 
+                            ControlToValidate="EditCardType" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Credit card type is required. You can choose from the following: American Express, Diners Club, Discover, MasterCard, Visa." 
+                            ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvEditCardType" runat="server" 
+                            ControlToValidate="EditCardType" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="You have to choose from the following: American Express, Diners Club, Discover, MasterCard, Visa." 
+                            ForeColor="Red" onservervalidate="cvEditCardType_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:DropDownList ID="insertCardTypeDropDownList" runat="server" Height="22px" 
-                            Width="250px" SelectedValue='<%# Bind("type") %>'>
-                            <asp:ListItem>-- Select credit card --</asp:ListItem>
-                            <asp:ListItem>American Express</asp:ListItem>
-                            <asp:ListItem>Diners Club</asp:ListItem>
-                            <asp:ListItem>Discover</asp:ListItem>
-                            <asp:ListItem>MasterCard</asp:ListItem>
-                            <asp:ListItem>Visa</asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvCardTypeDropDownList" runat="server" 
-                            ControlToValidate="insertCardTypeDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a credit card." 
-                            ForeColor="Red" InitialValue="-- Select credit card --">*</asp:RequiredFieldValidator>
+                        <asp:TextBox ID="InsertCardType" runat="server" Text='<%# Bind("type") %>'></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvEditCardType" runat="server" 
+                            ControlToValidate="InsertCardType" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="The credit card is required. You can choose from the following: American Express, Diners Club, Discover, MasterCard, Visa." 
+                            ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvInsertCardType" runat="server" 
+                            ControlToValidate="InsertCardType" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="You have to choose from the following: American Express, Diners Club, Discover, MasterCard, Visa." 
+                            ForeColor="Red" onservervalidate="cvInsertCardType_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("type") %>'></asp:Label>
+                    </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Cardholder Name" SortExpression="cardHolderName">
-                    <ItemTemplate>
-                        <asp:Label ID="Label3" runat="server" Text='<%# Bind("cardHolderName") %>'></asp:Label>
-                    </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:TextBox ID="editCardHolderName" runat="server" MaxLength="50" 
+                        <asp:TextBox ID="EditCardholderName" runat="server" MaxLength="50" 
                             Text='<%# Bind("cardHolderName") %>'></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvCardHolderName" runat="server" 
-                            ControlToValidate="editCardHolderName" Display="Dynamic" 
+                            ControlToValidate="EditCardholderName" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Cardholder Name is required." 
                             ForeColor="Red">*</asp:RequiredFieldValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:TextBox ID="insertCardHolderName" runat="server" MaxLength="50" 
+                        <asp:TextBox ID="InsertCardholderName" runat="server" MaxLength="50" 
                             Text='<%# Bind("cardHolderName") %>'></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvCardHolderName" runat="server" 
-                            ControlToValidate="insertCardHolderName" Display="Dynamic" 
+                            ControlToValidate="InsertCardholderName" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Cardholder Name is required." 
                             ForeColor="Red">*</asp:RequiredFieldValidator>
                     </InsertItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label4" runat="server" Text='<%# Bind("cardHolderName") %>'></asp:Label>
+                    </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Expiry Month" SortExpression="expiryMonth">
-                    <ItemTemplate>
-                        <asp:Label ID="Label4" runat="server" Text='<%# Bind("expiryMonth") %>'></asp:Label>
-                    </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:DropDownList ID="editMonthDropDownList" runat="server" Height="22px" 
-                            Width="110px" onload="editMonthDropDownList_Load">
-                            <asp:ListItem Value="00">Month</asp:ListItem>
-                            <asp:ListItem>01</asp:ListItem>
-                            <asp:ListItem>02</asp:ListItem>
-                            <asp:ListItem>03</asp:ListItem>
-                            <asp:ListItem Value="04"></asp:ListItem>
-                            <asp:ListItem Value="05"></asp:ListItem>
-                            <asp:ListItem Value="06"></asp:ListItem>
-                            <asp:ListItem Value="07"></asp:ListItem>
-                            <asp:ListItem Value="08"></asp:ListItem>
-                            <asp:ListItem Value="09"></asp:ListItem>
-                            <asp:ListItem Value="10"></asp:ListItem>
-                            <asp:ListItem Value="11"></asp:ListItem>
-                            <asp:ListItem Value="12"></asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvMonth" runat="server" 
-                            ControlToValidate="editMonthDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a month." 
-                            ForeColor="Red" InitialValue="00">*</asp:RequiredFieldValidator>
+                        <asp:TextBox ID="EditExpiryMonth" runat="server" MaxLength="2" 
+                            Text='<%# Bind("expiryMonth") %>'></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvEditExpiryMonth" runat="server" 
+                            ControlToValidate="EditExpiryMonth" Display="Dynamic" 
+                            EnableClientScript="False" ErrorMessage="Expiry Month is required." 
+                            ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvEditExpiryMonth" runat="server" 
+                            ControlToValidate="EditExpiryMonth" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="You can only choose from the following: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12" 
+                            ForeColor="Red" onservervalidate="cvEditExpiryMonth_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:DropDownList ID="insertMonthDropDownList" runat="server" Height="22px" 
-                            Width="110px" SelectedValue='<%# Bind("expiryMonth") %>'>
-                            <asp:ListItem Value="00">Month</asp:ListItem>
-                            <asp:ListItem>01</asp:ListItem>
-                            <asp:ListItem>02</asp:ListItem>
-                            <asp:ListItem>03</asp:ListItem>
-                            <asp:ListItem Value="04"></asp:ListItem>
-                            <asp:ListItem Value="05"></asp:ListItem>
-                            <asp:ListItem Value="06"></asp:ListItem>
-                            <asp:ListItem Value="07"></asp:ListItem>
-                            <asp:ListItem Value="08"></asp:ListItem>
-                            <asp:ListItem Value="09"></asp:ListItem>
-                            <asp:ListItem Value="10"></asp:ListItem>
-                            <asp:ListItem Value="11"></asp:ListItem>
-                            <asp:ListItem Value="12"></asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvMonth" runat="server" 
-                            ControlToValidate="insertMonthDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a month." 
-                            ForeColor="Red" InitialValue="00">*</asp:RequiredFieldValidator>
+                        <asp:TextBox ID="InsertExpiryMonth" runat="server" MaxLength="2" 
+                            Text='<%# Bind("expiryMonth") %>'></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvEditExpiryMonth" runat="server" 
+                            ControlToValidate="InsertExpiryMonth" Display="Dynamic" 
+                            EnableClientScript="False" ErrorMessage="Expiry Month is required." 
+                            ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvInsertExpiryMonth" runat="server" 
+                            ControlToValidate="InsertExpiryMonth" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="You can only choose from the following: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12" 
+                            ForeColor="Red" onservervalidate="cvInsertExpiryMonth_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label5" runat="server" Text='<%# Bind("expiryMonth") %>'></asp:Label>
+                    </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Expiry Year" SortExpression="expiryYear">
-                    <ItemTemplate>
-                        <asp:Label ID="Label5" runat="server" Text='<%# Bind("expiryYear") %>'></asp:Label>
-                    </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:DropDownList ID="editYearDropDownList" runat="server" Height="22px" 
-                            Width="110px" onload="editYearDropDownList_Load" 
-                            >
-                            <asp:ListItem Value="0">Year</asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvYear" runat="server" 
-                            ControlToValidate="editYearDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a year." ForeColor="Red" 
-                            InitialValue="0">*</asp:RequiredFieldValidator>
+                        <asp:TextBox ID="EditExpiryYear" runat="server" MaxLength="4" 
+                            Text='<%# Bind("expiryYear") %>'></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvEditExpiryYear" runat="server" 
+                            ControlToValidate="EditExpiryYear" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Expiry year is required." ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="revEditExpiryYear" runat="server" 
+                            ControlToValidate="EditExpiryYear" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Year should have the form yyyy. For example, 1999." 
+                            ForeColor="Red" ValidationExpression="^\d{4}$">*</asp:RegularExpressionValidator>
+                        <asp:CustomValidator ID="cvEditExpiryYear" runat="server" 
+                            ControlToValidate="EditExpiryYear" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Your credit card is expired. Please try another one." 
+                            ForeColor="Red" onservervalidate="cvEditExpiryYear_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:DropDownList ID="insertYearDropDownList" runat="server" Height="22px" Width="110px" 
-                            onload="insertYearDropDownList_Load" 
-                            SelectedValue='<%# Bind("expiryYear") %>'>
-                            <asp:ListItem Value="0">Year</asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvYear" runat="server" 
-                            ControlToValidate="insertYearDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a year." ForeColor="Red" 
-                            InitialValue="0">*</asp:RequiredFieldValidator>
+                        <asp:TextBox ID="InsertExpiryYear" runat="server" MaxLength="4" 
+                            Text='<%# Bind("expiryYear") %>'></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvInsertExpiryYear" runat="server" 
+                            ControlToValidate="InsertExpiryYear" Display="Dynamic" 
+                            EnableClientScript="False" ErrorMessage="Expiry year is required." 
+                            ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="revInsertExpiryYear" runat="server" 
+                            ControlToValidate="InsertExpiryYear" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="Year should have the form yyyy. For example, 1999." 
+                            ForeColor="Red" ValidationExpression="^\d{4}$">*</asp:RegularExpressionValidator>
+                        <asp:CustomValidator ID="cvInsertExpiryYear" runat="server" 
+                            ControlToValidate="InsertExpiryYear" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="Your credit card is expired. Please try another one." 
+                            ForeColor="Red" onservervalidate="cvInsertExpiryYear_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="Label6" runat="server" Text='<%# Bind("expiryYear") %>'></asp:Label>
+                    </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Credit Card Default" 
                     SortExpression="creditCardDefault">
+                    <EditItemTemplate>
+                        <asp:CheckBox ID="EditCreditCardDefault" runat="server" 
+                            Checked='<%# Bind("creditCardDefault") %>' />
+                    </EditItemTemplate>
+                    <InsertItemTemplate>
+                        <asp:CheckBox ID="InsertCreditCardDefault" runat="server" 
+                            Checked='<%# Bind("creditCardDefault") %>' />
+                    </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:CheckBox ID="CheckBox1" runat="server" 
                             Checked='<%# Bind("creditCardDefault") %>' Enabled="false" />
                     </ItemTemplate>
-                    <EditItemTemplate>
-                        <asp:CheckBox ID="CheckBox1" runat="server" 
-                            Checked='<%# Bind("creditCardDefault") %>' />
-                    </EditItemTemplate>
-                    <InsertItemTemplate>
-                        <asp:CheckBox ID="CheckBox1" runat="server" 
-                            Checked='<%# Bind("creditCardDefault") %>' />
-                    </InsertItemTemplate>
                 </asp:TemplateField>
                 <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" 
                     ShowInsertButton="True" />
