@@ -308,7 +308,7 @@
                     <td class="style52">
                         / 
                         <asp:DropDownList ID="YearDropDownList" runat="server" 
-                            Height="22px" Width="110px">
+                            Height="22px" Width="110px" >
                             <asp:ListItem Value="0">Year</asp:ListItem>
                         </asp:DropDownList>
                         <asp:RequiredFieldValidator ID="rfvYear" runat="server" 

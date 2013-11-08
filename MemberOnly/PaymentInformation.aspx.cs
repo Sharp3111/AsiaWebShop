@@ -143,9 +143,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
         if (Page.IsValid)
         {
             string connectionString = "AsiaWebShopDBConnectionString";
-            string userName = User.Identity.Name;
-
-         
+            string userName = User.Identity.Name;        
 
             // After the information is added, add the credit card data in the credit card database.
             AddCreditCard(connectionString,

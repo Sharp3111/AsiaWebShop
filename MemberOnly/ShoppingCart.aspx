@@ -12,6 +12,7 @@
             color: #000080;
             font-weight: bold;
             font-size: xx-large;
+            font-family: "Microsoft Sans Serif";
         }
         .style4
         {
@@ -23,13 +24,13 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p class="style3">
-        shopping cart</p>
+        Shopping Cart</p>
     <p class="style2">
         <asp:Label ID="lblMessage" runat="server" Text="Label"></asp:Label>
 &nbsp;<asp:HyperLink ID="ShopAround" runat="server" ForeColor="#FF9900" 
             NavigateUrl="~/ItemSearch.aspx" 
-            style="text-decoration: underline; color: #800080; font-weight: 400;">Go shopping around</asp:HyperLink>
-    </p>
+            style="text-decoration: underline; color: #800080; font-weight: 400;">Go Shopping Around</asp:HyperLink>
+    &nbsp;.</p>
     <p class="style2">
         <asp:GridView ID="gvShoppingCart" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" 
@@ -137,8 +138,6 @@
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
         </p>
-    <p class="style2">
-        &nbsp;</p>
     <p class="style2">
         &nbsp;</p>
     <p class="style4">

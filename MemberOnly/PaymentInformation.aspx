@@ -13,13 +13,13 @@
         {
             font-family: Arial, Helvetica, sans-serif;
             font-size: medium;
-            color: #0000FF;
+            color: #000080;
         }
         .style4
         {
             font-family: Arial, Helvetica, sans-serif;
             font-size: medium;
-            color: #0000FF;
+            color: #000080;
             text-decoration: underline;
             text-transform: uppercase;
         }
@@ -27,7 +27,7 @@
         {
             font-family: Arial, Helvetica, sans-serif;
             font-size: small;
-            color: #0000FF;
+            color: #000080;
         }
         .style6
         {
@@ -36,7 +36,7 @@
         .style7
         {
             text-decoration: underline;
-            color: #0000FF;
+            color: #000080;
             font-size: medium;
             text-transform: uppercase;
         }
@@ -53,11 +53,20 @@
             font-family: "Segoe UI";
             color: #000080;
         }
+        .style11
+        {
+            color: #000080;
+            font-size: small;
+        }
+        .style12
+        {
+            color: #000080;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <h1 class="style2">
-        <strong style="font-weight: 700; color: #0000CC">Specify Payment Information</strong></h1>
+        <strong style="font-weight: 700; " class="style12">Specify Payment Information</strong></h1>
     <p class="style3">
         Dear
         <asp:Label ID="UserName" runat="server"></asp:Label>
@@ -65,7 +74,7 @@
     <p class="style4">
         Add a card</p>
     <p class="style5">
-        Enter your card information:</p>
+        Please enter your credit card information:</p>
     <table class="style6">
         <tr>
             <td class="style9">
@@ -166,20 +175,23 @@
     <p class="style7">
         Or Select a card from your credit card List
     </p>
+    <p class="style11">
+        Please note: the checked card is your default credit card. you can select 
+        another credit card for this payment.</p>
     <p>
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" 
             ForeColor="#333333" GridLines="None" Width="928px"> 
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:TemplateField HeaderText="Delete">
+                <asp:TemplateField HeaderText="Delete" Visible="False">
                     <ItemTemplate>
                         <asp:Button ID="deleteButton" runat="server" BackColor="Silver" 
                             BorderColor="Silver" BorderStyle="Solid" onclick="deleteButton_Click" 
                             Text="Delete" Width="60px" />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Edit">
+                <asp:TemplateField HeaderText="Edit" Visible="False">
                     <ItemTemplate>
                         <asp:Button ID="editButton" runat="server" BackColor="Silver" 
                             BorderColor="Silver" BorderStyle="Solid" Text="Edit" Width="60px" />
@@ -233,8 +245,8 @@
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
     </p>
-    <p>
-        &nbsp;</p>
+    <p class="style12">
+        Note: you can manage your credit card list in Manage Personal Information.</p>
     <p>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
