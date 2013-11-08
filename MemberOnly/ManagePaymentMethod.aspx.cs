@@ -361,7 +361,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
             {
                 lblMessage.Visible = true;
                 lblMessage.ForeColor = System.Drawing.Color.Green;
-                lblMessage.Text = "The selected card is your default card. After deletion, your default card will be the first one appearing in your credit card list";
+                lblMessage.Text = "The selected card is your default card. After deletion, your default card will be the first one appearing in your credit card list different from your original default card";
 
 
                 string firstValidInGridViewNumber = "";
@@ -439,142 +439,346 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
     }
     protected void EditCreditCardDefault_CheckedChanged(object sender, EventArgs e)
     {
-        string connectionString = "AsiaWebShopDBConnectionString";
-        string userName = User.Identity.Name;
+        Page.Validate();
 
-        Int32 count = 0;     
-        //check if the item has already added into the shopping cart
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "')", connection))
+        if (Page.IsValid)
         {
-            command.Connection.Open();                
-            count = (Int32)command.ExecuteScalar();
-            command.Connection.Close();
-        }
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name;
 
-        if(count <= 1)
-        {
-            //if the edited credit card changes from default to non default, error message.
-            if(((CheckBox)(sender as Control)).Checked == false)
+            Int32 count = 0;
+            //check if the item has already added into the shopping cart
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "')", connection))
             {
-                ((CheckBox)(sender as Control)).Checked = true;
-                ((CheckBox)(sender as Control)).Enabled = false;
-                lblMessage.ForeColor = System.Drawing.Color.Red;
-                lblMessage.Text = "This is your only credit card in your credit card list. You have to have this credit card as the default credit card.";
+                command.Connection.Open();
+                count = (Int32)command.ExecuteScalar();
+                command.Connection.Close();
+            }
+
+            if (count <= 1)
+            {
+                //if the edited credit card changes from default to non default, error message.
+                if (((CheckBox)(sender as Control)).Checked == false)
+                {
+                    ((CheckBox)(sender as Control)).Checked = true;
+                    ((CheckBox)(sender as Control)).Enabled = false;
+                    lblMessage2.ForeColor = System.Drawing.Color.Red;
+                    lblMessage2.Text = "This is your only credit card in your credit card list. You have to have this credit card as the default credit card.";
+                }
+            }
+            else
+            {
+                //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
+                if (((CheckBox)(sender as Control)).Checked == true)
+                {
+                    //find the initial default number for later update
+                    string currentCardNumber = ((TextBox)dvCreditCard.FindControl("EditUserName")).Text.Trim();
+                    string initialDefaultNumber = "";
+
+                    string querySelect = "SELECT [number] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [creditCardDefault] = '" + Convert.ToString(true) + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(querySelect, connection))
+                    {
+                        command.Connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                initialDefaultNumber = reader.GetString(0);
+                            }
+                        }
+
+                        reader.Close();
+                        command.Connection.Close();
+                    }
+
+                    //Set the edited card to be default
+                    string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", true);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    //Set the initial default to be nondefault
+                    string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + initialDefaultNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", false);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    gvCreditCard.DataBind();
+
+                    lblMessage2.ForeColor = System.Drawing.Color.Green;
+                    lblMessage2.Text = "Your default credit card has changed.";
+                }
+                //else the edited credit card changes from default to nondefault, then this card is set to the default
+                else
+                {
+                    string currentCardNumber = ((TextBox)dvCreditCard.FindControl("EditUserName")).Text.Trim();
+                    string changedDefaultNumber = "";
+
+                    string querySelect = "SELECT [number] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [creditCardDefault] = '" + Convert.ToString(false) + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(querySelect, connection))
+                    {
+                        command.Connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                changedDefaultNumber = reader.GetString(0); break;
+                            }
+                        }
+
+                        reader.Close();
+                        command.Connection.Close();
+                    }
+
+                    //Set the edited card to be default
+                    string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + changedDefaultNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", true);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    //Set the initial default to be nondefault
+                    string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", false);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    gvCreditCard.DataBind();
+
+                    lblMessage2.ForeColor = System.Drawing.Color.Green;
+                    lblMessage2.Text = "Your default credit card has changed.";
+                }
             }
         }
         else
         {
-            //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
-            if (((CheckBox)(sender as Control)).Checked == true)
-            {
-                //find the initial default number for later update
-                string currentCardNumber = ((TextBox)dvCreditCard.FindControl("EditUserName")).Text.Trim();
-                string initialDefaultNumber = "";
-
-                string querySelect = "SELECT [number] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [creditCardDefault] = '" + Convert.ToString(true) + "')";
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand(querySelect, connection))
-                {
-                    command.Connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            initialDefaultNumber = reader.GetString(0);
-                        }
-                    }
-
-                    reader.Close();
-                    command.Connection.Close();
-                }
-
-                //Set the edited card to be default
-                string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
-                {
-                    command.Connection.Open();
-                    command.Parameters.AddWithValue("@creditCardDefault", true);
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-
-                //Set the initial default to be nondefault
-                string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + initialDefaultNumber + "')";
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
-                {
-                    command.Connection.Open();
-                    command.Parameters.AddWithValue("@creditCardDefault", false);
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-
-                gvCreditCard.DataBind();
-
-                lblMessage.ForeColor = System.Drawing.Color.Green;
-                lblMessage.Text = "Your default credit card has changed from the card with card number " + initialDefaultNumber 
-                                + " to the card with the card number " + currentCardNumber;
-            }
-            //else the edited credit card changes from default to nondefault, then this card is set to the default
-            else
-            {
-                string currentCardNumber = ((TextBox)dvCreditCard.FindControl("EditUserName")).Text.Trim();
-                string changedDefaultNumber = "";
-
-                string querySelect = "SELECT [number] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [creditCardDefault] = '" + Convert.ToString(false) + "')";
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand(querySelect, connection))
-                {
-                    command.Connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            changedDefaultNumber = reader.GetString(0); break;
-                        }
-                    }
-
-                    reader.Close();
-                    command.Connection.Close();
-                }
-
-                //Set the edited card to be default
-                string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + changedDefaultNumber + "')";
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
-                {
-                    command.Connection.Open();
-                    command.Parameters.AddWithValue("@creditCardDefault", true);
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-
-                //Set the initial default to be nondefault
-                string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
-                {
-                    command.Connection.Open();
-                    command.Parameters.AddWithValue("@creditCardDefault", false);
-                    command.ExecuteNonQuery();
-                    command.Connection.Close();
-                }
-
-                gvCreditCard.DataBind();
-
-                lblMessage.ForeColor = System.Drawing.Color.Green;
-                lblMessage.Text = "Your default credit card has changed from the card with card number " + currentCardNumber
-                                + " to the card with the card number " + changedDefaultNumber;
-            }
-        }       
-
+            ((CheckBox)(sender as Control)).Checked = false;
+        }
     }
     protected void dvCreditCard_Load(object sender, EventArgs e)
     {
         lblMessage.Visible = false;
+    }
+    protected void InsertCreditCardDefault_CheckedChanged(object sender, EventArgs e)
+    {
+        Page.Validate();
+
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name;
+
+            Int32 count = 0;
+            //check if the item has already added into the shopping cart
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "')", connection))
+            {
+                command.Connection.Open();
+                count = (Int32)command.ExecuteScalar();
+                command.Connection.Close();
+            }
+
+            if (count <= 1)
+            {
+                //if the edited credit card changes from default to non default, error message.
+                if (((CheckBox)(sender as Control)).Checked == false)
+                {
+                    ((CheckBox)(sender as Control)).Checked = true;
+                    ((CheckBox)(sender as Control)).Enabled = false;
+                    lblMessage2.ForeColor = System.Drawing.Color.Red;
+                    lblMessage2.Text = "This is your only credit card in your credit card list. You have to have this credit card as the default credit card.";
+                }
+            }
+            else
+            {
+                //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
+                if (((CheckBox)(sender as Control)).Checked == true)
+                {
+                    //find the initial default number for later update
+                    string currentCardNumber = ((TextBox)dvCreditCard.FindControl("InsertUserName")).Text.Trim();
+                    string initialDefaultNumber = "";
+
+                    string querySelect = "SELECT [number] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [creditCardDefault] = '" + Convert.ToString(true) + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(querySelect, connection))
+                    {
+                        command.Connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                initialDefaultNumber = reader.GetString(0);
+                            }
+                        }
+
+                        reader.Close();
+                        command.Connection.Close();
+                    }
+
+                    //Set the edited card to be default
+                    string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", true);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    //Set the initial default to be nondefault
+                    string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + initialDefaultNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", false);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    gvCreditCard.DataBind();
+
+                    lblMessage2.ForeColor = System.Drawing.Color.Green;
+                    lblMessage2.Text = "Your default credit card has changed.";
+                }
+                //else the edited credit card changes from default to nondefault, then this card is set to the default
+                else
+                {
+                    string currentCardNumber = ((TextBox)dvCreditCard.FindControl("EditUserName")).Text.Trim();
+                    string changedDefaultNumber = "";
+
+                    string querySelect = "SELECT [number] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [creditCardDefault] = '" + Convert.ToString(false) + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(querySelect, connection))
+                    {
+                        command.Connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                changedDefaultNumber = reader.GetString(0); break;
+                            }
+                        }
+
+                        reader.Close();
+                        command.Connection.Close();
+                    }
+
+                    //Set the edited card to be default
+                    string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + changedDefaultNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", true);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    //Set the initial default to be nondefault
+                    string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+                    {
+                        command.Connection.Open();
+                        command.Parameters.AddWithValue("@creditCardDefault", false);
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+
+                    gvCreditCard.DataBind();
+
+                    lblMessage2.ForeColor = System.Drawing.Color.Green;
+                    lblMessage2.Text = "Your default credit card has changed.";
+                }
+            }
+        }
+        else
+        {
+            ((CheckBox)(sender as Control)).Checked = false;
+        }
+    }
+    protected void cvEditCardNumber_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        GridViewRow row = gvCreditCard.SelectedRow;
+
+        string currentCreditCardNumber = ((TextBox)dvCreditCard.FindControl("EditCardNumber")).Text.Trim();
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+
+        Int32 count = 0;
+        Int32 MaxRows = gvCreditCard.Rows.Count;
+
+        for (int i = 0; i < MaxRows; i++)
+        {
+            if (gvCreditCard.Rows[i] != row) //not the selected row
+            {
+                if (((Label)gvCreditCard.Rows[i].FindControl("cardNumber")).Text.Trim() == currentCreditCardNumber)
+                {
+                    count++;
+                }
+            }
+        }
+
+        if (count == 0)
+        {
+            args.IsValid = true;
+        }
+        else
+        {
+            args.IsValid = false;
+        }
+    }
+    protected void cvInsertCardNumber_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        string currentCreditCardNumber = ((TextBox)dvCreditCard.FindControl("InsertCardNumber")).Text.Trim();
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+
+        Int32 count = 0;
+        //check if there is only one credit card in user's credit card list
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCreditCardNumber + "')", connection))
+        {
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+
+        if (count != 0)
+        {
+            args.IsValid = false;
+        }
+        else
+        {
+            args.IsValid = true;
+        }
     }
 }

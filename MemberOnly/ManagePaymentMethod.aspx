@@ -147,6 +147,10 @@
                             ControlToValidate="EditCardNumber" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Card Number must be numeric and between 14 and 16 digits." 
                             ForeColor="Red" ValidationExpression="^\d{14,16}$">*</asp:RegularExpressionValidator>
+                        <asp:CustomValidator ID="cvEditCardNumber" runat="server" 
+                            ControlToValidate="EditCardNumber" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="This card has existed in your credit card list. Please try another one." 
+                            ForeColor="Red" onservervalidate="cvEditCardNumber_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:TextBox ID="InsertCardNumber" runat="server" MaxLength="16" 
@@ -160,6 +164,11 @@
                             EnableClientScript="False" 
                             ErrorMessage="Card Number must be numeric and between 14 and 16 digits." 
                             ForeColor="Red" ValidationExpression="^\d{14,16}$">*</asp:RegularExpressionValidator>
+                        <asp:CustomValidator ID="cvInsertCardNumber" runat="server" 
+                            ControlToValidate="InsertCardNumber" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="This card has existed in your credit card list. Please try another one." 
+                            ForeColor="Red" onservervalidate="cvInsertCardNumber_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label2" runat="server" Text='<%# Bind("number") %>'></asp:Label>
@@ -286,12 +295,13 @@
                     SortExpression="creditCardDefault">
                     <EditItemTemplate>
                         <asp:CheckBox ID="EditCreditCardDefault" runat="server" 
-                            Checked='<%# Bind("creditCardDefault") %>' 
+                            Checked='<%# Bind("creditCardDefault") %>' AutoPostBack="True" 
                             oncheckedchanged="EditCreditCardDefault_CheckedChanged" />
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:CheckBox ID="InsertCreditCardDefault" runat="server" 
-                            Checked='<%# Bind("creditCardDefault") %>' />
+                            Checked='<%# Bind("creditCardDefault") %>' AutoPostBack="True" 
+                            oncheckedchanged="InsertCreditCardDefault_CheckedChanged" />
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:CheckBox ID="CheckBox1" runat="server" 
@@ -312,6 +322,11 @@
     <p>
         <asp:Label ID="lblMessage" runat="server"></asp:Label>
     </p>
+    <p>
+        <asp:Label ID="lblMessage2" runat="server"></asp:Label>
+    </p>
+    <p>
+        &nbsp;</p>
     <p class="style3">
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
@@ -330,7 +345,8 @@
             DeleteCommand="DELETE FROM [CreditCard] WHERE ([number] = @number)" 
             InsertCommand="INSERT INTO [CreditCard] ([userName], [cardHolderName], [type], [number], [expiryMonth], [expiryYear], [creditCardDefault]) VALUES (@userName, @cardHolderName, @type, @number, @expiryMonth, @expiryYear, @creditCardDefault)" 
             
-            UpdateCommand="UPDATE [CreditCard] SET [cardHolderName] = @carHolderName, [type] = @type, [number] = @number, [expiryMonth] = @expiryMonth, [expiryYear] = @expiryYear, [creditCardDefault] = @creditCardDefault WHERE ([userName] = @userName AND [number] = @number)">
+            
+            UpdateCommand="UPDATE [CreditCard] SET [cardHolderName] = @cardHolderName, [type] = @type, [number] = @number, [expiryMonth] = @expiryMonth, [expiryYear] = @expiryYear, [creditCardDefault] = @creditCardDefault WHERE ([userName] = @userName AND [number] = @number)">
             <DeleteParameters>
                 <asp:Parameter Name="number" />
             </DeleteParameters>
@@ -350,7 +366,7 @@
                     PropertyName="SelectedValue" Type="String" />
             </SelectParameters>
             <UpdateParameters>
-                <asp:Parameter Name="carHolderName" />
+                <asp:Parameter Name="cardHolderName" />
                 <asp:Parameter Name="type" />
                 <asp:Parameter Name="number" />
                 <asp:Parameter Name="expiryMonth" />
