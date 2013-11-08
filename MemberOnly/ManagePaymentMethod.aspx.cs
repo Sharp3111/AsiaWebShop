@@ -596,7 +596,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                 command.Connection.Close();
             }
 
-            if (count <= 1)
+            if (count < 1)
             {
                 //if the edited credit card changes from default to non default, error message.
                 if (((CheckBox)(sender as Control)).Checked == false)
