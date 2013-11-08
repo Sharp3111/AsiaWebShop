@@ -272,10 +272,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                 args.IsValid = false;
             }
         }
-        else
-        {
-            args.IsValid = false;
-        }
+
         
     }
     protected void cvInsertExpiryYear_ServerValidate(object source, ServerValidateEventArgs args)
@@ -310,10 +307,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                 args.IsValid = false;
             }
         }
-        else
-        {
-            args.IsValid = false;
-        }
+
     }
     protected void InsertUserName_Load(object sender, EventArgs e)
     {
