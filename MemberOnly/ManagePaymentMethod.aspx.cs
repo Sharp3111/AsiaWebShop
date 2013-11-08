@@ -50,15 +50,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
         }
     }
 
-    protected void NewLink_Click(object sender, EventArgs e)
-    {
-        // Populate the YearDropDownList from current year to plus 10 years.
-        for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 10; year++)
-        {
-            string Year = year.ToString().Trim();
-            ((DropDownList)dvCreditCard.FindControl("insertYearDropDownList")).Items.Add(Year);
-        }
-    }
+  
     protected void EditLink_Click(object sender, EventArgs e)
     {
         string connectionString = "AsiaWebShopDBConnectionString";
@@ -85,5 +77,119 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
 
         //Manually populate Expiry Year
+    }
+    protected void insertYearDropDownList_Load(object sender, EventArgs e)
+    {
+        // Populate the YearDropDownList from current year to plus 10 years.
+        for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 10; year++)
+        {
+            string Year = year.ToString().Trim();
+            ((DropDownList)(sender as Control)).Items.Add(Year);
+        }
+    }
+    protected void insertUserName_Load(object sender, EventArgs e)
+    {
+        ((TextBox)(sender as Control)).Text = User.Identity.Name.Trim();
+    }
+    protected void dvCreditCard_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
+    {
+        gvCreditCard.DataBind();
+    }
+    protected void editYearDropDownList_Load(object sender, EventArgs e)
+    {
+        // Populate the YearDropDownList from current year to plus 10 years.
+        for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 10; year++)
+        {
+            string Year = year.ToString().Trim();
+            ((DropDownList)(sender as Control)).Items.Add(Year);
+        }
+
+        string userName = User.Identity.Name;
+        string connectionString = "AsiaWebShopDBConnectionString";
+        GridViewRow row = gvCreditCard.SelectedRow;
+        string creditCardNumber = ((Label)row.FindControl("cardNumber")).Text.Trim();
+        //Response.Write("<script>alert('" + creditCardNumber + "')</script>");
+
+        string TYPE = "";
+        string MONTH = "";
+        string YEAR = "";
+        string querySelect = "SELECT [type], [expiryMonth], [expiryYear] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = '" + creditCardNumber + "')";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(querySelect, connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    TYPE = reader["type"].ToString().Trim();
+                    MONTH = reader["expiryMonth"].ToString().Trim();
+                    YEAR = reader["expiryYear"].ToString().Trim();
+                }
+            }
+        }
+
+        ((DropDownList)(sender as Control)).Text = YEAR;
+    }
+    protected void editCardTypeDropDownList_Load(object sender, EventArgs e)
+    {
+        string userName = User.Identity.Name;
+        string connectionString = "AsiaWebShopDBConnectionString";
+        GridViewRow row = gvCreditCard.SelectedRow;
+        string creditCardNumber = ((Label)row.FindControl("cardNumber")).Text.Trim();
+        //Response.Write("<script>alert('" + creditCardNumber + "')</script>");
+
+        string TYPE = "";
+        string MONTH = "";
+        string YEAR = "";
+        string querySelect = "SELECT [type], [expiryMonth], [expiryYear] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = '" + creditCardNumber + "')";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(querySelect, connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    TYPE = reader["type"].ToString().Trim();
+                    MONTH = reader["expiryMonth"].ToString().Trim();
+                    YEAR = reader["expiryYear"].ToString().Trim();
+                }
+            }
+        }
+
+        ((DropDownList)(sender as Control)).Text = TYPE;
+    }
+    protected void editMonthDropDownList_Load(object sender, EventArgs e)
+    {
+        string userName = User.Identity.Name;
+        string connectionString = "AsiaWebShopDBConnectionString";
+        GridViewRow row = gvCreditCard.SelectedRow;
+        string creditCardNumber = ((Label)row.FindControl("cardNumber")).Text.Trim();
+        //Response.Write("<script>alert('" + creditCardNumber + "')</script>");
+
+        string TYPE = "";
+        string MONTH = "";
+        string YEAR = "";
+        string querySelect = "SELECT [type], [expiryMonth], [expiryYear] FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = '" + creditCardNumber + "')";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(querySelect, connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    TYPE = reader["type"].ToString().Trim();
+                    MONTH = reader["expiryMonth"].ToString().Trim();
+                    YEAR = reader["expiryYear"].ToString().Trim();
+                }
+            }
+        }
+
+        ((DropDownList)(sender as Control)).Text = MONTH;
     }
 }
