@@ -45,10 +45,10 @@
                     <Items>
                         <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Home"/>
                         <asp:MenuItem NavigateUrl="~/About.aspx" Text="About"/>
+                        <asp:MenuItem NavigateUrl="~/MemberOnly/ShoppingCart.aspx" Text="Shopping Cart" 
+                            Value="Shopping Cart"></asp:MenuItem>
                     </Items>
                 </asp:Menu>
-                <asp:HyperLink ID="GoToShoppingCart" runat="server" ForeColor="White" 
-                    NavigateUrl="~/MemberOnly/ShoppingCart.aspx" style="text-align: right">Shopping Cart</asp:HyperLink>
             </div>
         </div>
         <div class="main">
