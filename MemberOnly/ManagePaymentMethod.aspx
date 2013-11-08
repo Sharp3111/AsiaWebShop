@@ -34,7 +34,7 @@
         , your credit card information is as follows:</p>
     <p class="style3">
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
-            CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" DataKeyNames = "number, userName"
+            CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" DataKeyNames = "number,userName"
             GridLines="None" Width="915px">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
@@ -92,6 +92,13 @@
                             Checked='<%# Bind("creditCardDefault") %>' Enabled="false" />
                     </ItemTemplate>
                 </asp:TemplateField>
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:Button ID="RemoveButton" runat="server" BackColor="Silver" 
+                            BorderColor="Silver" BorderStyle="Outset" onclick="RemoveButton_Click" 
+                            Text="Remove" />
+                    </ItemTemplate>
+                </asp:TemplateField>
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -110,7 +117,7 @@
             CellPadding="4" DataSourceID="SqlDataSource2" ForeColor="#333333" 
             GridLines="None" Height="50px" Width="696px" 
             oniteminserted="dvCreditCard_ItemInserted1" 
-            onitemupdated="dvCreditCard_ItemUpdated">
+            onitemupdated="dvCreditCard_ItemUpdated" onload="dvCreditCard_Load">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
@@ -279,7 +286,8 @@
                     SortExpression="creditCardDefault">
                     <EditItemTemplate>
                         <asp:CheckBox ID="EditCreditCardDefault" runat="server" 
-                            Checked='<%# Bind("creditCardDefault") %>' />
+                            Checked='<%# Bind("creditCardDefault") %>' 
+                            oncheckedchanged="EditCreditCardDefault_CheckedChanged" />
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:CheckBox ID="InsertCreditCardDefault" runat="server" 
@@ -290,7 +298,7 @@
                             Checked='<%# Bind("creditCardDefault") %>' Enabled="false" />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" 
+                <asp:CommandField ShowEditButton="True" 
                     ShowInsertButton="True" />
             </Fields>
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -302,6 +310,7 @@
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" 
         HeaderText="The following errors occur:" />
     <p>
+        <asp:Label ID="lblMessage" runat="server"></asp:Label>
     </p>
     <p class="style3">
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
