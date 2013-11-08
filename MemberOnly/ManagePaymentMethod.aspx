@@ -117,7 +117,9 @@
             CellPadding="4" DataSourceID="SqlDataSource2" ForeColor="#333333" 
             GridLines="None" Height="50px" Width="696px" 
             oniteminserted="dvCreditCard_ItemInserted1" 
-            onitemupdated="dvCreditCard_ItemUpdated" onload="dvCreditCard_Load">
+            oniteminserting="dvCreditCard_ItemInserting" 
+            onitemupdated="dvCreditCard_ItemUpdated" 
+            onitemupdating="dvCreditCard_ItemUpdating" onload="dvCreditCard_Load">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
@@ -295,7 +297,7 @@
                     SortExpression="creditCardDefault">
                     <EditItemTemplate>
                         <asp:CheckBox ID="EditCreditCardDefault" runat="server" 
-                            Checked='<%# Bind("creditCardDefault") %>' AutoPostBack="True" 
+                            Checked='<%# Bind("creditCardDefault") %>' 
                             oncheckedchanged="EditCreditCardDefault_CheckedChanged" />
                     </EditItemTemplate>
                     <InsertItemTemplate>
@@ -323,8 +325,7 @@
         <asp:Label ID="lblMessage" runat="server"></asp:Label>
     </p>
     <p>
-        <asp:Label ID="lblMessage2" runat="server"></asp:Label>
-    </p>
+        &nbsp;</p>
     <p>
         &nbsp;</p>
     <p class="style3">
