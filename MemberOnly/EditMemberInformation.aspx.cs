@@ -16,6 +16,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
+            /*
             // Populate the DistrictDropDownList.
             DistrictDropDownList.Items.Add("-- Select district --");
             DistrictDropDownList.Items.Add("Central and Western");
@@ -42,7 +43,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
             {
                 YearDropDownList.Items.Add(year.ToString());
             }
-
+            */
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
             GetMemberData(connectionString, userName);
@@ -110,7 +111,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                     FlatSuite.Text = reader["flatSuite"].ToString().Trim();
                     BlockTower.Text = reader["blockTower"].ToString().Trim();
                     Street.Text = reader["streetAddress"].ToString().Trim();
-                    DistrictDropDownList.Text = reader["district"].ToString().Trim();
+                    District.Text = reader["district"].ToString().Trim();
                 }
             }
 
@@ -143,12 +144,12 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                     // Assign the data values to the web form labels.
                     CardHolderName.Text = reader["cardHolderName"].ToString().Trim();
                     CardNumber.Text = reader["number"].ToString().Trim();
-                    CardTypeDropDownList.Text = reader["type"].ToString().Trim();
-                    MonthDropDownList.Text = reader["expiryMonth"].ToString().Trim();
+                    CardType.Text = reader["type"].ToString().Trim();
+                    Month.Text = reader["expiryMonth"].ToString().Trim();
 
                    // System.Diagnostics.Debug.WriteLine("GetMemberCreditCard_MonthDropDownList.SelectedItem.Value:");
                    // System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
-                    YearDropDownList.Text = reader["expiryYear"].ToString().Trim();
+                    Year.Text = reader["expiryYear"].ToString().Trim();
                 }
             }
 
@@ -235,7 +236,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
         }
     }
 
-
+    /*
     protected void cvExpiryDate_ServerValidate(object source, ServerValidateEventArgs args)
     {
         if ((MonthDropDownList.SelectedValue.Trim() != "00") & (YearDropDownList.SelectedValue.Trim() != "0"))
@@ -248,7 +249,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
             }  
         }
     }
-
+    */
 
     protected void Update_Click(object sender, EventArgs e)
     {
@@ -265,7 +266,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                 FirstName.Text.Trim(),
                 LastName.Text.Trim(),
                 PhoneNumber.Text.Trim());
-
+            /*
             // After the registration information is validated, update the address data in the database.
             UpdateAddress(connectionString,
                 UserName.Text.Trim(),
@@ -275,7 +276,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                 BlockTower.Text.Trim(),
                 Street.Text.Trim(),
                 DistrictDropDownList.SelectedItem.Text.Trim());
-
+            
             // After the registration information is validated, update the credit card data in the database.
             UpdateCreditCard(connectionString,
                 UserName.Text.Trim(),
@@ -284,7 +285,7 @@ public partial class MemberOnly_EditMemberInformation : System.Web.UI.Page
                 CardHolderName.Text.Trim(),
                 MonthDropDownList.SelectedItem.Text.Trim(),
                 YearDropDownList.SelectedItem.Text.Trim());
-
+            */
             FormsAuthentication.SetAuthCookie(UserName.Text, false /* createPersistentCookie */);
 
             string continueUrl = "~/MemberOnly/ViewMemberInformation.aspx";

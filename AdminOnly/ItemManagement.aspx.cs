@@ -9,6 +9,8 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
+
 
 
 public partial class ItemManagement : System.Web.UI.Page
@@ -190,5 +192,59 @@ public partial class ItemManagement : System.Web.UI.Page
                 args.IsValid = false;
             }
         }  
+    }
+
+    private bool isValid(string price)
+    {
+        return Regex.IsMatch(price, @"^([1-9]{1}[\d]{0,2}(\,[\d]{3})*(\.[\d]{0,2})?|[1-9]{1}[\d]{0,}(\.[\d]{0,2})?|0(\.[\d]{0,2})?|(\.[\d]{1,2})?)$");
+    }
+
+    protected void cvEditDiscountPrice_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        string txtDiscountPrice = ((TextBox)dvItem.FindControl("EditDiscountPrice")).Text.Trim();
+        string txtNormalPrice = ((TextBox)dvItem.FindControl("EditNormalPrice")).Text.Trim();
+
+        if (isValid(txtDiscountPrice) && isValid(txtNormalPrice))
+        {
+            Decimal discountPrice = Convert.ToDecimal(((TextBox)dvItem.FindControl("EditDiscountPrice")).Text.Trim());
+            Decimal normalPrice = Convert.ToDecimal(((TextBox)dvItem.FindControl("EditNormalPrice")).Text.Trim());
+
+            if (discountPrice > normalPrice)
+            {
+                args.IsValid = false;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+        else
+        {
+            args.IsValid = false;
+        }
+    }
+    protected void cvInsertDiscountPrice_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        string txtDiscountPrice = ((TextBox)dvItem.FindControl("InsertDiscountPrice")).Text.Trim();
+        string txtNormalPrice = ((TextBox)dvItem.FindControl("InsertNormalPrice")).Text.Trim();
+
+        if (isValid(txtDiscountPrice) && isValid(txtNormalPrice))
+        {
+            Decimal discountPrice = Convert.ToDecimal(((TextBox)dvItem.FindControl("InsertDiscountPrice")).Text.Trim());
+            Decimal normalPrice = Convert.ToDecimal(((TextBox)dvItem.FindControl("InsertNormalPrice")).Text.Trim());
+
+            if (discountPrice > normalPrice)
+            {
+                args.IsValid = false;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+        else
+        {
+            args.IsValid = false;
+        }
     }
 }

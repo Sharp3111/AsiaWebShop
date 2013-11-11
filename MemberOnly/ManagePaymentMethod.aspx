@@ -173,7 +173,7 @@
                             ForeColor="Red" onservervalidate="cvInsertCardNumber_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
-                        <asp:Label ID="Label2" runat="server" Text='<%# Bind("number") %>'></asp:Label>
+                        <asp:Label ID="LabelCardNumber" runat="server" Text='<%# Bind("number") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Card Type" SortExpression="type">
@@ -325,7 +325,11 @@
         <asp:Label ID="lblMessage" runat="server"></asp:Label>
     </p>
     <p>
-        &nbsp;</p>
+        <asp:Button ID="Return" runat="server" BackColor="Silver" BorderColor="Silver" 
+            BorderStyle="Solid" Height="30px" 
+            PostBackUrl="~/MemberOnly/EditMemberInformation.aspx" 
+            Text="Return to Manage Member Information" Width="300px" />
+    </p>
     <p>
         &nbsp;</p>
     <p class="style3">

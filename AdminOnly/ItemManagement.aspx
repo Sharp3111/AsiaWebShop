@@ -241,15 +241,11 @@ Women." ForeColor="Red" onservervalidate="cvInsertCategory_ServerValidate">*</as
                             ControlToValidate="EditDiscountPrice" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Discount Price is required." 
                             ForeColor="Red">*</asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="revEditDiscountPrice" runat="server" 
+                        <asp:CustomValidator ID="cvEditDiscountPrice" runat="server" 
                             ControlToValidate="EditDiscountPrice" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Discount Price should be positve money values." 
-                            ForeColor="Red" 
-                            
-                            
-                            
-                            
-                            ValidationExpression="^([1-9]{1}[\d]{0,2}(\,[\d]{3})*(\.[\d]{0,2})?|[1-9]{1}[\d]{0,}(\.[\d]{0,2})?|0(\.[\d]{0,2})?|(\.[\d]{1,2})?)$">*</asp:RegularExpressionValidator>
+                            EnableClientScript="False" 
+                            ErrorMessage="Discount Price should be positive money values and discount Price cannot be greater than normal price." 
+                            ForeColor="Red" onservervalidate="cvEditDiscountPrice_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:TextBox ID="InsertDiscountPrice" runat="server" MaxLength="12" 
@@ -258,15 +254,11 @@ Women." ForeColor="Red" onservervalidate="cvInsertCategory_ServerValidate">*</as
                             ControlToValidate="InsertDiscountPrice" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Discount Price is required." 
                             ForeColor="Red">*</asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="revInsertDiscountPrice" runat="server" 
+                        <asp:CustomValidator ID="cvInsertDiscountPrice" runat="server" 
                             ControlToValidate="InsertDiscountPrice" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Discount Price should be positive money values." 
-                            ForeColor="Red" 
-                            
-                            
-                            
-                            
-                            ValidationExpression="^([1-9]{1}[\d]{0,2}(\,[\d]{3})*(\.[\d]{0,2})?|[1-9]{1}[\d]{0,}(\.[\d]{0,2})?|0(\.[\d]{0,2})?|(\.[\d]{1,2})?)$">*</asp:RegularExpressionValidator>
+                            EnableClientScript="False" 
+                            ErrorMessage="Discount Price should be positive money values and discount Price cannot be greater than normal price." 
+                            ForeColor="Red" onservervalidate="cvInsertDiscountPrice_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label7" runat="server" Text='<%# Bind("discountPrice") %>'></asp:Label>

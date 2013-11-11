@@ -93,6 +93,10 @@
             width: 126px;
             height: 43px;
         }
+        .style54
+        {
+            color: #000080;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
@@ -169,8 +173,7 @@
         <td class="style32">
             Building:</td>
         <td class="style5">
-            <asp:TextBox ID="Building" runat="server" Height="22px" Width="200px" 
-                MaxLength="20"></asp:TextBox>
+            <asp:Label ID="Building" runat="server"></asp:Label>
         </td>
         <td class="style46">
             <table class="style3">
@@ -178,7 +181,7 @@
                     <td class="style7">
                         &nbsp;Floor</td>
                     <td>
-                        <asp:TextBox ID="Floor" runat="server" Width="40px" Height="22px" MaxLength="3"></asp:TextBox>
+                        <asp:Label ID="Floor" runat="server"></asp:Label>
                     </td>
                 </tr>
             </table>
@@ -189,14 +192,12 @@
                     <td class="style8">
                         Flat/Suite:</td>
                     <td class="style29">
-                        <asp:TextBox ID="FlatSuite" runat="server" Width="40px" Height="22px" 
-                            MaxLength="5"></asp:TextBox>
+                        <asp:Label ID="FlatSuite" runat="server"></asp:Label>
                     </td>
                     <td class="style10">
                         Block/Tower:</td>
                     <td>
-                        <asp:TextBox ID="BlockTower" runat="server" Width="40px" Height="22px" 
-                            MaxLength="2"></asp:TextBox>
+                        <asp:Label ID="BlockTower" runat="server"></asp:Label>
                     </td>
                 </tr>
             </table>
@@ -206,25 +207,13 @@
         <td class="style32">
             Street:</td>
         <td class="style5">
-            <asp:TextBox ID="Street" runat="server" Height="22px" Width="200px" 
-                MaxLength="30"></asp:TextBox>
-            <asp:RequiredFieldValidator ID="rfvStreet" runat="server" 
-                ControlToValidate="Street" Display="Dynamic" EnableClientScript="False" 
-                ErrorMessage="Street is required." ForeColor="Red" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:Label ID="Street" runat="server"></asp:Label>
         </td>
         <td class="style46">
             &nbsp;
             District:</td>
         <td>
-            <asp:DropDownList ID="DistrictDropDownList" runat="server" 
-                Height="22px" style="margin-left: 0px" Width="205px">
-            </asp:DropDownList>
-            <asp:RequiredFieldValidator ID="rfvDistrict" runat="server" 
-                ControlToValidate="DistrictDropDownList" Display="Dynamic" 
-                EnableClientScript="False" ErrorMessage="Please select a district." 
-                ForeColor="Red" InitialValue="-- Select district --" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:Label ID="District" runat="server"></asp:Label>
         </td>
     </tr>
 </table>
@@ -235,47 +224,19 @@
         <td class="style21">
             Cardholder Name:</td>
         <td class="style41">
-            <asp:TextBox ID="CardHolderName" runat="server" Height="22px" 
-                style="margin-left: 0px" Width="200px" MaxLength="50"></asp:TextBox>
-            <asp:RequiredFieldValidator ID="rfvCardHolderName" runat="server" 
-                ControlToValidate="CardHolderName" Display="Dynamic" EnableClientScript="False" 
-                ErrorMessage="Cardholder Name is required." ForeColor="Red" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:Label ID="CardHolderName" runat="server"></asp:Label>
         </td>
         <td class="style23">
             Card Type:</td>
         <td class="style24">
-            <asp:DropDownList ID="CardTypeDropDownList" runat="server" 
-                Width="250px" Height="22px" ValidationGroup="RegisterUserValidationGroup">
-                <asp:ListItem>-- Select credit card --</asp:ListItem>
-                <asp:ListItem>American Express</asp:ListItem>
-                <asp:ListItem>Diners Club</asp:ListItem>
-                <asp:ListItem>Discover</asp:ListItem>
-                <asp:ListItem>MasterCard</asp:ListItem>
-                <asp:ListItem>Visa</asp:ListItem>
-            </asp:DropDownList>
-            <asp:RequiredFieldValidator ID="rfvCardTypeDropDownList" runat="server" 
-                ControlToValidate="CardTypeDropDownList" Display="Dynamic" 
-                EnableClientScript="False" ErrorMessage="Please select a credit card." 
-                ForeColor="Red" InitialValue="-- Select credit card --" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:Label ID="CardType" runat="server"></asp:Label>
         </td>
     </tr>
     <tr>
         <td class="style47">
             Card Number:</td>
         <td class="style44">
-            <asp:TextBox ID="CardNumber" runat="server" Height="22px" Width="200px" 
-                MaxLength="16"></asp:TextBox>
-            <asp:RequiredFieldValidator ID="rfvCardNumber" runat="server" 
-                ControlToValidate="CardNumber" Display="Dynamic" EnableClientScript="False" 
-                ErrorMessage="Card Number is required." ForeColor="Red" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
-            <asp:RegularExpressionValidator ID="revCardNumber" runat="server" 
-                ControlToValidate="CardNumber" Display="Dynamic" EnableClientScript="False" 
-                ErrorMessage="Card Number must be numeric and between 14 and 16 digits." 
-                ForeColor="Red" ValidationExpression="^\d{14,16}$" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
+            <asp:Label ID="CardNumber" runat="server"></asp:Label>
         </td>
         <td class="style37">
             Expiry Date:</td>
@@ -283,43 +244,11 @@
             <table class="style3">
                 <tr>
                     <td class="style53">
-                        <asp:DropDownList ID="MonthDropDownList" runat="server" 
-                            Height="22px" Width="110px" CausesValidation="True" 
-                            ValidationGroup="RegisterUserValidationGroup">
-                            <asp:ListItem Value="00">Month</asp:ListItem>
-                            <asp:ListItem>01</asp:ListItem>
-                            <asp:ListItem>02</asp:ListItem>
-                            <asp:ListItem>03</asp:ListItem>
-                            <asp:ListItem Value="04"></asp:ListItem>
-                            <asp:ListItem Value="05"></asp:ListItem>
-                            <asp:ListItem Value="06"></asp:ListItem>
-                            <asp:ListItem Value="07"></asp:ListItem>
-                            <asp:ListItem Value="08"></asp:ListItem>
-                            <asp:ListItem Value="09"></asp:ListItem>
-                            <asp:ListItem Value="10"></asp:ListItem>
-                            <asp:ListItem Value="11"></asp:ListItem>
-                            <asp:ListItem Value="12"></asp:ListItem>
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvMonth" runat="server" 
-                            ControlToValidate="MonthDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a month." 
-                            ForeColor="Red" InitialValue="00" 
-                            ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                        <asp:Label ID="Month" runat="server"></asp:Label>
                     </td>
                     <td class="style52">
                         / 
-                        <asp:DropDownList ID="YearDropDownList" runat="server" 
-                            Height="22px" Width="110px">
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvYear" runat="server" 
-                            ControlToValidate="YearDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Please select a year." ForeColor="Red" 
-                            InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
-                        <asp:CustomValidator ID="cvExpiryDate" runat="server" 
-                            ControlToValidate="MonthDropDownList" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="Credit card is expired." 
-                            ForeColor="Red" onservervalidate="cvExpiryDate_ServerValidate" 
-                            ValidationGroup="RegisterUserValidationGroup">*</asp:CustomValidator>
+                        <asp:Label ID="Year" runat="server"></asp:Label>
                     </td>
                 </tr>
             </table>
@@ -334,7 +263,19 @@
             BorderColor="Silver" />
     </p>
     <p>
-        If you want to change your password, please click
+        <span class="style54">If you want to edit delivery addresses, please click</span>
+        <asp:HyperLink ID="ManageDeliveryAddressLink" runat="server" 
+            NavigateUrl="~/MemberOnly/ManageDeliveryAddress.aspx" 
+            style="text-decoration: underline; color: #9900FF">Manage Delivery Address List</asp:HyperLink>
+    </p>
+    <p>
+        <span class="style54">If you want to edit credit card information, please click</span>
+        <asp:HyperLink ID="ManageCreditCardLink" runat="server" 
+            NavigateUrl="~/MemberOnly/ManagePaymentMethod.aspx" 
+            style="text-decoration: underline; color: #9900FF">Manage Payment Methods</asp:HyperLink>
+    </p>
+    <p>
+        <span class="style54">If you want to change your password, please click</span>
         <asp:HyperLink ID="HyperLinkToChangePassword" runat="server" ForeColor="#9900FF" 
             NavigateUrl="~/Account/ChangePassword.aspx">Change Password</asp:HyperLink>
     </p>

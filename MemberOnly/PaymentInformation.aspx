@@ -246,7 +246,7 @@
         </asp:GridView>
     </p>
     <p class="style12">
-        Note: you can manage your credit card list in Manage Personal Information.</p>
+        Note: you can manage your credit card list in Edit Member Information.</p>
     <p>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 

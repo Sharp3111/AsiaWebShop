@@ -213,6 +213,12 @@
     <p>
     </p>
     <p class="style7">
+        <asp:Button ID="Return" runat="server" BackColor="Silver" BorderColor="Silver" 
+            BorderStyle="Solid" Height="30px" 
+            PostBackUrl="~/MemberOnly/EditMemberInformation.aspx" 
+            Text="Return to Manage Member Information" Width="300px" />
+    </p>
+    <p class="style7">
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             SelectCommand="SELECT [nickname], [district], [streetAddress], [blockTower], [flatSuite], [floor], [building] FROM [Address] WHERE ([userName] = @userName)">
