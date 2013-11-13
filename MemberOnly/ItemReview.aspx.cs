@@ -9,6 +9,6 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        UserName.Text = User.Identity.Name;
     }
 }
