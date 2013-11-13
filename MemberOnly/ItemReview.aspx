@@ -26,26 +26,62 @@
         <asp:Label ID="UserName" runat="server" Text="UserName"></asp:Label>
         , this is the item review page.</p>
     <p>
-        <span class="style3">Please specify the item you want to review:</span>
-        <asp:RequiredFieldValidator ID="rfvItem" runat="server" 
-            ControlToValidate="ItemRadioButtonList" Display="Dynamic" 
-            EnableClientScript="False" ErrorMessage="Please choose an item to review." 
-            ForeColor="Red" ValidationGroup="reviewValidationGroup">*</asp:RequiredFieldValidator>
-        <asp:CustomValidator ID="cvItem" runat="server" ErrorMessage="CustomValidator"></asp:CustomValidator>
+        <span class="style3">The following list shows items you purchased. Please specify 
+        an item you want to review:</span>
+        &nbsp;</p>
+    <p>
+        <asp:Label ID="lblMessage" runat="server"></asp:Label>
     </p>
     <p>
-        <asp:RadioButtonList ID="ItemRadioButtonList" runat="server" 
-            DataSourceID="SqlDataSource1" style="color: #000080" Width="246px">
-        </asp:RadioButtonList>
+        <asp:GridView ID="gvItemReview" runat="server" AutoGenerateColumns="False" 
+            CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" 
+            GridLines="None" Width="356px">
+            <AlternatingRowStyle BackColor="White" />
+            <Columns>
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:CheckBox ID="selected" runat="server" AutoPostBack="True" 
+                            oncheckedchanged="selected_CheckedChanged" />
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Item Name" SortExpression="name">
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("name") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="ItemName" runat="server" Text='<%# Bind("name") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="UPC" SortExpression="upc">
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("upc") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="ItemUPC" runat="server" Text='<%# Bind("upc") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </Columns>
+            <EditRowStyle BackColor="#2461BF" />
+            <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+            <RowStyle BackColor="#EFF3FB" />
+            <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+            <SortedAscendingCellStyle BackColor="#F5F7FB" />
+            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+            <SortedDescendingCellStyle BackColor="#E9EBEF" />
+            <SortedDescendingHeaderStyle BackColor="#4870BE" />
+        </asp:GridView>
     </p>
+    <p>
+        &nbsp;</p>
     <p>
         <span class="style3">Please rate the following aspects of the item from 1 to 5 (required):</span></p>
-    <p>
-        <span class="style3"></p>
+    <span class="style3">
     <p>
         <span class="style4">Quality</span>:
         <asp:RequiredFieldValidator ID="rfvQuality" runat="server" 
-            ControlToValidate="ItemRadioButtonList" Display="Dynamic" 
+            ControlToValidate="qualityRadioButtonList" Display="Dynamic" 
             EnableClientScript="False" ErrorMessage="Please rate the item's quality." 
             ForeColor="Red" ValidationGroup="reviewValidationGroup">*</asp:RequiredFieldValidator>
     </p>
@@ -60,7 +96,7 @@
     </asp:RadioButtonList>
     <p>
         <span class="style4">Features</span>:<asp:RequiredFieldValidator 
-            ID="rfvFeatures" runat="server" ControlToValidate="ItemRadioButtonList" 
+            ID="rfvFeatures" runat="server" ControlToValidate="featuresRadioButtonList" 
             Display="Dynamic" EnableClientScript="False" 
             ErrorMessage="Please rate the item's features." ForeColor="Red" 
             ValidationGroup="reviewValidationGroup">*</asp:RequiredFieldValidator>
@@ -79,7 +115,7 @@
     <p>
         <span class="style4">Performance</span>:
         <asp:RequiredFieldValidator ID="rfvPerformance" runat="server" 
-            ControlToValidate="ItemRadioButtonList" Display="Dynamic" 
+            ControlToValidate="featuresRadioButtonList" Display="Dynamic" 
             EnableClientScript="False" ErrorMessage="Please rate the item's performance." 
             ForeColor="Red" ValidationGroup="reviewValidationGroup">*</asp:RequiredFieldValidator>
     </p>
@@ -95,7 +131,7 @@
     <p>
         <span class="style4">Appearance</span>:
         <asp:RequiredFieldValidator ID="rfvAppearance" runat="server" 
-            ControlToValidate="ItemRadioButtonList" Display="Dynamic" 
+            ControlToValidate="appearanceRadioButtonList" Display="Dynamic" 
             EnableClientScript="False" ErrorMessage="Please rate the item's appearance." 
             ForeColor="Red" ValidationGroup="reviewValidationGroup">*</asp:RequiredFieldValidator>
     </p>
@@ -111,7 +147,7 @@
     <p>
         <span class="style4">Durability</span>:
         <asp:RequiredFieldValidator ID="rfvDurability" runat="server" 
-            ControlToValidate="ItemRadioButtonList" Display="Dynamic" 
+            ControlToValidate="durabilityRadioButtonList" Display="Dynamic" 
             EnableClientScript="False" ErrorMessage="Please rate the item's durability." 
             ForeColor="Red" ValidationGroup="reviewValidationGroup">*</asp:RequiredFieldValidator>
     </p>
@@ -130,14 +166,20 @@
         Please write a comment for the item you are reviewing (optional; maximum: 140 
         characters):</span></p>
     <p>
-        <asp:TextBox ID="TextBox1" runat="server" Height="191px" TextMode="MultiLine" 
-            Width="498px" MaxLength="140"></asp:TextBox>
+        <asp:TextBox ID="comment" runat="server" Height="191px" TextMode="MultiLine" 
+            Width="522px" MaxLength="140"></asp:TextBox>
     </p>
     <p>
-        &nbsp;</p>
+        <asp:Label ID="indicator" runat="server"></asp:Label>
+    </p>
+    <p>
+        If you want your review to be anonymous, please check here
+        <asp:CheckBox ID="checkAnonymous" runat="server" />
+    </p>
     <p>
         <asp:Button ID="submit" runat="server" Text="Submit" Height="30px" 
-            ValidationGroup="reviewValidationGroup" Width="120px" />
+            ValidationGroup="reviewValidationGroup" Width="120px" 
+            onclick="submit_Click" />
     </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" 
         HeaderText="The following errors occur:" 
@@ -147,7 +189,8 @@
     <p>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT [name] FROM [OrderRecord] WHERE (([userName] = @userName) AND ([isConfirmed] = @isConfirmed))">
+            
+            SelectCommand="SELECT [name], [upc] FROM [OrderRecord] WHERE (([userName] = @userName) AND ([isConfirmed] = @isConfirmed))">
             <SelectParameters>
                 <asp:ControlParameter ControlID="UserName" Name="userName" PropertyName="Text" 
                     Type="String" />
