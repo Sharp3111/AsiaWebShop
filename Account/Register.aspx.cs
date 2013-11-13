@@ -99,8 +99,8 @@ public partial class Account_Register : System.Web.UI.Page
     protected void InsertAddress(string connectionString, string userName, string building, string floor, string flatSuite, string blockTower, string streetAddress, string district)
     {
         // Define the INSERT query with parameters.
-        string query = "INSERT INTO [Address]([userName], [building], [floor], [flatSuite], [BlockTower], [streetAddress], [district], [nickname])" +
-                               "VALUES (@UserName, @Building, @Floor, @FlatSuite, @BlockTower, @StreetAddress, @District, 'Home')";
+        string query = "INSERT INTO [Address]([userName], [building], [floor], [flatSuite], [BlockTower], [streetAddress], [district], [isDefault], [nickname])" +
+                               "VALUES (@UserName, @Building, @Floor, @FlatSuite, @BlockTower, @StreetAddress, @District, @IsDefault, 'Home')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -114,6 +114,7 @@ public partial class Account_Register : System.Web.UI.Page
             command.Parameters.AddWithValue("@BlockTower", blockTower);
             command.Parameters.AddWithValue("@StreetAddress", streetAddress);
             command.Parameters.AddWithValue("@District", district);
+            command.Parameters.AddWithValue("@IsDefault", true);
 
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();
