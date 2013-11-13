@@ -35,12 +35,13 @@
     <p class="style3">
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" DataKeyNames = "number,userName"
-            GridLines="None" Width="915px">
+            GridLines="None" Width="915px" onselectedindexchanged="gvCreditCard_SelectedIndexChanged" 
+            >
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:CommandField ShowSelectButton="True" />
                 <asp:BoundField DataField="userName" HeaderText="userName" 
-                    SortExpression="userName" Visible="False" />
+                    SortExpression="userName" Visible="False" ReadOnly="True" />
                 <asp:TemplateField HeaderText="Card Number" SortExpression="number">
                     <EditItemTemplate>
                         <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("number") %>'></asp:TextBox>
@@ -119,7 +120,8 @@
             oniteminserted="dvCreditCard_ItemInserted1" 
             oniteminserting="dvCreditCard_ItemInserting" 
             onitemupdated="dvCreditCard_ItemUpdated" 
-            onitemupdating="dvCreditCard_ItemUpdating" onload="dvCreditCard_Load">
+            onitemupdating="dvCreditCard_ItemUpdating" onload="dvCreditCard_Load" 
+            ondatabound="dvCreditCard_DataBound">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
@@ -127,12 +129,10 @@
             <Fields>
                 <asp:TemplateField HeaderText="User Name" SortExpression="userName">
                     <EditItemTemplate>
-                        <asp:TextBox ID="EditUserName" runat="server" MaxLength="10" ReadOnly="True" 
-                            Text='<%# Bind("userName") %>' ></asp:TextBox>
+                        <asp:Label ID="EditUserName" runat="server" Text='<%# Bind("userName") %>' onload="InsertUserName_Load"></asp:Label>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:TextBox ID="InsertUserName" runat="server" MaxLength="10" 
-                            Text='<%# Bind("userName") %>' onload="InsertUserName_Load"></asp:TextBox>
+                        <asp:Label ID="InsertUserName" runat="server" Text='<%# Bind("userName") %>' onload="InsertUserName_Load"></asp:Label>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label1" runat="server" Text='<%# Bind("userName") %>'></asp:Label>
@@ -351,7 +351,9 @@
             InsertCommand="INSERT INTO [CreditCard] ([userName], [cardHolderName], [type], [number], [expiryMonth], [expiryYear], [creditCardDefault]) VALUES (@userName, @cardHolderName, @type, @number, @expiryMonth, @expiryYear, @creditCardDefault)" 
             
             
-            UpdateCommand="UPDATE [CreditCard] SET [cardHolderName] = @cardHolderName, [type] = @type, [number] = @number, [expiryMonth] = @expiryMonth, [expiryYear] = @expiryYear, [creditCardDefault] = @creditCardDefault WHERE ([userName] = @userName AND [number] = @number)">
+            
+            
+            UpdateCommand="UPDATE CreditCard SET cardHolderName = @cardHolderName, type = @type, number = @number, expiryMonth = @expiryMonth, expiryYear = @expiryYear, creditCardDefault = @creditCardDefault WHERE (userName = @userName) AND (isSelected = 'true')">
             <DeleteParameters>
                 <asp:Parameter Name="number" />
             </DeleteParameters>

@@ -141,7 +141,7 @@ public partial class MemberOnly_DeliveryAddressManagement : System.Web.UI.Page
         }
     }
     protected void cvEditNickname_ServerValidate(object source, ServerValidateEventArgs args)
-    {
+    {/*
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
         {
             // Get the value of the new UPC from the DetailsView control.
@@ -159,6 +159,7 @@ public partial class MemberOnly_DeliveryAddressManagement : System.Web.UI.Page
                 args.IsValid = false;
             }
         }
+      * */
     }
     protected void cvInsertNickname_ServerValidate(object source, ServerValidateEventArgs args)
     {
@@ -179,5 +180,70 @@ public partial class MemberOnly_DeliveryAddressManagement : System.Web.UI.Page
                 args.IsValid = false;
             }
         }
+    }
+    protected void dvDelivery_DataBound(object sender, EventArgs e)
+    {
+        if (dvDelivery.CurrentMode == DetailsViewMode.Edit)
+        {
+            foreach (DetailsViewRow dvr in dvDelivery.Rows)
+            {
+                if (dvr.Cells.Count.Equals(2) && dvr.Cells[1].HasControls())
+                {
+                    foreach (Control ctrl in dvr.Cells[1].Controls)
+                    {
+                        if (ctrl is TextBox)
+                        {
+                            TextBox txt = ctrl as TextBox;
+                            txt.Text = txt.Text.Trim();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    protected void gvDelivery_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+
+        Int32 MaxRow = gvDelivery.Rows.Count;
+        GridViewRow row = gvDelivery.SelectedRow;
+
+        for (int i = 0; i < MaxRow; i++)
+        {
+            string currentNickname = ((Label)gvDelivery.Rows[i].FindControl("nickname")).Text.Trim();
+            if (gvDelivery.Rows[i] == row)
+            {
+                string queryUpdate = "UPDATE [Address] SET [isSelected] = @isSelected WHERE ([userName] = '" + userName + "' AND [nickname] = '" + currentNickname + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                {
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@isSelected", true);
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+            else
+            {
+                string queryUpdate = "UPDATE [Address] SET [isSelected] = @isSelected WHERE ([userName] = '" + userName + "' AND [nickname] = '" + currentNickname + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                {
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@isSelected", false);
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+        }
+    }
+    protected void dvDelivery_ItemUpdated1(object sender, DetailsViewUpdatedEventArgs e)
+    {
+        gvDelivery.DataBind();
+    }
+    protected void dvDelivery_ItemInserted1(object sender, DetailsViewInsertedEventArgs e)
+    {
+        gvDelivery.DataBind();
     }
 }

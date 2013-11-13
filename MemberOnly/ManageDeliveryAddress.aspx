@@ -37,12 +37,18 @@
     <p class="style7">
         <asp:GridView ID="gvDelivery" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataKeyNames="nickname" DataSourceID="SqlDataSource1" ForeColor="#333333" 
-            GridLines="None">
+            GridLines="None" onselectedindexchanged="gvDelivery_SelectedIndexChanged">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:CommandField ShowSelectButton="True" />
-                <asp:BoundField DataField="nickname" HeaderText="nickname" 
-                    SortExpression="nickname" />
+                <asp:TemplateField HeaderText="nickname" SortExpression="nickname">
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("nickname") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="nickname" runat="server" Text='<%# Bind("nickname") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
                 <asp:BoundField DataField="district" HeaderText="district" 
                     SortExpression="district" />
                 <asp:BoundField DataField="streetAddress" HeaderText="streetAddress" 
@@ -70,7 +76,9 @@
     <p class="style7">
         <asp:DetailsView ID="dvDelivery" runat="server" AutoGenerateRows="False" 
             CellPadding="4" DataSourceID="SqlDataSource2" ForeColor="#333333" 
-            GridLines="None" Height="50px">
+            GridLines="None" Height="50px" ondatabound="dvDelivery_DataBound" 
+            oniteminserted="dvDelivery_ItemInserted1" 
+            onitemupdated="dvDelivery_ItemUpdated1" Width="659px">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
@@ -235,7 +243,8 @@
             InsertCommand="INSERT INTO [Address] ([userName], [building], [floor], [flatSuite], [blockTower], [streetAddress], [district], [nickname]) VALUES (@userName, @building, @floor, @flatSuite, @blockTower, @streetAddress, @district, @nickname)" 
             SelectCommand="SELECT * FROM [Address] WHERE (([userName] = @userName) AND ([nickname] = @nickname))" 
             
-            UpdateCommand="UPDATE [Address] SET [building] = @building, [floor] = @floor, [flatSuite] = @flatSuite, [blockTower] = @blockTower, [streetAddress] = @streetAddress, [district] = @district, [nickname] = @nickname WHERE ([userName] = @userName AND [nickname] = @nickname)">
+            
+            UpdateCommand="UPDATE Address SET building = @building, floor = @floor, flatSuite = @flatSuite, blockTower = @blockTower, streetAddress = @streetAddress, district = @district, nickname = @nickname WHERE (userName = @userName AND isSelected = 'True')">
             <DeleteParameters>
                 <asp:Parameter Name="userName" />
                 <asp:Parameter Name="nickname" />

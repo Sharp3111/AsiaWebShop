@@ -27,7 +27,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
     protected void insertUserName_Load(object sender, EventArgs e)
     {
-        ((TextBox)(sender as Control)).Text = User.Identity.Name.Trim();
+        ((Label)(sender as Control)).Text = User.Identity.Name.Trim();
     }
     protected void dvCreditCard_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
     {
@@ -311,8 +311,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
     }
     protected void InsertUserName_Load(object sender, EventArgs e)
     {
-        ((TextBox)(sender as Control)).Text = User.Identity.Name.Trim();
-        ((TextBox)(sender as Control)).ReadOnly = true;
+        ((Label)(sender as Control)).Text = User.Identity.Name.Trim();
     }
     protected void dvCreditCard_ItemInserted1(object sender, DetailsViewInsertedEventArgs e)
     {
@@ -1061,5 +1060,64 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
         {
             ((CheckBox)(dvCreditCard.FindControl("InsertCreditCardDefault"))).Checked = false;
         }
+    }
+
+    protected void gvCreditCard_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+
+        Int32 MaxRow = gvCreditCard.Rows.Count;
+        GridViewRow row = gvCreditCard.SelectedRow;       
+
+        for (int i = 0; i < MaxRow; i++)
+        {
+            string currentCardNumber = ((Label)gvCreditCard.Rows[i].FindControl("cardNumber")).Text.Trim();
+            if(gvCreditCard.Rows[i] == row)
+            {
+                string queryUpdate = "UPDATE [CreditCard] SET [isSelected] = @isSelected WHERE ([userName] = '" + userName + "' AND [number] = '" + currentCardNumber + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                {
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@isSelected", true);
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+            else
+            {
+                string queryUpdate = "UPDATE [CreditCard] SET [isSelected] = @isSelected WHERE ([userName] = '" + userName + "' AND [number] = '" + currentCardNumber + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                {
+                    command.Connection.Open();
+                    command.Parameters.AddWithValue("@isSelected", false);
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }            
+        }
+    }
+    protected void dvCreditCard_DataBound(object sender, EventArgs e)
+    {
+        if (dvCreditCard.CurrentMode == DetailsViewMode.Edit)
+        {
+            foreach (DetailsViewRow dvr in dvCreditCard.Rows)
+            {
+                if (dvr.Cells.Count.Equals(2) && dvr.Cells[1].HasControls())
+                {
+                    foreach (Control ctrl in dvr.Cells[1].Controls)
+                    {
+                        if (ctrl is TextBox)
+                        {
+                            TextBox txt = ctrl as TextBox;
+                            txt.Text = txt.Text.Trim();
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
