@@ -188,7 +188,8 @@
                     <asp:Button ID="btn_ShoppingCart" runat="server" Height="25px" 
                         Text="Add To Shopping Cart" Width="150px" 
                         onclick="btn_ShoppingCart_Click" 
-                        ValidationGroup="QuantityValidationGroup" />
+                        ValidationGroup="QuantityValidationGroup" BackColor="Silver" 
+                        BorderColor="Silver" BorderStyle="Solid" />
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
