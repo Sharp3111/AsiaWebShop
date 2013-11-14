@@ -58,7 +58,7 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
             Int32 MaxRow = gvItemReview.Rows.Count;
             //check whether the currently checked one has been reviewed by the current member.
             Int32 count = 0;
-            //check if there is only one credit card in user's credit card list
+            //check if the item has already been reviewed by the user before
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Review] WHERE ([userName] = N'" + userName + "' AND [upc] = '" + checkedItemUPC + "')", connection))
             {

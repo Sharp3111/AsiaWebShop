@@ -16,18 +16,24 @@
         {
             text-decoration: underline;
         }
+        .style5
+        {
+            color: #000080;
+            font-size: medium;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p class="style2">
         <strong>Item Review</strong></p>
-    <p class="style3">
+    <p class="style5">
         Dear
         <asp:Label ID="UserName" runat="server" Text="UserName"></asp:Label>
         , this is the item review page.</p>
     <p>
-        <span class="style3">The following list shows items you purchased. Please specify 
-        an item you want to review:</span>
+        <span class="style3">The following list contains the items you have purchased 
+        before. Please specify 
+        an item that you want to review:</span>
         &nbsp;</p>
     <p>
         <asp:Label ID="lblMessage" runat="server"></asp:Label>
