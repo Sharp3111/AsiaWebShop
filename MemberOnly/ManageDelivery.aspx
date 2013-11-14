@@ -79,7 +79,13 @@
                             Enabled="false" />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField></asp:TemplateField>
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:Button ID="RemoveButton" runat="server" BackColor="Silver" 
+                            BorderColor="Silver" BorderStyle="Outset" onclick="RemoveButton_Click" 
+                            Text="Remove" />
+                    </ItemTemplate>
+                </asp:TemplateField>
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -125,6 +131,10 @@
                         <asp:RequiredFieldValidator ID="rfvEditNickname" runat="server" 
                             ControlToValidate="EditNickname" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="NickName is required." ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="cvEditNickname" runat="server" 
+                            ControlToValidate="EditNickname" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Nickname already exists." ForeColor="Red" 
+                            onservervalidate="cvEditNickname_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:TextBox ID="InsertNickname" runat="server" MaxLength="15" 

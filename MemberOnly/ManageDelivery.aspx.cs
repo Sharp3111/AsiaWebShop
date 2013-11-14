@@ -19,7 +19,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
             //GridView.DataKeyNames 
             UserName.Text = userName;
 
-            //GetCreditCardInformationForGridView(connectionString, userName);
+            //GetDeliveryInformationForGridView(connectionString, userName);
 
         }
     }
@@ -126,14 +126,14 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
             lblMessage.Text = "You cannot delete the only address in your delivery address list";
         }
     }
-    protected void EditCreditCardDefault_CheckedChanged(object sender, EventArgs e)
+    protected void EditDeliveryDefault_CheckedChanged(object sender, EventArgs e)
     {
     }
     protected void dvDelivery_Load(object sender, EventArgs e)
     {
         lblMessage.Visible = false;
     }
-    protected void InsertCreditCardDefault_CheckedChanged(object sender, EventArgs e)
+    protected void InsertDeliveryDefault_CheckedChanged(object sender, EventArgs e)
     {
     }
     
@@ -594,6 +594,37 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
             txtInsertistrict.Text.Trim().Equals(P16, StringComparison.Ordinal) ||
              txtInsertistrict.Text.Trim().Equals(P17, StringComparison.Ordinal) ||
              txtInsertistrict.Text.Trim().Equals(P18, StringComparison.Ordinal)))
+        {
+            args.IsValid = false;
+        }
+    }
+    protected void cvEditNickname_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        GridViewRow row = gvDelivery.SelectedRow;
+
+        string currentNickname = ((TextBox)dvDelivery.FindControl("EditNickname")).Text.Trim();
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+
+        Int32 count = 0;
+        Int32 MaxRows = gvDelivery.Rows.Count;
+
+        for (int i = 0; i < MaxRows; i++)
+        {
+            if (gvDelivery.Rows[i] != row) //not the selected row
+            {
+                if (((Label)gvDelivery.Rows[i].FindControl("nickname")).Text.Trim() == currentNickname)
+                {
+                    count++;
+                }
+            }
+        }
+
+        if (count == 0)
+        {
+            args.IsValid = true;
+        }
+        else
         {
             args.IsValid = false;
         }
