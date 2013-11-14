@@ -328,6 +328,9 @@ public partial class ItemDetails : System.Web.UI.Page
         }
         else
         {
+            lblMessage.ForeColor = System.Drawing.Color.Red;
+            lblMessage.Text = "The following are reviews from members who have purchased this item.";
+
             numberOfPeople.Text = MaxRows.ToString().Trim();
                         
             //calculate quality aggregate
