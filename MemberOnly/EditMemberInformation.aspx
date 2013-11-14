@@ -265,7 +265,7 @@
     <p>
         <span class="style54">If you want to edit delivery addresses, please click</span>
         <asp:HyperLink ID="ManageDeliveryAddressLink" runat="server" 
-            NavigateUrl="~/MemberOnly/ManageDeliveryAddress.aspx" 
+            NavigateUrl="~/MemberOnly/ManageDelivery.aspx" 
             style="text-decoration: underline; color: #9900FF">Manage Delivery Address List</asp:HyperLink>
     </p>
     <p>
