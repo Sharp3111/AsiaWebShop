@@ -17,8 +17,9 @@ public partial class MemberOnly_StockAvailableAlert : System.Web.UI.Page
         if (!Page.IsPostBack)
         {   //Item was passed through URL, i.e. ?item=
             //can change to textbos but need a validator
-            string item = Request.QueryString["item"];
-            itemBox.Text = item;
+            //string item = Request.QueryString["item"];
+            string upc = Request.QueryString["upc"];
+            //itemBox.Text = item;
             // Populate the DistrictDropDownList.
             email.Items.Add("-- Select email --");
 
@@ -40,6 +41,29 @@ public partial class MemberOnly_StockAvailableAlert : System.Web.UI.Page
                 }
                 command.Connection.Close();
                 reader.Close();
+            }
+
+            if (upc != null)
+            {
+                SQLCmd = "SELECT [name] FROM [Item] WHERE [upc] = '" + upc + "'";
+
+                connectionString = "AsiaWebShopDBConnectionString";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(SQLCmd, connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            itemBox.Text = reader["name"].ToString().Trim();
+                        }
+                    }
+                    command.Connection.Close();
+                    reader.Close();
+                }
             }
 
         }

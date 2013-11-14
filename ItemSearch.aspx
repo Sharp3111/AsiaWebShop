@@ -142,7 +142,8 @@
     <br />
     <asp:GridView ID="gvItemSearchResult" runat="server" 
         AutoGenerateColumns="False" CellPadding="4" DataKeyNames="upc" 
-        DataSourceID="AsiaWebShopDBSqlDataSource" ForeColor="#333333" GridLines="None">
+        DataSourceID="AsiaWebShopDBSqlDataSource" ForeColor="#333333" 
+        GridLines="None" onrowdatabound="gvItemSearchResult_RowDataBound">
         <AlternatingRowStyle BackColor="White" />
         <Columns>
             <asp:BoundField DataField="upc" HeaderText="upc" ReadOnly="True" 

@@ -59,7 +59,7 @@
         <td class="style7">
             Request notification for item available:</td>
         <td class="style8">
-            <asp:TextBox ID="itemBox" runat="server"></asp:TextBox>
+            <asp:TextBox ID="itemBox" runat="server" ReadOnly="True"></asp:TextBox>
         </td>
         <td class="style13">
             <asp:CustomValidator ID="CustomValidator2" runat="server" 

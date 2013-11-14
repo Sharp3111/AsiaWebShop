@@ -15,6 +15,7 @@ public partial class ItemDetails : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
             lblSearchResultMessage.Text = "";
+
     }
 
 
@@ -22,8 +23,9 @@ public partial class ItemDetails : System.Web.UI.Page
     {
         lblSearchResultMessage.Text = "";
         //check if the user has logined
-        if (User.Identity.Name != "")
+        if (User.IsInRole("Member"))
         {
+            
             if (IsValid)
             {
                 string connectionString = "AsiaWebShopDBConnectionString";
@@ -166,6 +168,7 @@ public partial class ItemDetails : System.Web.UI.Page
             lblSearchResultMessage.Text = "Please Login";
             //ValidationSummary1.HeaderText = "Please Login";
             //Response.Write("<script>alert('Please Login')</script>");
+            Response.Redirect("~/Account/Login.aspx");
         }
     }
     protected void cvQuantity_ServerValidate(object source, ServerValidateEventArgs args)
@@ -216,5 +219,18 @@ public partial class ItemDetails : System.Web.UI.Page
                     args.IsValid = false;
             }
         }
+    }
+    protected void dvItemDetails_DataBound(object sender, EventArgs e)
+    {
+        DetailsView detailView = (DetailsView)(sender as Control);
+
+        if (Convert.ToInt32(detailView.Rows[7].Cells[1].Text.Trim()) == 0)
+        {
+            Button btn = ((Button)detailView.FindControl("btn_ShoppingCart"));
+            btn.Text = "Subscribe";
+            btn.PostBackUrl = "~/MemberOnly/StockAvailableAlert.aspx?upc=" + detailView.DataKey[0];
+        }
+        //Response.Write("<script>alert('" + gridViewRow.Cells[5].Text + "')</script>");
+
     }
 }

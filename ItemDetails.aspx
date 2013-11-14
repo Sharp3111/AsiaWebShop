@@ -13,7 +13,8 @@
     <p>
         <asp:DetailsView ID="dvItemDetails" runat="server" AutoGenerateRows="False" 
             CellPadding="4" DataKeyNames="upc" DataSourceID="AsiaWebShopDBSqlDataSource" 
-            ForeColor="#333333" GridLines="None" Height="50px" Width="419px">
+            ForeColor="#333333" GridLines="None" Height="50px" Width="419px" 
+            ondatabound="dvItemDetails_DataBound">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />

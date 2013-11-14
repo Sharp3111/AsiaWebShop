@@ -68,7 +68,7 @@ public partial class _Default : System.Web.UI.Page
         // Hide and clear the search result message.
         lblSearchResultMessage.Visible = false;
         lblSearchResultMessage.Text = "";
-
+        
         // If a search string is specified, but no radio button is selected, ignore the search string.
         if (searchString != "" & !cbItemName.Checked & !cbItemDescription.Checked)
         {
@@ -143,7 +143,6 @@ public partial class _Default : System.Web.UI.Page
             ((Button)gvItemSearchResult.Rows[i].FindControl("btn_ShoppingCart")).ValidationGroup = "QuantityValidationGroup" + i;
         }
         //ValidationSummary1.Enabled = true;
-
     }
 
     protected void btn_ShoppingCart_Click(object sender, EventArgs e)
@@ -154,7 +153,7 @@ public partial class _Default : System.Web.UI.Page
         ValidationSummary1.ValidationGroup = "QuantityValidationGroup" +Row_index;
         //Response.Write("<script>alert('" + Row_index + "  " + ((Button)(sender as Control)).ValidationGroup + "')</script>");
         //check if the user has logined
-        if (User.Identity.Name != "")
+        if (User.IsInRole("Member"))
         {
             if (IsValid)
             {
@@ -297,10 +296,11 @@ public partial class _Default : System.Web.UI.Page
             }
 
         }
-        else // if the user does not log, send a error message
+        else // if the user does not log in, send a error message
         {
             //Response.Write("<script>alert('Please Login')</script>");
             lblSearchResultMessage.Text = "Please Login";
+            Response.Redirect("~/Account/Login.aspx");
         }
     }
     protected void categoryDropDownList_SelectedIndexChanged(object sender, EventArgs e)
@@ -358,4 +358,19 @@ public partial class _Default : System.Web.UI.Page
             }
         }
    }
+    protected void gvItemSearchResult_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        GridViewRow gridViewRow = e.Row;
+        if (gridViewRow.RowIndex >= 0)
+        {
+            if (Convert.ToInt32(gridViewRow.Cells[5].Text.Trim()) == 0)
+            {
+                Button btn = ((Button)gridViewRow.FindControl("btn_ShoppingCart"));
+                btn.Text = "Subscribe";
+                btn.PostBackUrl="~/MemberOnly/StockAvailableAlert.aspx?upc="+((GridView)(sender as Control)).DataKeys[gridViewRow.RowIndex][0];
+            } 
+            //Response.Write("<script>alert('" + gridViewRow.Cells[5].Text + "')</script>");
+        }
+        //Response.Write("<script>alert('" + gridViewRow.RowIndex + "')</script>");
+    }
 }
