@@ -150,9 +150,6 @@
             </tr>
         </table>
     </p>
-    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
-        EnableClientScript="False" ForeColor="Red" 
-        HeaderText="Following Error Occurred:" ValidationGroup="finalConfirm" />
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         <asp:SqlDataSource ID="AsiaWebDataSource" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 

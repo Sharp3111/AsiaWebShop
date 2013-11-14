@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Text;
 
 //Page description:
 /*  Finally, a final confirmation page should be displayed showing all the details of the member’s 
@@ -29,6 +30,7 @@ using System.Data;
  * 5.generate a purchase identifier
  * 6.send purchase receipt to user's email (please refer to the statement for detail
  */
+
 
 
 public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
@@ -76,10 +78,40 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             }
     }
 
+    private static Random random = new Random((int)DateTime.Now.Ticks);
+    private string RandomLetter()
+    {
+        StringBuilder builder = new StringBuilder();
+        char ch;
+        for (int i = 0; i < 2; i++)
+        {
+            ch = (char)random.Next('A', 'Z' + 1);
+            builder.Append(ch);
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            ch = (char)random.Next('0', '9' + 1);
+            builder.Append(ch);
+        }
+
+        return builder.ToString();
+    }
+
+        
+
+
+
     protected void confirm_Click(object sender, EventArgs e)
     {
         if (IsValid)
         {
+            do {
+                string docNum = RandomLetter();
+            }
+            while (
+                //count the docNum in DB if > 0, redo
+            )
         }
 
     }
