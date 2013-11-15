@@ -106,12 +106,11 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     {
         if (IsValid)
         {
-            do {
-                string docNum = RandomLetter();
-            }
-            while (
-                //count the docNum in DB if > 0, redo
-            )
+            //do
+            //{
+            //    string docNum = RandomLetter();
+            //}
+            //while (true);//count the docNum in DB if > 0, redo
         }
 
     }

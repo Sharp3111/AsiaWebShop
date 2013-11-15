@@ -104,7 +104,7 @@
                         <br />
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Quantity Available" 
+                <asp:TemplateField HeaderText="Quantity Left After Your Purchase" 
                     SortExpression="quantityAvailable">
                     <EditItemTemplate>
                         <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("quantityAvailable") %>'></asp:TextBox>
@@ -114,7 +114,7 @@
                             Text='<%# Bind("quantityAvailable") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Total Price Of Each Item" 
+                <asp:TemplateField HeaderText="Total Price of Each Item" 
                     SortExpression="TotalPriceOfEachItem">
                     <EditItemTemplate>
                         <asp:Label ID="Label1" runat="server" 

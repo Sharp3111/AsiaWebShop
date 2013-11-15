@@ -82,7 +82,7 @@ public partial class MemberOnly_StockAvailableAlert : System.Web.UI.Page
                 command.ExecuteScalar();
                 command.Connection.Close();
             }
-            result.Text = "Redord Added!";
+            result.Text = "Record Added!";
             result.Visible = true;
         }
     }
