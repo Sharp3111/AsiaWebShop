@@ -6,6 +6,18 @@
         {
             color: #000080;
         }
+        .style3
+        {
+            color: #000000;
+        }
+        .style4
+        {
+            font-size: large;
+            color: #000080;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-decoration: underline;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -107,31 +119,45 @@
     <p>
         <asp:Label ID="UPC" runat="server" Visible="False"></asp:Label>
     </p>
+    <p class="style4">
+        Review information</p>
     <p>
-        <span class="style2">Number of members who have reviewed this item: 
+        <span class="style3">Number of members who have reviewed this item:
+        </span>
+        <span class="style2"> 
         <asp:Label ID="numberOfPeople" runat="server"></asp:Label>
     </p>
+        </span>
+        <span class="style3">
     <p>
-        Quality Aggregate Rating:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Quality Aggregate Rating:&nbsp;</span><span class="style2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Label ID="QualityAggregate" runat="server"></asp:Label>
     </p>
+        </span>
+        <span class="style3">
     <p>
-        Features Aggregate Rating:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Features Aggregate Rating:</span><span class="style2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Label ID="FeaturesAggregate" runat="server"></asp:Label>
     </p>
+        </span>
+        <span class="style3">
     <p>
-        Appearance Aggregate Rating:&nbsp;&nbsp;
+        Appearance Aggregate Rating:</span><span class="style2">&nbsp;&nbsp;
         <asp:Label ID="AppearanceAggregate" runat="server"></asp:Label>
     </p>
+        </span>
+        <span class="style3">
     <p>
         Performance Aggregate Rating:&nbsp;
-        <asp:Label ID="PerformanceAggregate" runat="server"></asp:Label>
+        <asp:Label ID="PerformanceAggregate" runat="server" style="color: #000080"></asp:Label>
     </p>
     <p>
-        Durability Aggregate Rating:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Durability Aggregate Rating:&nbsp;</span><span class="style2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Label ID="DurabilityAggregate" runat="server"></asp:Label>
         </span>
     </p>
+    <p>
+        &nbsp;</p>
     <p>
         <asp:Label ID="lblMessage" runat="server"></asp:Label>
     </p>
@@ -141,7 +167,8 @@
             GridLines="None" Width="920px">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:TemplateField HeaderText="User Name" SortExpression="userName">
+                <asp:TemplateField HeaderText="User Name" SortExpression="userName" 
+                    Visible="False">
                     <EditItemTemplate>
                         <asp:TextBox ID="TextBox6" runat="server" Text='<%# Bind("userName") %>'></asp:TextBox>
                     </EditItemTemplate>
@@ -220,6 +247,10 @@
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
     </p>
+    <p>
+        &nbsp;</p>
+    <p>
+        &nbsp;</p>
     <p>
         <asp:SqlDataSource ID="AsiaWebShopDBSqlDataSource" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 

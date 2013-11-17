@@ -229,17 +229,20 @@ public partial class ItemDetails : System.Web.UI.Page
         DetailsView detailView = (DetailsView)(sender as Control);
         Label quantityAvailableLabel = (Label)detailView.FindControl("quantityAvailableLabel");
         //Response.Write("<script>alert('" + quantityAvailableLabel + "')</script>");
-        Int32 quantityAvailable = Convert.ToInt32(quantityAvailableLabel.Text.Trim());
+        Int32 quantityAvailable = Convert.ToInt32(quantityAvailableLabel != null ? quantityAvailableLabel.Text.Trim() : "0");
 
         if (quantityAvailable == 0)
         {
             Button btn = ((Button)detailView.FindControl("btn_ShoppingCart"));
-            btn.Text = "Subscribe";
-            btn.PostBackUrl = "~/MemberOnly/StockAvailableAlert.aspx?upc=" + detailView.DataKey[0];
+            if (btn != null)
+            {
+                btn.Text = "Subscribe";
+                btn.PostBackUrl = "~/MemberOnly/StockAvailableAlert.aspx?upc=" + detailView.DataKey[0];
+            }
         }
-        
 
-        UPC.Text = ((Label)detailView.FindControl("upcLabel")).Text.Trim();
+        if (detailView.FindControl("upcLabel") != null)
+            UPC.Text = ((Label)detailView.FindControl("upcLabel")).Text.Trim();
         //Response.Write("<script>alert('" + UPC.Text + "')</script>");
 
         populateGridViewReview(UPC.Text.Trim());
@@ -328,7 +331,7 @@ public partial class ItemDetails : System.Web.UI.Page
         }
         else
         {
-            lblMessage.ForeColor = System.Drawing.Color.Red;
+            lblMessage.ForeColor = System.Drawing.Color.Navy;
             lblMessage.Text = "The following are reviews from members who have purchased this item.";
 
             numberOfPeople.Text = MaxRows.ToString().Trim();
