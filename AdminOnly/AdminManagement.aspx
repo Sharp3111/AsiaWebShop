@@ -23,7 +23,11 @@
     <br />
     <asp:HyperLink ID="ItemPurchaseReport" runat="server" Font-Bold="True" 
         Font-Size="Large" NavigateUrl="~/AdminOnly/ItemPurchaseReport.aspx">General Item Purchase Report</asp:HyperLink>
+    <br />
 <br />
+    <asp:HyperLink ID="RecommendationManagement" runat="server" 
+        style="color: #034AF3; font-weight: 700; font-family: 'Segoe UI'; font-size: large; text-decoration: underline">Recommendation Management</asp:HyperLink>
+    <br />
 <br />
 </asp:Content>
 
