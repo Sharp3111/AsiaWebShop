@@ -82,7 +82,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
             {
                 lblMessage.Visible = true;
                 lblMessage.ForeColor = System.Drawing.Color.Green;
-                lblMessage.Text = "The selected address is your default home address. After deletion, your default home address will be the first one appearing in your delivery address list different from your original default address";
+                lblMessage.Text = "The selected address is your default address. After deletion, your default address will be the first one appearing in your delivery address list different from your original default address";
 
 
                 string firstValidInGridViewAddress = "";
@@ -95,7 +95,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                     }
                 }
 
-                //?????????????????????????????????????????????????????????????????nickname in both where and update?????????????????????????????????????????
+                
                 string queryUpdate = "UPDATE [Address] SET isDefault = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + firstValidInGridViewAddress + "')";
 
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -158,13 +158,14 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
             if (count <= 1)
             {
-                //if the edited address changes from default to non default, error message.
+                //if the only one edited address changes from default to non default, error message.
                 if (((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked == false)
                 {
                     ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked = true;
                     ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Enabled = false;
                     lblMessage.ForeColor = System.Drawing.Color.Red;
-                    lblMessage.Text = "This is your only address in your delivery address list. You have to have this address as the default home delivery address.";
+                    lblMessage.Text = "This is your only address in your delivery address list. You have to have this address as the default delivery address.";
+                    lblMessage.Visible = true;
                 }
             }
             else
@@ -218,8 +219,9 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
                     gvDelivery.DataBind();
 
-                    lblMessage.ForeColor = System.Drawing.Color.Green;
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
                     lblMessage.Text = "Your default delivery address has changed.";
+                    lblMessage.Visible = true;
                 }
                 //else the edited address changes from default to nondefault, then this card is set to the default
                 else
@@ -237,6 +239,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         {
                             while (reader.Read())
                             {
+                                // find next address to be default
                                 changedDefaultAddress = reader.GetString(0); break;
                             }
                         }
@@ -307,6 +310,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                     ((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Enabled = false;
                     lblMessage.ForeColor = System.Drawing.Color.Red;
                     lblMessage.Text = "This is your only delivery address in your address list. You have to use this address as the default delivery address.";
+                    lblMessage.Visible = true;
                 }
             }
             else
@@ -314,7 +318,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                 //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
                 if (((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked == true)
                 {
-                    //find the initial default number for later update
+                    //find the initial default address for later update
                     string currentnickname = ((TextBox)dvDelivery.FindControl("InsertNickname")).Text.Trim();
                     string initialDefaultAddress = "";
 
@@ -362,6 +366,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
                     lblMessage.ForeColor = System.Drawing.Color.Green;
                     lblMessage.Text = "Your default delivery address has changed.";
+                    lblMessage.Visible = true;
                 }
                 //else the edited credit card changes from default to nondefault, then this card is set to the default
                 else
@@ -413,6 +418,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
                     lblMessage.ForeColor = System.Drawing.Color.Green;
                     lblMessage.Text = "Your default delivery address has changed.";
+                    lblMessage.Visible = true;
                 }
             }
         }
@@ -486,6 +492,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
     }
     protected void cvInsertNickname_ServerValidate(object source, ServerValidateEventArgs args)
     {
+        string userName = User.Identity.Name;
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
         {
             // Get the value of the new UPC from the DetailsView control.
@@ -493,7 +500,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
             // Count how many existing records have the student id value.
             connection.Open();
-            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([nickname] = N'" + txtInsertNickname.Text + "')", connection);
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = '" + userName + "' AND [nickname] = N'" + txtInsertNickname.Text + "')", connection);
             Int32 count = (Int32)command.ExecuteScalar();
             connection.Close();
 
