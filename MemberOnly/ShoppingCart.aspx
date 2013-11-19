@@ -32,6 +32,10 @@
             style="text-decoration: underline; color: #800080; font-weight: 400;">Go Shopping Around</asp:HyperLink>
     &nbsp;.</p>
     <p class="style2">
+        Dear
+        <asp:Label ID="UserName" runat="server"></asp:Label>
+        , items in your shopping cart are as follows:</p>
+    <p class="style2">
         <asp:GridView ID="gvShoppingCart" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" 
             GridLines="None" Width="922px">
@@ -169,8 +173,12 @@
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
             
-            SelectCommand="SELECT ShoppingCart.isChecked, Item.upc, Item.name, Item.discountPrice, ShoppingCart.quantity, Item.quantityAvailable, Item.discountPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc" 
+            SelectCommand="SELECT ShoppingCart.isChecked, Item.upc, Item.name, Item.discountPrice, ShoppingCart.quantity, Item.quantityAvailable, Item.discountPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc WHERE userName = @userName" 
             DeleteCommand="DELETE FROM ShoppingCart WHERE userName = ''">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="UserName" Name="userName" 
+                    PropertyName="Text" />
+            </SelectParameters>
         </asp:SqlDataSource>
     </p>
 </asp:Content>

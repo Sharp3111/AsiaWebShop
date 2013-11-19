@@ -19,6 +19,10 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             string connectionString = "AsiaWebShopDBConnectionString";
             //create userName for current session
             string userName = User.Identity.Name;
+
+            //GridView.DataKeyNames 
+            UserName.Text = userName;
+
             //count number of rows in GridView
             int maxRowIndex = gvShoppingCart.Rows.Count;
 
