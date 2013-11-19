@@ -19,13 +19,9 @@
         .style5
     {
         }
-        .style50
-        {
-            width: 141px;
-        }
         .style51
         {
-            width: 337px;
+            width: 289px;
         }
         .style53
         {
@@ -39,6 +35,52 @@
         {
             width: 199px;
         }
+        .style64
+        {
+        }
+        .style65
+        {
+            height: 54px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: medium;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+        .style66
+        {
+            height: 66px;
+        }
+        .style67
+        {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: medium;
+            text-transform: uppercase;
+            text-decoration: underline;
+            border-left-color: #A0A0A0;
+            border-right-color: #C0C0C0;
+            border-top-color: #A0A0A0;
+            border-bottom-color: #C0C0C0;
+            padding: 1px;
+        }
+        .style69
+        {
+            width: 289px;
+            height: 74px;
+        }
+        .style70
+        {
+            width: 206px;
+            height: 74px;
+        }
+        .style71
+        {
+            width: 268435136px;
+            height: 74px;
+        }
+        .style72
+        {
+            height: 74px;
+        }
         </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -46,7 +88,7 @@
         <strong>SPECIFY Delivery Information</strong></p>
 <table class="style3">
     <tr>
-        <td class="style50">
+        <td class="style64">
             User Name:</td>
         <td class="style51">
             <asp:Label ID="UserName" runat="server"></asp:Label>
@@ -69,7 +111,7 @@
         </td>
     </tr>
     <tr>
-        <td class="style50">
+        <td class="style64">
             First Name:</td>
         <td class="style51">
             <asp:TextBox ID="FirstName" runat="server" Height="22px" Width="200px" 
@@ -91,7 +133,7 @@
         </td>
     </tr>
     <tr>
-        <td class="style50">
+        <td class="style64">
             Phone Number:</td>
         <td class="style51">
             <asp:TextBox ID="PhoneNumber" runat="server" Height="22px" Width="200px" 
@@ -112,7 +154,92 @@
             &nbsp;</td>
     </tr>
     <tr>
-        <td class="style50">
+        <td class="style66" colspan="5">
+            <br />
+            <span class="style67">Add an Address</span></td>
+    </tr>
+    <tr>
+        <td class="style64" colspan="5">
+            Please enter your delivery address information:</td>
+    </tr>
+    <tr>
+        <td class="style64">
+            Building:</td>
+        <td class="style51">
+            <asp:TextBox ID="Building" runat="server" Height="22px" Width="200px" 
+                MaxLength="20"></asp:TextBox>
+        </td>
+        <td class="style56" colspan="2">
+            <table class="style3" __designer:mapid="51d">
+                <tr __designer:mapid="51e">
+                    <td class="style7" __designer:mapid="51f">
+                        &nbsp;Floor</td>
+                    <td __designer:mapid="520">
+                        <asp:TextBox ID="Floor" runat="server" Width="40px" Height="22px" MaxLength="3"></asp:TextBox>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="style53">
+            <table class="style3" __designer:mapid="523">
+                <tr __designer:mapid="524">
+                    <td class="style8" __designer:mapid="525">
+                        Flat/Suite:</td>
+                    <td class="style29" __designer:mapid="526">
+                        <asp:TextBox ID="FlatSuite" runat="server" Width="40px" Height="22px" 
+                            MaxLength="5"></asp:TextBox>
+                    </td>
+                    <td class="style10" __designer:mapid="528">
+                        Block/Tower:</td>
+                    <td __designer:mapid="529">
+                        <asp:TextBox ID="BlockTower" runat="server" Width="40px" Height="22px" 
+                            MaxLength="2"></asp:TextBox>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="style64">
+            Street:</td>
+        <td class="style51">
+            <asp:TextBox ID="Street" runat="server" Height="22px" Width="200px" 
+                MaxLength="30"></asp:TextBox>
+            <asp:RequiredFieldValidator ID="rfvStreet" runat="server" 
+                ControlToValidate="Street" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="Street is required." ForeColor="Red" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+        </td>
+        <td class="style56" colspan="2">
+            District:</td>
+        <td class="style53">
+            <asp:DropDownList ID="DistrictDropDownList" runat="server" 
+                Height="22px" style="margin-left: 0px" Width="205px" 
+                onselectedindexchanged="DistrictDropDownList0_SelectedIndexChanged">
+                <asp:ListItem Value="0">-- Select district --</asp:ListItem>
+            </asp:DropDownList>
+            <asp:RequiredFieldValidator ID="rfvDistrict" runat="server" 
+                ControlToValidate="DistrictDropDownList" Display="Dynamic" 
+                EnableClientScript="False" ErrorMessage="Please select a district." 
+                ForeColor="Red" InitialValue="0" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="style64" colspan="5">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:Button ID="btAddYourAddress" runat="server" onclick="btAddYourCard_Click" 
+            Text="Add Your Address" ValidationGroup="RegisterUserValidationGroup" 
+                    BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
+                    </td>
+    </tr>
+    <tr>
+        <td class="style65" colspan="2">
+            <br />
+            OR Select a delivery address</td>
+    </tr>
+    <tr>
+        <td class="style64">
             Delivery Address:</td>
         <td class="style57" colspan="2">
             <asp:DropDownList ID="AddressDropDownList" runat="server" AutoPostBack="True" 
@@ -129,7 +256,17 @@
         </td>
     </tr>
     <tr>
-        <td class="style50">
+        <td class="style72">
+            </td>
+        <td class="style69">
+        </td>
+        <td class="style70" colspan="2">
+            </td>
+        <td class="style71">
+        </td>
+    </tr>
+    <tr>
+        <td class="style64">
             Delivery Date:</td>
         <td class="style51">
             <asp:DropDownList ID="DeliveryDateDropDownList" runat="server">
@@ -166,6 +303,7 @@
     <p>
         &nbsp;</p>
     <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="ContinueButton" runat="server" onclick="ContinueButton_Click" 
             Text="Next: Specify Payment Information" 
             ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 

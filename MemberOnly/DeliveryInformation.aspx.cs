@@ -16,6 +16,27 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
+            // Populate the DistrictDropDownList.
+            DistrictDropDownList.Items.Add("-- Select district --");
+            DistrictDropDownList.Items.Add("Central and Western");
+            DistrictDropDownList.Items.Add("Eastern");
+            DistrictDropDownList.Items.Add("Islands");
+            DistrictDropDownList.Items.Add("Kowloon City");
+            DistrictDropDownList.Items.Add("Kwai Tsing");
+            DistrictDropDownList.Items.Add("Kwun Tong");
+            DistrictDropDownList.Items.Add("North");
+            DistrictDropDownList.Items.Add("Sai Kung");
+            DistrictDropDownList.Items.Add("Sha Tin");
+            DistrictDropDownList.Items.Add("Sham Shui Po");
+            DistrictDropDownList.Items.Add("Southern");
+            DistrictDropDownList.Items.Add("Tai Po");
+            DistrictDropDownList.Items.Add("Tsuen Wan");
+            DistrictDropDownList.Items.Add("Tuen Mun");
+            DistrictDropDownList.Items.Add("Wan Chai");
+            DistrictDropDownList.Items.Add("Wong Tai Sin");
+            DistrictDropDownList.Items.Add("Yau Tsim Mong");
+            DistrictDropDownList.Items.Add("Yuen Long");
+
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
             GetMemberData(connectionString, userName);
@@ -236,6 +257,94 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 command.Connection.Close();
                 reader.Close();
             }
+        }
+    }
+
+    protected void AddAddress(string connectionString, string userName, string number, string type, string cardHolderName, string expiryMonth, string expiryYear)
+    {
+        // Define the INSERT query with parameters.
+        string query = "INSERT INTO [CreditCard]([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear])" +
+                       "VALUES (@Username, @Number, @Type, @CardHolderName, @ExpiryMonth, @ExpiryYear)";
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Username", userName);
+            command.Parameters.AddWithValue("@Number", number);
+            command.Parameters.AddWithValue("@Type", type);
+            command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
+            command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
+
+            //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
+            //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
+
+            command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+
+            // Open the connection, execute the INSERT query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    protected void updateAddressInOrderRecord(string connectionString, string userName, string creditCardNumber)
+    {
+        // Define the INSERT query with parameters.
+        string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Username", userName);
+            command.Parameters.AddWithValue("@CreditCardNumber", creditCardNumber);
+            command.Parameters.AddWithValue("@IsConfirmed", false);
+            /*command.Parameters.AddWithValue("@Type", type);
+            command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
+            command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
+
+            //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
+            //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
+
+            //command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+
+            // Open the connection, execute the INSERT query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    protected void btAddYourCard_Click(object sender, EventArgs e)
+    {
+        Page.Validate("RegisterUserValidationGroup");
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name;
+
+            // After the information is added, add the credit card data in the credit card database.
+            AddAddress(connectionString,
+                userName.Trim(),
+                CardNumber.Text.Trim(),
+                CardTypeDropDownList.SelectedItem.Text.Trim(),
+                CardHolderName.Text.Trim(),
+                MonthDropDownList.SelectedItem.Text.Trim(),
+                YearDropDownList.SelectedItem.Text.Trim());
+            // After the information is added, add the credit card data in the order record database.
+            updateCreditCardInOrderRecord(connectionString,
+               userName.Trim(),
+               CardNumber.Text.Trim());
+
+            FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
+
+            string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
+            if (String.IsNullOrEmpty(continueUrl))
+            {
+                continueUrl = "~/";
+            }
+            Response.Redirect(continueUrl, false);
         }
     }
 }
