@@ -85,6 +85,11 @@
                 ControlToValidate="CardholderName" Display="Dynamic" EnableClientScript="False" 
                 ErrorMessage="Cardholder Name is required." ForeColor="Red" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                <asp:RegularExpressionValidator ID="revCardholderName" runat="server" 
+                    Display="Dynamic" EnableClientScript="False" 
+                    ErrorMessage="Cardholder name can only contain alphabet and spaces." 
+                    ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$" 
+                    ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
             </td>
             <td>
                 <span class="style10">Card Type:

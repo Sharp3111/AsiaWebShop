@@ -19,9 +19,6 @@
         .style5
     {
         }
-        .style49
-        {
-        }
         .style50
         {
             width: 141px;
@@ -130,15 +127,6 @@
         <td class="style5" colspan="2">
             <asp:Label ID="Address" runat="server"></asp:Label>
         </td>
-    </tr>
-    <tr>
-        <td class="style50">
-            &nbsp;</td>
-        <td class="style49" colspan="4">
-            Desired address not listed? Click
-            <asp:HyperLink ID="ChangeAddressLink" runat="server" 
-                NavigateUrl="~/MemberOnly/ManageDeliveryAddress.aspx">here</asp:HyperLink>
-&nbsp;to add another and check out later!</td>
     </tr>
     <tr>
         <td class="style50">

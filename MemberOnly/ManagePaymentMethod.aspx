@@ -211,6 +211,11 @@
                             ControlToValidate="EditCardholderName" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Cardholder Name is required." 
                             ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="revEditCardholderName" runat="server" 
+                            ControlToValidate="EditCardholderName" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="Cardholder name can only contain alphabet and spaces." 
+                            ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$">*</asp:RegularExpressionValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:TextBox ID="InsertCardholderName" runat="server" MaxLength="50" 
@@ -219,6 +224,11 @@
                             ControlToValidate="InsertCardholderName" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Cardholder Name is required." 
                             ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="revInsertCardholderName" runat="server" 
+                            ControlToValidate="InsertCardholderName" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="Cardholder name can only contain alphabet and spaces." 
+                            ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$">*</asp:RegularExpressionValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label4" runat="server" Text='<%# Bind("cardHolderName") %>'></asp:Label>

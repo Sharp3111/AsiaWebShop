@@ -126,7 +126,7 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Nickname" SortExpression="nickname">
                     <EditItemTemplate>
-                        <asp:TextBox ID="EditNickname" runat="server" MaxLength="15" 
+                        <asp:TextBox ID="EditNickname" runat="server" MaxLength="10" 
                             Text='<%# Bind("nickname") %>'></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvEditNickname" runat="server" 
                             ControlToValidate="EditNickname" Display="Dynamic" EnableClientScript="False" 
@@ -135,9 +135,13 @@
                             ControlToValidate="EditNickname" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Nickname already exists." ForeColor="Red" 
                             onservervalidate="cvEditNickname_ServerValidate">*</asp:CustomValidator>
+                        <asp:RegularExpressionValidator ID="revEditNickname" runat="server" 
+                            ControlToValidate="EditNickname" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Nickname must be alphanumeric only." ForeColor="Red" 
+                            ValidationExpression="^[a-zA-Z0-9]+$">*</asp:RegularExpressionValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:TextBox ID="InsertNickname" runat="server" MaxLength="15" 
+                        <asp:TextBox ID="InsertNickname" runat="server" MaxLength="10" 
                             Text='<%# Bind("nickname") %>'></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvInsertNickname" runat="server" 
                             ControlToValidate="InsertNickname" Display="Dynamic" EnableClientScript="False" 
@@ -146,6 +150,10 @@
                             ControlToValidate="InsertNickname" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Nickname already exists." ForeColor="Red" 
                             onservervalidate="cvInsertNickname_ServerValidate">*</asp:CustomValidator>
+                        <asp:RegularExpressionValidator ID="revInsertNickname" runat="server" 
+                            ControlToValidate="InsertNickname" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Nickname must be alphanumeric only." ForeColor="Red" 
+                            ValidationExpression="^[a-zA-Z0-9]+$">*</asp:RegularExpressionValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label1" runat="server" Text='<%# Bind("nickname") %>'></asp:Label>
