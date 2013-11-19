@@ -921,6 +921,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
     }
     protected void dvCreditCard_ItemInserting(object sender, DetailsViewInsertEventArgs e)
     {
+        //Response.Write("<script>alert('" + "ENTER" + "')</script>");
         Page.Validate();
 
         if (Page.IsValid)
@@ -976,6 +977,18 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         command.Connection.Close();
                     }
 
+                    count = 0;
+                    //check if the item has already added into the shopping cart
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')", connection))
+                    {
+                        command.Connection.Open();
+                        count = (Int32)command.ExecuteScalar();
+                        command.Connection.Close();
+                    }
+
+                    Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
+
                     //Set the edited card to be default
                     string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
                     using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -986,6 +999,18 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         command.ExecuteNonQuery();
                         command.Connection.Close();
                     }
+
+                    count = 0;
+                    //check if the item has already added into the shopping cart
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')", connection))
+                    {
+                        command.Connection.Open();
+                        count = (Int32)command.ExecuteScalar();
+                        command.Connection.Close();
+                    }
+
+                    Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
 
                     //Set the initial default to be nondefault
                     string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + initialDefaultNumber + "')";

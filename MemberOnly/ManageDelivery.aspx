@@ -113,7 +113,7 @@
             <EditRowStyle BackColor="#2461BF" />
             <FieldHeaderStyle BackColor="#DEE8F5" Font-Bold="True" />
             <Fields>
-                <asp:TemplateField HeaderText="userName" SortExpression="userName">
+                <asp:TemplateField HeaderText="User Name" SortExpression="userName">
                     <EditItemTemplate>
                         <asp:Label ID="EditUserName" runat="server" Text='<%# Bind("userName") %>' onload="InsertUserName_Load"></asp:Label>
                     </EditItemTemplate>
@@ -251,14 +251,17 @@
                 </asp:TemplateField>
                 <asp:CheckBoxField DataField="isSelected" HeaderText="isSelected" 
                     SortExpression="isSelected" Visible="False" />
-                <asp:TemplateField HeaderText="isDefault" SortExpression="isDefault">
+                <asp:TemplateField HeaderText="isDefault" SortExpression="isDefault" 
+                    Visible="False">
                     <EditItemTemplate>
                         <asp:CheckBox ID="EditIsDefault" runat="server" 
-                            Checked='<%# Bind("isDefault") %>' />
+                            Checked='<%# Bind("isDefault") %>' 
+                            oncheckedchanged="EditIsDefault_CheckedChanged" />
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:CheckBox ID="InsertIsDefault" runat="server" 
-                            Checked='<%# Bind("isDefault") %>' />
+                            Checked='<%# Bind("isDefault") %>' 
+                            oncheckedchanged="InsertIsDefault_CheckedChanged" />
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("isDefault") %>' 
