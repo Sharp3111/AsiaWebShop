@@ -114,8 +114,14 @@
             GridLines="None">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:BoundField DataField="number" HeaderText="Card Number" 
-                    SortExpression="number" />
+                <asp:TemplateField HeaderText="Card Number" SortExpression="number">
+                    <ItemTemplate>
+                        <asp:Label ID="cardNumberLabel" runat="server" Text='<%# Bind("number") %>'></asp:Label>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("number") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                </asp:TemplateField>
                 <asp:BoundField DataField="type" HeaderText="Card Type" SortExpression="type" />
                 <asp:BoundField DataField="cardHolderName" HeaderText="Holder Name" 
                     SortExpression="cardHolderName" />

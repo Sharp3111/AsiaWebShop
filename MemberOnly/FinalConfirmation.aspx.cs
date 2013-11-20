@@ -152,8 +152,16 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
         }
     }
 
+    public static string Reverse(string s)
+    {
+        char[] charArray = s.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
+    }
+
     protected void confirm_Click(object sender, EventArgs e)
     {
+        string connectionString = "AsiaWebShopDBConnectionString";
         if (IsValid)
         {
             string authNum = "";
@@ -162,7 +170,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             Int32 cardNumberHead = 0;            
             Int32 cardNumberTail = 0;
 
-            string connectionString = "AsiaWebShopDBConnectionString";
+            
             string query = "SELECT [creditCardNumber] FROM [OrderRecord] WHERE [isConfirmed] = 0 AND [username] = N'" + User.Identity.Name + "' GROUP BY [username], [creditCardNumber]";
 
             // Create the connection and the SQL command.
@@ -228,8 +236,55 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             finalConfirm();
         }
 
+        // Create an instance of MailMessage named mail.
+        MailMessage mail = new MailMessage();
+
+        // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
+        SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
+
+        // Set the sender (From), receiver (To), subject and message body fields of the mail message.
+        mail.From = new MailAddress("huanbang@gmail.com", "Asia Web Shop");
+        mail.To.Add(emailAddress.Text.Trim());
+        mail.Subject = "Receipt";
+
+        //Gather information
+        string confirmationNumber = "";
+
+        string itemsInformation = "";
+        string itemPurchased = "";
+        string quantityPurchased = "";
+        string unitPurchasePrice = "";
+        string totalPurchasePriceOfEachItem = "";
+        string totalPurchasePrice = totalPrice.Text.Trim();
+        //string amountSaved = "";
+
+        string deliveryInformation = "";
+
+        Label creditCardNumberLabel = (Label)paymentMethod.Rows[0].FindControl("cardNumberLabel");
+        string creditCardNumber = "";
+        string creditCardType = "";
+
+        string authorizationCode = "";
+
+        string query1 = "SELECT "
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query1, connection))
 
 
+        //the amount that the member saved from the normal price is not included ???? Needs further working
+        mail.Body = "Dear " + User.Identity.Name + ", your latest purchase detail is as follows:\n\n"
+                    + "Confirmation #:\n" + confirmationNumber + '\n' + '\n'
+                    + "Item information:\n" + itemsInformation + '\n' + '\n'
+                    + "Delivery information:\n" + deliveryInformation + '\n' + '\n'
+                    + "Payment information:\n"
+                    + "Credit Card #:     " + creditCardNumber + '\n'
+                    + "Credit Card Type:  " + creditCardType + '\n' + '\n'
+                    + "Authorization Code:" + authorizationCode + '\n' + '\n'
+                    + '\n' + '\n'
+                    + "Note: this is a system generated email receipt, please do not reply.";
+
+        // Send the message.
+        emailServer.Send(mail);
     }
     protected void deliverAddress_DataBound(object sender, EventArgs e)
     {

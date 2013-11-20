@@ -388,7 +388,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             }
         }
 
-        Response.Write("<script>alert('" + cardNumberSelected + "')</script>");
+        //Response.Write("<script>alert('" + cardNumberSelected + "')</script>");
 
         // After the information is added, add the credit card data in the order record database.
         updateCreditCardInOrderRecord(connectionString,
