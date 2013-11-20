@@ -297,14 +297,18 @@ public partial class ItemManagement : System.Web.UI.Page
                 connection.Open();
                 SqlCommand command = new SqlCommand("SELECT [email] FROM [Subscription] WHERE ([name] = N'" + itemName + "')", connection);
                 string subscriber = (string)command.ExecuteScalar();
-                mail.To.Add(subscriber);
+                if (subscriber != null)
+                {
+                    mail.To.Add(subscriber);
+                    mail.Subject = itemName + " is Available!";
+                    mail.Body = "Dear Customer,\nThank you for your interest in " + itemName + ". New stock for this item is available. Act now!\nAsiaWebShop";
+
+                    // Send the message.
+                    emailServer.Send(mail);
+                }
                 connection.Close();
             }
-            mail.Subject = itemName + " is Available!";
-            mail.Body = "Dear Customer,\nThank you for your interest in " + itemName + ". New stock for this item is available. Act now!\nAsiaWebShop";
-                    
-            // Send the message.
-            emailServer.Send(mail);
+            
         }
     }
 }
