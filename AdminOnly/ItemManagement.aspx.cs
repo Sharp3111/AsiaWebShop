@@ -118,81 +118,83 @@ public partial class ItemManagement : System.Web.UI.Page
 
     protected void cvInsertPicture_ServerValidate(object source, ServerValidateEventArgs args)
     {
-        args.IsValid = false; //Initialize args to false
+        FileUpload fileName = (FileUpload)dvItem.FindControl("pictureFileUpload");
 
-        FileUpload Picture = (FileUpload)dvItem.FindControl("pictureFileUpload");
+        string fileExtension = System.IO.Path.GetExtension(fileName.FileName);
 
-        var Extension = Path.GetExtension(Picture.PostedFile.FileName);
-        double filesize = Picture.FileContent.Length;
+        string fileMimeType = fileName.PostedFile.ContentType;
 
-        string E1 = ".jpg";
-        string E2 = ".JPG";
+        int fileLengthInKB = fileName.PostedFile.ContentLength / 512;
 
-        if (!(Extension.Equals(E1, StringComparison.Ordinal) ||
-              Extension.Equals(E2, StringComparison.Ordinal)) ||
-             filesize > 512 * 1024)
+
+
+
+        string[] matchExtension = { ".jpg" };
+
+        string[] matchMimeType = { "image/jpeg" };
+
+
+
+
+
+        if (matchExtension.Contains(fileExtension) && matchMimeType.Contains(fileMimeType))
         {
-            args.IsValid = false;
+            if (fileLengthInKB > 512)
+            {
+                //Please choose a file less than 512kb
+                args.IsValid = false;
+
+            }
+
         }
+
         else
         {
-            try
-            {
-                System.Drawing.Image img = System.Drawing.Image.FromFile(Picture.PostedFile.FileName);
 
-                // Two image formats can be compared using the Equals method
-                // See http://msdn.microsoft.com/en-us/library/system.drawing.imaging.imageformat.aspx
-                //
-                args.IsValid = img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Jpeg);
-            }
-            catch (OutOfMemoryException)
-            {
-                // Image.FromFile throws an OutOfMemoryException 
-                // if the file does not have a valid image format or
-                // GDI+ does not support the pixel format of the file.
-                //
-                args.IsValid = false;
-            }
-        }  
+            //Please choose only jpg, png or gif file.
+            args.IsValid = false;
+
+        }
     }
     protected void cvEditPicture_ServerValidate(object source, ServerValidateEventArgs args)
     {
-        args.IsValid = false; //Initialize args to false
+        FileUpload fileName = (FileUpload)dvItem.FindControl("pictureFileUpload");
 
-        FileUpload Picture = (FileUpload)dvItem.FindControl("pictureFileUpload");
+        string fileExtension = System.IO.Path.GetExtension(fileName.FileName);
 
-        var Extension = Path.GetExtension(Picture.PostedFile.FileName);
-        double filesize = Picture.FileContent.Length;
+        string fileMimeType = fileName.PostedFile.ContentType;
 
-        string E1 = ".jpg";
-        string E2 = ".JPG";
+        int fileLengthInKB = fileName.PostedFile.ContentLength / 512;
 
-        if (!(Extension.Equals(E1, StringComparison.Ordinal) ||
-              Extension.Equals(E2, StringComparison.Ordinal)) ||
-             filesize > 512 * 1024)
+
+
+
+        string[] matchExtension = { ".jpg" };
+
+        string[] matchMimeType = { "image/jpeg" };
+
+
+
+
+
+        if (matchExtension.Contains(fileExtension) && matchMimeType.Contains(fileMimeType))
         {
-            args.IsValid = false;
+            if (fileLengthInKB > 512)
+            {
+                //Please choose a file less than 512kb
+                args.IsValid = false;
+
+            }
+
         }
+
         else
         {
-            try
-            {
-                System.Drawing.Image img = System.Drawing.Image.FromFile(Picture.PostedFile.FileName);
 
-                // Two image formats can be compared using the Equals method
-                // See http://msdn.microsoft.com/en-us/library/system.drawing.imaging.imageformat.aspx
-                //
-                args.IsValid = img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Jpeg);
-            }
-            catch (OutOfMemoryException)
-            {
-                // Image.FromFile throws an OutOfMemoryException 
-                // if the file does not have a valid image format or
-                // GDI+ does not support the pixel format of the file.
-                //
-                args.IsValid = false;
-            }
-        }  
+            //Please choose only jpg, png or gif file.
+            args.IsValid = false;
+
+        }
     }
 
     private bool isValid(string price)
