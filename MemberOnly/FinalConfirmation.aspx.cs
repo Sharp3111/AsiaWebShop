@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 using System.Text;
+using System.Net.Mail;
 
 //Page description:
 /*  Finally, a final confirmation page should be displayed showing all the details of the member’s 
@@ -57,7 +58,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
 
 
 
-
+        /*
         string SQLCmd2 = "SELECT [email] FROM [Member] WHERE [userName] = '"+User.Identity.Name+"'";
 
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -76,6 +77,8 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 command.Connection.Close();
                 reader.Close();
             }
+
+        */
     }
 
     /*private Random random = new Random((int)DateTime.Now.Ticks);
@@ -102,7 +105,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     public bool codeCheck(string code, string column)
     {
         string connectionString = "AsiaWebShopDBConnectionString";
-        string query = "SELECT COUNT FROM [OrderRecord] WHERE [" + column + "] =" + code + ") AND isConfirmed = 1";
+        string query = "SELECT COUNT(*) FROM [OrderRecord] WHERE (" + column + " = '" + code + "' AND isConfirmed = 'True')";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
@@ -122,7 +125,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     public void codeInsert(string code, string column) 
     {
         string connectionString = "AsiaWebShopDBConnectionString";
-        string query = "UPDATE OrderRecord SET "+ column +"= "+ code + " WHERE isConfirmed = 0 AND userName = "+User.Identity.Name ;
+        string query = "UPDATE OrderRecord SET "+ column +" = '"+ code + "' WHERE (isConfirmed = 'False' AND userName = '"+User.Identity.Name + "')" ;
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -137,7 +140,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     public void finalConfirm()
     {
         string connectionString = "AsiaWebShopDBConnectionString";
-        string query = "UPDATE OrderRecord SET isConfirmed = 1, orderDateTime = CAST('"+ System.Data.SqlDbType.SmallDateTime+"' AS smalldatetime WHERE isConfirmed = 0 AND userName = " + User.Identity.Name;
+        string query = "UPDATE OrderRecord SET isConfirmed = 'True', orderDateTime = CURRENT_TIMESTAMP WHERE (isConfirmed = 'False' AND userName = '" + User.Identity.Name + "')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -156,11 +159,11 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             string authNum = "";
             string confirmationNum = "";
 
-            int cardNumber = 0;
-            int purchaseAmount= 0;
+            Int32 cardNumberHead = 0;            
+            Int32 cardNumberTail = 0;
 
             string connectionString = "AsiaWebShopDBConnectionString";
-            string query = "SELECT [creditCardNumber], SUM([unitPrice]*[quantity])AS [totalPrice], FROM [OrderRecord] WHERE [isConfirmed] = 0 AND [username] = " + User.Identity.Name + " GROUP BY [username],[creditCardNumber]";
+            string query = "SELECT [creditCardNumber] FROM [OrderRecord] WHERE [isConfirmed] = 0 AND [username] = N'" + User.Identity.Name + "' GROUP BY [username], [creditCardNumber]";
 
             // Create the connection and the SQL command.
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -177,8 +180,8 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                     while (reader.Read())
                     {
                         // Assign the data values to the web form labels.
-                        cardNumber = Convert.ToInt32(reader["creditCardNumber"].ToString().Trim());
-                        purchaseAmount = Convert.ToInt32(reader["totalPrice"].ToString().Trim());
+                        cardNumberHead = Convert.ToInt32(reader["creditCardNumber"].ToString().Trim().Substring(0, 7));
+                        cardNumberTail = Convert.ToInt32(reader["creditCardNumber"].ToString().Trim().Substring(7, 7));
                     }
                 }
 
@@ -189,7 +192,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
 
             do
             {
-                Random random_ = new Random(cardNumber + purchaseAmount);
+                Random random_ = new Random(cardNumberHead + cardNumberTail);
                 StringBuilder builder_ = new StringBuilder();
                 char ch_;
                 for (int i = 0; i < 4; i++)
@@ -199,7 +202,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 }
                 authNum = builder_.ToString();
             }
-            while (codeCheck(authNum, "authorizationCode"));
+            while (!codeCheck(authNum, "authorizationCode"));
             codeInsert(authNum, "authorizationCode");
 
             do
@@ -219,11 +222,22 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 }
                 confirmationNum = builder.ToString(); 
             }
-            while (codeCheck(confirmationNum,"confirmationNumber"));//count the docNum in DB if > 0, redo
+            while (!codeCheck(confirmationNum,"confirmationNumber"));//count the docNum in DB if > 0, redo
             codeInsert(confirmationNum, "confirmationNumber");
 
             finalConfirm();
         }
 
+
+
+    }
+    protected void deliverAddress_DataBound(object sender, EventArgs e)
+    {
+        //There must be a delivery address in the table, take the first one
+        GridViewRow row = deliverAddress.Rows[0];
+        Label EmailLabel = (Label)row.FindControl("EmailLabel");
+        string email = EmailLabel.Text.Trim();
+
+        emailAddress.Text = email;
     }
 }

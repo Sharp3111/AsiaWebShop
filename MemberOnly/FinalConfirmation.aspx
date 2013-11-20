@@ -30,11 +30,11 @@
         , following is the detail of your order, please confirm or change the incorret 
         information:</p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
-        The item you purchased:</p>
+        The item(s) you purchased:</p>
     <p>
         <asp:GridView ID="itemPurchase" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="AsiaWebDataSource" ForeColor="#333333" 
-            GridLines="None">
+            GridLines="None" Width="383px">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:BoundField DataField="name" HeaderText="Item Name" SortExpression="name" />
@@ -63,16 +63,23 @@
             PostBackUrl="~/MemberOnly/ShoppingCart.aspx" Text="Back to Shopping Cart" />
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
-        Your deliver address:</p>
+        Your delivery address:</p>
     <p>
         <asp:GridView ID="deliverAddress" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="AsiaWebDataSource2" ForeColor="#333333" 
-            GridLines="None">
+            GridLines="None" ondatabound="deliverAddress_DataBound">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:BoundField DataField="name" HeaderText="Name" 
                     SortExpression="name" />
-                <asp:BoundField DataField="email" HeaderText="Email" SortExpression="email" />
+                <asp:TemplateField HeaderText="Email" SortExpression="email">
+                    <ItemTemplate>
+                        <asp:Label ID="EmailLabel" runat="server" Text='<%# Bind("email") %>'></asp:Label>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("email") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                </asp:TemplateField>
                 <asp:BoundField DataField="phoneNumber" HeaderText="Phone Number" 
                     SortExpression="phoneNumber" />
                 <asp:BoundField DataField="address" HeaderText="Delivery Address" 
@@ -101,7 +108,7 @@
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         Your payment method:</p>
-    <p>
+    <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
 &nbsp;<asp:GridView ID="paymentMethod" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="AsiaWebDataSource3" ForeColor="#333333" 
             GridLines="None">
@@ -142,11 +149,11 @@
                         ValidationGroup="finalConfirm" />
                 </td>
                 <td class="style4">
-                    (The receipt will be sent to your email address:
+                    ( The receipt will be sent to your email address:
                 </td>
                 <td class="style5">
                     <asp:Label ID="emailAddress" runat="server"></asp:Label>
-                    )</td>
+                    &nbsp;)</td>
             </tr>
         </table>
     </p>
@@ -175,7 +182,9 @@
         <asp:SqlDataSource ID="AsiaWebDataSource3" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
-            SelectCommand="SELECT CreditCard.number, CreditCard.type, CreditCard.cardHolderName, CreditCard.expiryMonth, CreditCard.expiryYear FROM OrderRecord INNER JOIN CreditCard ON OrderRecord.creditCardNumber = CreditCard.number WHERE (OrderRecord.userName = @userName) GROUP BY CreditCard.number, CreditCard.type, CreditCard.cardHolderName, CreditCard.expiryMonth, CreditCard.expiryYear">
+            
+            
+            SelectCommand="SELECT CreditCard.number, CreditCard.type, CreditCard.cardHolderName, CreditCard.expiryMonth, CreditCard.expiryYear FROM OrderRecord INNER JOIN CreditCard ON OrderRecord.creditCardNumber = CreditCard.number WHERE (OrderRecord.userName = @userName AND OrderRecord.isConfirmed = 'False') GROUP BY CreditCard.number, CreditCard.type, CreditCard.cardHolderName, CreditCard.expiryMonth, CreditCard.expiryYear">
             <SelectParameters>
                 <asp:ControlParameter ControlID="userName" Name="userName" 
                     PropertyName="Text" />

@@ -170,12 +170,25 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
     }
 
 
- 
+ /*
     protected void btContinue_Click(object sender, EventArgs e)
-    {
+    { Response.Write("<script>alert('enter btContinue_Click button')</script>");
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
-            string cardNumberSelected = "";            
+            string cardNumberSelected = ""; 
+
+            Int32 MaxRows = gvCreditCard.Rows.Count;
+
+            for (int i = 0; i < MaxRows; i++)
+            {
+                if (((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked == true)
+                {
+                    cardNumberSelected = ((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text.Trim();
+                    break;
+                }
+            }
+
+            Response.Write("<script>alert('" + cardNumberSelected + "')</script>");
 
                 // After the information is added, add the credit card data in the order record database.
                 updateCreditCardInOrderRecord(connectionString,
@@ -184,22 +197,22 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
                 
                 //OnlyOneCardMessgae.Text = "Your selection has been made. Please proceed to the next step.";
                 //OnlyOneCardMessgae.Visible = true;
-                btNextStep.Visible = true;
+                //btNextStep.Visible = true;
                 //btSelectThisCard.Visible = false;
             
 
            
 
-            //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
+            //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie );*/
 
             /*string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
             if (String.IsNullOrEmpty(continueUrl))
             {
                 continueUrl = "~/";
             }
-            Response.Redirect(continueUrl, false);*/
+            Response.Redirect(continueUrl, false);
     }
-
+    */
 
     protected void cvCardNumber_ServerValidate(object source, ServerValidateEventArgs args)
     {
@@ -357,5 +370,47 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
                 //Response.Write("<script>alert('" + Convert.ToString(((CheckBox)gridViewRow.FindControl("checkBoxSelect")).Checked) + "')</script>");
             }
         }
+    }
+    protected void btNextStep_Click(object sender, EventArgs e)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+        string cardNumberSelected = "";
+
+        Int32 MaxRows = gvCreditCard.Rows.Count;
+
+        for (int i = 0; i < MaxRows; i++)
+        {
+            if (((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked == true)
+            {
+                cardNumberSelected = ((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text.Trim();
+                break;
+            }
+        }
+
+        Response.Write("<script>alert('" + cardNumberSelected + "')</script>");
+
+        // After the information is added, add the credit card data in the order record database.
+        updateCreditCardInOrderRecord(connectionString,
+        userName.Trim(),
+        cardNumberSelected);
+
+        //OnlyOneCardMessgae.Text = "Your selection has been made. Please proceed to the next step.";
+        //OnlyOneCardMessgae.Visible = true;
+        //btNextStep.Visible = true;
+        //btSelectThisCard.Visible = false;
+
+
+
+
+        //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
+
+        /*string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
+        if (String.IsNullOrEmpty(continueUrl))
+        {
+            continueUrl = "~/";
+        }
+        Response.Redirect(continueUrl, false);*/
+        Response.Redirect("~/MemberOnly/FinalConfirmation.aspx");
     }
 }
