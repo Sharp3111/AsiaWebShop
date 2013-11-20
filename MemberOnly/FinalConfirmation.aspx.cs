@@ -162,6 +162,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     protected void confirm_Click(object sender, EventArgs e)
     {
         string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
         if (IsValid)
         {
             string authNum = "";
@@ -233,58 +234,148 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             while (!codeCheck(confirmationNum,"confirmationNumber"));//count the docNum in DB if > 0, redo
             codeInsert(confirmationNum, "confirmationNumber");
 
+            // Create an instance of MailMessage named mail.
+            MailMessage mail = new MailMessage();
+
+            // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
+            SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
+
+            // Set the sender (From), receiver (To), subject and message body fields of the mail message.
+            mail.From = new MailAddress("huanbang@gmail.com", "Asia Web Shop t115 @Sharp");
+            mail.To.Add(emailAddress.Text.Trim());
+            mail.Subject = "Receipt";
+
+            //Gather information
+            string confirmationNumber = "";
+
+            string itemsInformation = "Purchased item(s) information:\n";
+            string itemPurchased = "";
+            Int32 quantityPurchased = 0;
+            Decimal unitPurchasePrice = 0;
+            Decimal totalPurchasePriceOfEachItem = 0;
+            string totalPurchasePrice = totalPrice.Text.Trim();
+            //string amountSaved = ""; ??????????????????????????????????????????????????????????????????????????????????????????//DB needs modification
+            string authorizationCode = "";
+            string deliveryInformation = "";
+            string orderDateTime = DateTime.Now.ToString().Trim();
+
+            string query1 = "SELECT upc, unitPrice, quantity FROM [OrderRecord] WHERE (userName = '" + userName + "' AND isConfirmed = 'False')";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query1, connection))
+            {
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        itemPurchased = ConvertUPCToItemName(reader["upc"].ToString().Trim());
+                        unitPurchasePrice = Convert.ToDecimal(reader["unitPrice"].ToString().Trim());
+                        quantityPurchased = Convert.ToInt32(reader["quantity"].ToString().Trim());
+                        totalPurchasePriceOfEachItem = unitPurchasePrice * quantityPurchased;
+
+                        itemsInformation +="Item name:                            " + itemPurchased.ToString().Trim() + '\n';
+                        itemsInformation +="Quanity purchased:                    " + quantityPurchased.ToString().Trim() + '\n';
+                        itemsInformation += "Unit purchase price:             HKD " + unitPurchasePrice.ToString().Trim() + '\n';
+                        itemsInformation +="Total purchase price of this item:HKD " + totalPurchasePriceOfEachItem.ToString().Trim() + '\n';                        
+                    }
+                }
+
+                // Close the connection and the DataReader.
+                command.Connection.Close();
+                reader.Close();
+            }
+            itemsInformation += "\nTotal purchase price:            HKD ";
+            itemsInformation += totalPurchasePrice;
+
+
+            string query2 = "SELECT confirmationNumber, authorizationCode, name, phoneNumber, address, deliveryDate, deliveryTime FROM [OrderRecord] WHERE (userName = '" + userName + "' AND isConfirmed = 'False')";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query2, connection))
+            {
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        confirmationNumber = reader["confirmationNumber"].ToString().Trim();
+                        authorizationCode = reader["authorizationCode"].ToString().Trim();
+                        deliveryInformation = "Delivery information:\n" 
+                                         + "Name:               " + reader["name"].ToString().Trim() + '\n'
+                                         + "phoneNumber:        " + reader["phoneNumber"].ToString().Trim() + '\n'
+                                         + "Address:            " + reader["address"].ToString().Trim() + '\n'
+                                         + "Delivery Address:   " + reader["deliveryDate"].ToString().Trim() + '\n'
+                                         + "DeliveryTime:       " + reader["deliveryTime"].ToString().Trim() + '\n';
+                        break;
+                    }
+                }
+
+                // Close the connection and the DataReader.
+                command.Connection.Close();
+                reader.Close();
+            }
+
+            Label creditCardNumberLabel = (Label)paymentMethod.Rows[0].FindControl("cardNumberLabel");
+            string creditCardNumber_temp = creditCardNumberLabel.Text.Trim();
+            int creditCardNumberStars = creditCardNumber_temp.Length - 4;
+            string creditCardNumber_temp2 = Reverse(creditCardNumber_temp);
+            string creditCardNumber = "";
+            for(int i = 0; i < creditCardNumberStars; i++)
+            {
+                creditCardNumber += "*";
+            }
+
+            creditCardNumber += Reverse(creditCardNumber_temp2.Substring(0,4));
+
+            string creditCardType = "";
+            //Retrieve 
+            string query3 = "SELECT type FROM [CreditCard] WHERE (userName = '" + userName + "' AND number = '" + creditCardNumber_temp + "')";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query3, connection))
+            {
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                         creditCardType = reader["type"].ToString().Trim();
+                    }
+                }
+
+                // Close the connection and the DataReader.
+                command.Connection.Close();
+                reader.Close();
+            }
+
+            //the amount that the member saved from the normal price is not included ???? Needs further working
+            mail.Body = "Dear " + User.Identity.Name + ", your latest purchase detail is as follows:\n\n"
+                        + "Confirmation #:\n" + confirmationNumber + '\n' + '\n'
+                        + "Order date and time:\n" + orderDateTime + '\n' + '\n'
+                        + "Item information:\n" + itemsInformation + '\n' + '\n'
+                        + "Delivery information:\n" + deliveryInformation + '\n' + '\n'
+                        + "Payment information:\n"
+                        + "Credit Card #:       " + creditCardNumber + '\n'
+                        + "Credit Card Type:    " + creditCardType + '\n' + '\n'
+                        + "Authorization Code:  " + authorizationCode + '\n' + '\n'
+                        + '\n' + '\n'
+                        + "Note: this is a system generated email receipt, please do not reply.";
+
+            // Send the message.
+            emailServer.Send(mail);
+
+            //final confirm
             finalConfirm();
         }
 
-        // Create an instance of MailMessage named mail.
-        MailMessage mail = new MailMessage();
 
-        // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
-        SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
-
-        // Set the sender (From), receiver (To), subject and message body fields of the mail message.
-        mail.From = new MailAddress("huanbang@gmail.com", "Asia Web Shop");
-        mail.To.Add(emailAddress.Text.Trim());
-        mail.Subject = "Receipt";
-
-        //Gather information
-        string confirmationNumber = "";
-
-        string itemsInformation = "";
-        string itemPurchased = "";
-        string quantityPurchased = "";
-        string unitPurchasePrice = "";
-        string totalPurchasePriceOfEachItem = "";
-        string totalPurchasePrice = totalPrice.Text.Trim();
-        //string amountSaved = "";
-
-        string deliveryInformation = "";
-
-        Label creditCardNumberLabel = (Label)paymentMethod.Rows[0].FindControl("cardNumberLabel");
-        string creditCardNumber = "";
-        string creditCardType = "";
-
-        string authorizationCode = "";
-
-        string query1 = "SELECT "
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query1, connection))
-
-
-        //the amount that the member saved from the normal price is not included ???? Needs further working
-        mail.Body = "Dear " + User.Identity.Name + ", your latest purchase detail is as follows:\n\n"
-                    + "Confirmation #:\n" + confirmationNumber + '\n' + '\n'
-                    + "Item information:\n" + itemsInformation + '\n' + '\n'
-                    + "Delivery information:\n" + deliveryInformation + '\n' + '\n'
-                    + "Payment information:\n"
-                    + "Credit Card #:     " + creditCardNumber + '\n'
-                    + "Credit Card Type:  " + creditCardType + '\n' + '\n'
-                    + "Authorization Code:" + authorizationCode + '\n' + '\n'
-                    + '\n' + '\n'
-                    + "Note: this is a system generated email receipt, please do not reply.";
-
-        // Send the message.
-        emailServer.Send(mail);
     }
     protected void deliverAddress_DataBound(object sender, EventArgs e)
     {
@@ -294,5 +385,35 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
         string email = EmailLabel.Text.Trim();
 
         emailAddress.Text = email;
+    }
+
+    private string ConvertUPCToItemName(string UPC)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        //string userName = User.Identity.Name;
+
+        string itemName = "";
+        string query = "SELECT name FROM [Item] WHERE (upc = '" + UPC + "')";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    itemName= reader["name"].ToString().Trim();
+                }
+            }
+
+            // Close the connection and the DataReader.
+            command.Connection.Close();
+            reader.Close();
+        }
+
+        return itemName;
     }
 }
