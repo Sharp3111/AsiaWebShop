@@ -260,8 +260,23 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
         }
     }
 
-    protected void AddAddress(string connectionString, string userName, string number, string type, string cardHolderName, string expiryMonth, string expiryYear)
+    protected void AddAddress(string connectionString, string userName, string buidling, string floor, string flatSuite, string blockTower, string streetAddress, string district, string nickname)
     {
+<<<<<<< HEAD
+        // Define the INSERT query with parameters.
+        string query = "INSERT INTO [Address]([userName], [building], [floor], [flatSuite], [blockTower], [streetAddress], [district], [nickname])" +
+                       "VALUES (@Username, @Building, @Floor, @FlatSuite, @BlockTower, @StreetAddress, @District, @Nickname)";
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Username", userName);
+            command.Parameters.AddWithValue("@Building", buidling);
+            command.Parameters.AddWithValue("@Floor", floor);
+            command.Parameters.AddWithValue("@FlatSuite", flatSuite);
+            command.Parameters.AddWithValue("@BlockTower", blockTower);
+=======
     //    // Define the INSERT query with parameters.
     //    string query = "INSERT INTO [CreditCard]([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear])" +
     //                   "VALUES (@Username, @Number, @Type, @CardHolderName, @ExpiryMonth, @ExpiryYear)";
@@ -275,11 +290,18 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //        command.Parameters.AddWithValue("@Type", type);
     //        command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
     //        command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
+>>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
 
     //        //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
     //        //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
 
+<<<<<<< HEAD
+            command.Parameters.AddWithValue("@StreetAddress", streetAddress);
+            command.Parameters.AddWithValue("@District", district);
+            command.Parameters.AddWithValue("@Nickname", nickname);
+=======
     //        command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+>>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
 
     //        // Open the connection, execute the INSERT query and close the connection.
     //        command.Connection.Open();
@@ -288,8 +310,50 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //    }
     }
 
-    protected void updateAddressInOrderRecord(string connectionString, string userName, string creditCardNumber)
+    protected void updateAddressInOrderRecord(string connectionString, string userName, string nickname)
     {
+<<<<<<< HEAD
+        // Define the INSERT query with parameters.
+        string query1 = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "' AND [nickname] = N'" + nickname + "')";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query1, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to the web form label.
+                    string addressItem = reader["building"].ToString().Trim() + " " +
+                                        reader["floor"].ToString().Trim() + " " +
+                                        reader["flatSuite"].ToString().Trim() + " " +
+                                        reader["blockTower"].ToString().Trim() + ", " +
+                                        reader["streetAddress"].ToString().Trim() + ", " +
+                                        reader["district"].ToString().Trim();
+                    Address.Text = addressItem;
+                }
+            }
+            command.Connection.Close();
+            reader.Close();
+        }
+        string query2 = "UPDATE [OrderRecord] SET [address] = @Address WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query2, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Username", userName);
+            command.Parameters.AddWithValue("@Address", Address.Text);
+            command.Parameters.AddWithValue("@IsConfirmed", false);
+            /*command.Parameters.AddWithValue("@Type", type);
+            command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
+            command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
+=======
     //    // Define the INSERT query with parameters.
     //    string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
     //    // Create the connection and the SQL command.
@@ -303,6 +367,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //        /*command.Parameters.AddWithValue("@Type", type);
     //        command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
     //        command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
+>>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
 
     //        //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
     //        //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
@@ -316,8 +381,131 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //    }
     }
 
-    protected void btAddYourCard_Click(object sender, EventArgs e)
+    protected void btnAddYourAddress_Click(object sender, EventArgs e)
     {
+<<<<<<< HEAD
+        Page.Validate("AddAddressValidationGroup");
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name;
+
+            // After the information is added, add the credit card data in the credit card database.
+            AddAddress(connectionString,
+                userName.Trim(),
+                Building.Text.Trim(),
+                Floor.Text.Trim(),
+                FlatSuite.Text.Trim(),
+                BlockTower.Text.Trim(),
+                Street.Text.Trim(),
+                DistrictDropDownList.SelectedItem.Text.Trim(),
+                Nickname.Text.Trim());
+
+            // After the information is added, add the credit card data in the order record database.
+            updateAddressInOrderRecord(connectionString,
+               userName.Trim(),
+               Nickname.Text.Trim());
+
+            //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
+
+            //string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
+            //if (String.IsNullOrEmpty(continueUrl))
+            //{
+            //    continueUrl = "~/";
+            //}
+            //Response.Redirect(continueUrl, false);
+            lblMessage.Visible = true;
+            lblMessage.ForeColor = System.Drawing.Color.Red;
+            lblMessage.Text = "You successfully added a new delivery address. Next please specify delivery time.";
+            //AddressDropDownList.Visible = false;
+            AddressDropDownList.Enabled = false;
+            //lblSelectAddress.Visible = false;
+            //lblDeliveryAddress.Visible = false;
+ 
+            //btnChooseAddress.Visible = false;
+            btnChooseAddress.Enabled = false;
+
+            lblFinalAddress.Visible = true;
+            Address.Visible = true;
+        }
+    }
+    protected void cvInsertNickname_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        string userName = User.Identity.Name;
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        {
+            // Get the value of the new UPC from the DetailsView control.
+            string txtInsertNickname = Nickname.Text.Trim();
+            
+
+            // Count how many existing records have the student id value.
+            connection.Open();
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = '" + userName + "' AND [nickname] = N'" + txtInsertNickname + "')", connection);
+            Int32 count = (Int32)command.ExecuteScalar();
+            connection.Close();
+
+            // If the count is not zero the UPC already exists, so cancel the insert.
+            if (count != 0)
+            {
+                args.IsValid = false;
+            }
+        }
+    }
+    protected void DistrictDropDownList0_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void btnChooseAddress_Click(object sender, EventArgs e)
+    {
+        Page.Validate("ChooseAddressValidationGroup");
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name;
+
+            lblMessage0.Visible = true;
+            lblMessage0.ForeColor = System.Drawing.Color.Red;
+            lblMessage0.Text = "You successfully chose this delivery address. Next please specify delivery time.";
+
+            //lblAddAddress.Visible = false;
+            //lblEnterAddrInfo.Visible = false;
+
+            //lblBuilding.Visible = false;
+            //Building.Visible = false;
+            Building.Enabled = false;
+
+            //lblFloor.Visible = false;
+            //Floor.Visible = false;
+            Floor.Enabled = false;
+
+            //lblFlatSuite.Visible = false;
+            //FlatSuite.Visible = false;
+            FlatSuite.Enabled = false;
+
+            //lblBlockTower.Visible = false;
+            //BlockTower.Visible = false;
+            BlockTower.Enabled = false;
+
+            //lblStreet.Visible = false;
+            //Street.Visible = false;
+            Street.Enabled = false;
+
+            //lblDistrict.Visible = false;
+            //DistrictDropDownList.Visible = false;
+            DistrictDropDownList.Enabled = false;
+
+            //lblNickname.Visible = false;
+            //Nickname.Visible = false;
+            Nickname.Enabled = false;
+
+            //btnAddYourAddress.Visible = false;
+            btnAddYourAddress.Enabled = false;
+
+            lblFinalAddress.Visible = true;
+            Address.Visible = true;
+           
+        }
+=======
     //    Page.Validate("RegisterUserValidationGroup");
     //    if (Page.IsValid)
     //    {
@@ -350,5 +538,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     protected void DistrictDropDownList0_SelectedIndexChanged(object sender, EventArgs e)
     {
 
+>>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
     }
 }

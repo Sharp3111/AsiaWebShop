@@ -89,7 +89,8 @@
                     Display="Dynamic" EnableClientScript="False" 
                     ErrorMessage="Cardholder name can only contain alphabet and spaces." 
                     ForeColor="Red" ValidationExpression="^[a-zA-Z\s]+$" 
-                    ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
+                    ValidationGroup="RegisterUserValidationGroup" 
+                    ControlToValidate="CardHolderName">*</asp:RegularExpressionValidator>
             </td>
             <td>
                 <span class="style10">Card Type:

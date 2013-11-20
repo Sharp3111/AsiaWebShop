@@ -19,21 +19,9 @@
         .style5
     {
         }
-        .style51
-        {
-            width: 289px;
-        }
-        .style53
-        {
-            width: 268435136px;
-        }
-        .style56
-        {
-            width: 206px;
-        }
         .style57
         {
-            width: 199px;
+            width: 295px;
         }
         .style64
         {
@@ -62,40 +50,62 @@
             border-bottom-color: #C0C0C0;
             padding: 1px;
         }
-        .style69
-        {
-            width: 289px;
-            height: 74px;
-        }
-        .style70
-        {
-            width: 206px;
-            height: 74px;
-        }
-        .style71
-        {
-            width: 268435136px;
-            height: 74px;
-        }
         .style72
         {
             height: 74px;
+        }
+        .style73
+        {
+            height: 29px;
+            width: 191px;
+        }
+        .style75
+        {
+            width: 302px;
+            height: 29px;
+        }
+        .style76
+        {
+            width: 245px;
+            height: 29px;
+        }
+        .style77
+        {
+        }
+        .style78
+        {
+            width: 916px;
+            height: 28px;
+            color: #000080;
+            font-family: "Segoe UI";
+        }
+        .style79
+        {
+            width: 245px;
+        }
+        .style80
+        {
+            width: 191px;
+        }
+        .style81
+        {
+            width: 302px;
         }
         </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p class="style2">
         <strong>SPECIFY Delivery Information</strong></p>
-<table class="style3">
+<table class="style78">
     <tr>
-        <td class="style64">
+        <td class="style77">
             User Name:</td>
-        <td class="style51">
+        <td class="style80">
             <asp:Label ID="UserName" runat="server"></asp:Label>
         </td>
-        <td class="style56" colspan="2">
+        <td class="style81" colspan="2">
             &nbsp;Email Address:</td>
-        <td class="style53">
+        <td class="style79">
             <asp:TextBox ID="Email" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
@@ -111,9 +121,9 @@
         </td>
     </tr>
     <tr>
-        <td class="style64">
+        <td class="style77">
             First Name:</td>
-        <td class="style51">
+        <td class="style80">
             <asp:TextBox ID="FirstName" runat="server" Height="22px" Width="200px" 
                 MaxLength="20"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvFirstName" runat="server" 
@@ -121,9 +131,9 @@
                 ErrorMessage="First Name is required." ForeColor="Red" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style56" colspan="2">
+        <td class="style81" colspan="2">
             &nbsp;Last Name:</td>
-        <td class="style53">
+        <td class="style79">
             <asp:TextBox ID="LastName" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvLastName" runat="server" 
@@ -133,9 +143,9 @@
         </td>
     </tr>
     <tr>
-        <td class="style64">
+        <td class="style77">
             Phone Number:</td>
-        <td class="style51">
+        <td class="style80">
             <asp:TextBox ID="PhoneNumber" runat="server" Height="22px" Width="200px" 
                 MaxLength="8"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvPhoneNumber" runat="server" 
@@ -148,49 +158,58 @@
                 ForeColor="Red" ValidationExpression="^\d{8}$" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
         </td>
-        <td class="style56" colspan="2">
+        <td class="style81" colspan="2">
             &nbsp;</td>
-        <td class="style53">
+        <td class="style79">
             &nbsp;</td>
     </tr>
     <tr>
         <td class="style66" colspan="5">
             <br />
-            <span class="style67">Add an Address</span></td>
+            <asp:Label ID="lblAddAddress" runat="server" 
+                style="text-transform: uppercase; text-decoration: underline; font-size: medium; font-family: Arial, Helvetica, sans-serif" 
+                Text="Add an Address"></asp:Label>
+        </td>
     </tr>
     <tr>
         <td class="style64" colspan="5">
-            Please enter your delivery address information:</td>
+            <asp:Label ID="lblEnterAddrInfo" runat="server" 
+                Text="Please enter your delivery address information:"></asp:Label>
+        </td>
     </tr>
     <tr>
-        <td class="style64">
-            Building:</td>
-        <td class="style51">
+        <td class="style77">
+            <asp:Label ID="lblBuilding" runat="server" Text="Building:"></asp:Label>
+        </td>
+        <td class="style80">
             <asp:TextBox ID="Building" runat="server" Height="22px" Width="200px" 
                 MaxLength="20"></asp:TextBox>
         </td>
-        <td class="style56" colspan="2">
+        <td class="style81" colspan="2">
             <table class="style3" __designer:mapid="51d">
                 <tr __designer:mapid="51e">
                     <td class="style7" __designer:mapid="51f">
-                        &nbsp;Floor</td>
+                        <asp:Label ID="lblFloor" runat="server" Text="&nbsp;Floor: "></asp:Label>
+                    </td>
                     <td __designer:mapid="520">
                         <asp:TextBox ID="Floor" runat="server" Width="40px" Height="22px" MaxLength="3"></asp:TextBox>
                     </td>
                 </tr>
             </table>
         </td>
-        <td class="style53">
+        <td class="style79">
             <table class="style3" __designer:mapid="523">
                 <tr __designer:mapid="524">
                     <td class="style8" __designer:mapid="525">
-                        Flat/Suite:</td>
+                        <asp:Label ID="lblFlatSuite" runat="server" Text="Flat/Suite:"></asp:Label>
+                    </td>
                     <td class="style29" __designer:mapid="526">
                         <asp:TextBox ID="FlatSuite" runat="server" Width="40px" Height="22px" 
                             MaxLength="5"></asp:TextBox>
                     </td>
                     <td class="style10" __designer:mapid="528">
-                        Block/Tower:</td>
+                        <asp:Label ID="lblBlockTower" runat="server" Text="Block/Tower:"></asp:Label>
+                    </td>
                     <td __designer:mapid="529">
                         <asp:TextBox ID="BlockTower" runat="server" Width="40px" Height="22px" 
                             MaxLength="2"></asp:TextBox>
@@ -200,19 +219,21 @@
         </td>
     </tr>
     <tr>
-        <td class="style64">
-            Street:</td>
-        <td class="style51">
+        <td class="style77">
+            <asp:Label ID="lblStreet" runat="server" Text="Street:"></asp:Label>
+        </td>
+        <td class="style80">
             <asp:TextBox ID="Street" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvStreet" runat="server" 
                 ControlToValidate="Street" Display="Dynamic" EnableClientScript="False" 
                 ErrorMessage="Street is required." ForeColor="Red" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                ValidationGroup="AddAddressValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style56" colspan="2">
-            District:</td>
-        <td class="style53">
+        <td class="style81" colspan="2">
+            <asp:Label ID="lblDistrict" runat="server" Text="District:"></asp:Label>
+        </td>
+        <td class="style79">
             <asp:DropDownList ID="DistrictDropDownList" runat="server" 
                 Height="22px" style="margin-left: 0px" Width="205px" 
                 onselectedindexchanged="DistrictDropDownList0_SelectedIndexChanged">
@@ -222,53 +243,119 @@
                 ControlToValidate="DistrictDropDownList" Display="Dynamic" 
                 EnableClientScript="False" ErrorMessage="Please select a district." 
                 ForeColor="Red" InitialValue="0" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                ValidationGroup="AddAddressValidationGroup">*</asp:RequiredFieldValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="style73">
+            <asp:Label ID="lblNickname" runat="server" Text="Nickname:"></asp:Label>
+        </td>
+        <td class="style73">
+            <asp:TextBox ID="Nickname" runat="server" MaxLength="10" 
+                            Text='<%# Bind("nickname") %>'></asp:TextBox>
+            <asp:RequiredFieldValidator ID="rfvNickname" runat="server" 
+                            ControlToValidate="Nickname" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Nickname is required." ForeColor="Red" 
+                ValidationGroup="AddAddressValidationGroup">*</asp:RequiredFieldValidator>
+            <asp:CustomValidator ID="cvNickname" runat="server" 
+                            ControlToValidate="Nickname" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Nickname already exists." ForeColor="Red" 
+                            onservervalidate="cvInsertNickname_ServerValidate" 
+                ValidationGroup="AddAddressValidationGroup">*</asp:CustomValidator>
+            <asp:RegularExpressionValidator ID="revNickname" runat="server" 
+                            ControlToValidate="Nickname" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Nickname must be alphanumeric only." ForeColor="Red" 
+                            ValidationExpression="^[a-zA-Z0-9]+$" 
+                ValidationGroup="AddAddressValidationGroup">*</asp:RegularExpressionValidator>
+        </td>
+        <td class="style75" colspan="2">
+            </td>
+        <td class="style76">
         </td>
     </tr>
     <tr>
         <td class="style64" colspan="5">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Button ID="btAddYourAddress" runat="server" onclick="btAddYourCard_Click" 
-            Text="Add Your Address" ValidationGroup="RegisterUserValidationGroup" 
+        <asp:Button ID="btnAddYourAddress" runat="server" onclick="btnAddYourAddress_Click" 
+            Text="Add Your Address" ValidationGroup="AddAddressValidationGroup" 
                     BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
+                    </td>
+    </tr>
+    <tr>
+        <td class="style64" colspan="5">
+        <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
                     </td>
     </tr>
     <tr>
         <td class="style65" colspan="2">
             <br />
-            OR Select a delivery address</td>
+            <asp:Label ID="lblSelectAddress" runat="server" 
+                Text="OR Select a delivery address"></asp:Label>
+        </td>
     </tr>
     <tr>
-        <td class="style64">
-            Delivery Address:</td>
+        <td class="style77">
+            <asp:Label ID="lblDeliveryAddress" runat="server" Text="Delivery Address:"></asp:Label>
+        </td>
         <td class="style57" colspan="2">
-            <asp:DropDownList ID="AddressDropDownList" runat="server" AutoPostBack="True" 
+            <asp:DropDownList ID="AddressDropDownList" runat="server" 
                 onselectedindexchanged="AddressDropDownList_SelectedIndexChanged">
                 <asp:ListItem Value="0">-- Select an Address --</asp:ListItem>
             </asp:DropDownList>
             <asp:RequiredFieldValidator ID="rfvAddressDropDownList" runat="server" 
                 ControlToValidate="AddressDropDownList" Display="Dynamic" 
                 EnableClientScript="False" ErrorMessage="Please select an address." 
-                ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                ForeColor="Red" InitialValue="0" 
+                ValidationGroup="ChooseAddressValidationGroup">*</asp:RequiredFieldValidator>
         </td>
         <td class="style5" colspan="2">
-            <asp:Label ID="Address" runat="server"></asp:Label>
+            &nbsp;</td>
+    </tr>
+    <tr>
+        <td class="style77">
+            &nbsp;</td>
+        <td class="style57" colspan="2">
+            &nbsp;</td>
+        <td class="style5" colspan="2">
+            &nbsp;</td>
+    </tr>
+    <tr>
+        <td class="style64" colspan="5">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <asp:Button ID="btnChooseAddress" runat="server" BackColor="Silver" 
+                BorderColor="Silver" BorderStyle="Solid" onclick="btnChooseAddress_Click" 
+                Text="Choose Your Address" ValidationGroup="ChooseAddressValidationGroup" />
         </td>
     </tr>
     <tr>
-        <td class="style72">
-            </td>
-        <td class="style69">
+        <td class="style64" colspan="5">
+            &nbsp;</td>
+    </tr>
+    <tr>
+        <td class="style77">
+            <asp:Label ID="lblFinalAddress" runat="server" 
+                Text="Now your delivery address is: " Visible="False"></asp:Label>
         </td>
-        <td class="style70" colspan="2">
-            </td>
-        <td class="style71">
+        <td class="style64" colspan="4">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <asp:Label ID="Address" runat="server" Visible="False"></asp:Label>
         </td>
     </tr>
     <tr>
-        <td class="style64">
+        <td class="style77" colspan="5">
+        <asp:Label ID="lblMessage0" runat="server" ForeColor="Red"></asp:Label>
+                    </td>
+    </tr>
+    <tr>
+        <td class="style72" colspan="5">
+            <br />
+            <br />
+            <span class="style67">Specify Delivery Time</span></td>
+    </tr>
+    <tr>
+        <td class="style77">
             Delivery Date:</td>
-        <td class="style51">
+        <td class="style80">
             <asp:DropDownList ID="DeliveryDateDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select a Date --</asp:ListItem>
             </asp:DropDownList>
@@ -277,9 +364,9 @@
                 EnableClientScript="False" ErrorMessage="Please select a delivery date." 
                 ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style56" colspan="2">
+        <td class="style81" colspan="2">
             Delivery Time:</td>
-        <td class="style53">
+        <td class="style79">
             <asp:DropDownList ID="DeliveryTimeDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select a Time Slot --</asp:ListItem>
                 <asp:ListItem Value="9">09:00-12:00</asp:ListItem>
@@ -309,8 +396,18 @@
             ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
             BorderColor="Silver" BorderStyle="Solid" />
     </p>
+    <asp:ValidationSummary ID="ValidationSummary3" runat="server" 
+        EnableClientScript="False" ForeColor="Red" 
+        HeaderText="The following error(s) occurred:" 
+        ValidationGroup="AddAddressValidationGroup" />
     <p>
-        &nbsp;</p>
+    </p>
+    <asp:ValidationSummary ID="ValidationSummary2" runat="server" 
+        EnableClientScript="False" ForeColor="Red" 
+        HeaderText="The following error(s) occurred:" 
+        ValidationGroup="ChooseAddressValidationGroup" />
+    <p>
+    </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
         HeaderText="The following error(s) occurred:" 
