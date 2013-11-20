@@ -39,7 +39,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     {
         userName.Text = User.Identity.Name;
 
-        string SQLCmd = "SELECT SUM([unitPrice]*[quantity])AS [totalPrice] FROM [OrderRecord] WHERE [userName] = '" + User.Identity.Name + "' GROUP BY [userName]";
+        string SQLCmd = "SELECT SUM([unitPrice]*[quantity])AS [totalPrice] FROM [OrderRecord] WHERE [isConfirmed] = 0 AND [userName] = '" + User.Identity.Name + "' GROUP BY [userName]";
         string connectionString = "AsiaWebShopDBConnectionString";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand(SQLCmd, connection))
@@ -78,7 +78,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             }
     }
 
-    private static Random random = new Random((int)DateTime.Now.Ticks);
+    /*private Random random = new Random((int)DateTime.Now.Ticks);
     private string RandomLetter()
     {
         StringBuilder builder = new StringBuilder();
@@ -97,20 +97,132 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
 
         return builder.ToString();
     }
+    */
 
-        
+    public bool codeCheck(string code, string column)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string query = "SELECT COUNT FROM [OrderRecord] WHERE [" + column + "] =" + code + ") AND isConfirmed = 1";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            int count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+            if (count == 0)
+                return true;
+            else
+                return false;
 
+        }
+    }
 
+    public void codeInsert(string code, string column) 
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string query = "UPDATE OrderRecord SET "+ column +"= "+ code + " WHERE isConfirmed = 0 AND userName = "+User.Identity.Name ;
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    public void finalConfirm()
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string query = "UPDATE OrderRecord SET isConfirmed = 1, orderDateTime = CAST('"+ System.Data.SqlDbType.SmallDateTime+"' AS smalldatetime WHERE isConfirmed = 0 AND userName = " + User.Identity.Name;
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
 
     protected void confirm_Click(object sender, EventArgs e)
     {
         if (IsValid)
         {
-            //do
-            //{
-            //    string docNum = RandomLetter();
-            //}
-            //while (true);//count the docNum in DB if > 0, redo
+            string authNum = "";
+            string confirmationNum = "";
+
+            int cardNumber = 0;
+            int purchaseAmount= 0;
+
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string query = "SELECT [creditCardNumber], SUM([unitPrice]*[quantity])AS [totalPrice], FROM [OrderRecord] WHERE [isConfirmed] = 0 AND [username] = " + User.Identity.Name + " GROUP BY [username],[creditCardNumber]";
+
+            // Create the connection and the SQL command.
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                // Open the connection.
+                command.Connection.Open();
+                // Execute the SELECT query and place the result in a DataReader.
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        // Assign the data values to the web form labels.
+                        cardNumber = Convert.ToInt32(reader["creditCardNumber"].ToString().Trim());
+                        purchaseAmount = Convert.ToInt32(reader["totalPrice"].ToString().Trim());
+                    }
+                }
+
+                // Close the connection and the DataReader.
+                command.Connection.Close();
+                reader.Close();
+            }
+
+            do
+            {
+                Random random_ = new Random(cardNumber + purchaseAmount);
+                StringBuilder builder_ = new StringBuilder();
+                char ch_;
+                for (int i = 0; i < 4; i++)
+                {
+                    ch_ = (char)random_.Next('0', '9' + 1);
+                    builder_.Append(ch_);
+                }
+                authNum = builder_.ToString();
+            }
+            while (codeCheck(authNum, "authorizationCode"));
+            codeInsert(authNum, "authorizationCode");
+
+            do
+            {
+                Random random = new Random((int)DateTime.Now.Ticks);
+                StringBuilder builder = new StringBuilder();
+                char ch;
+                for (int i = 0; i < 2; i++)
+                {
+                    ch = (char)random.Next('A', 'Z' + 1);
+                    builder.Append(ch);
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    ch = (char)random.Next('0', '9' + 1);
+                    builder.Append(ch);
+                }
+                confirmationNum = builder.ToString(); 
+            }
+            while (codeCheck(confirmationNum,"confirmationNumber"));//count the docNum in DB if > 0, redo
+            codeInsert(confirmationNum, "confirmationNumber");
+
+            finalConfirm();
         }
 
     }
