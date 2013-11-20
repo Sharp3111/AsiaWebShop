@@ -262,7 +262,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 
     protected void AddAddress(string connectionString, string userName, string buidling, string floor, string flatSuite, string blockTower, string streetAddress, string district, string nickname)
     {
-<<<<<<< HEAD
         // Define the INSERT query with parameters.
         string query = "INSERT INTO [Address]([userName], [building], [floor], [flatSuite], [blockTower], [streetAddress], [district], [nickname])" +
                        "VALUES (@Username, @Building, @Floor, @FlatSuite, @BlockTower, @StreetAddress, @District, @Nickname)";
@@ -276,7 +275,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             command.Parameters.AddWithValue("@Floor", floor);
             command.Parameters.AddWithValue("@FlatSuite", flatSuite);
             command.Parameters.AddWithValue("@BlockTower", blockTower);
-=======
     //    // Define the INSERT query with parameters.
     //    string query = "INSERT INTO [CreditCard]([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear])" +
     //                   "VALUES (@Username, @Number, @Type, @CardHolderName, @ExpiryMonth, @ExpiryYear)";
@@ -290,29 +288,24 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //        command.Parameters.AddWithValue("@Type", type);
     //        command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
     //        command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
->>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
 
     //        //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
     //        //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
 
-<<<<<<< HEAD
             command.Parameters.AddWithValue("@StreetAddress", streetAddress);
             command.Parameters.AddWithValue("@District", district);
             command.Parameters.AddWithValue("@Nickname", nickname);
-=======
     //        command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
->>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
 
     //        // Open the connection, execute the INSERT query and close the connection.
     //        command.Connection.Open();
     //        command.ExecuteNonQuery();
     //        command.Connection.Close();
-    //    }
+        }
     }
 
     protected void updateAddressInOrderRecord(string connectionString, string userName, string nickname)
     {
-<<<<<<< HEAD
         // Define the INSERT query with parameters.
         string query1 = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "' AND [nickname] = N'" + nickname + "')";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -353,7 +346,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             /*command.Parameters.AddWithValue("@Type", type);
             command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
             command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
-=======
     //    // Define the INSERT query with parameters.
     //    string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
     //    // Create the connection and the SQL command.
@@ -367,7 +359,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //        /*command.Parameters.AddWithValue("@Type", type);
     //        command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
     //        command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
->>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
 
     //        //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
     //        //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
@@ -378,12 +369,11 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //        command.Connection.Open();
     //        command.ExecuteNonQuery();
     //        command.Connection.Close();
-    //    }
+        }
     }
 
     protected void btnAddYourAddress_Click(object sender, EventArgs e)
     {
-<<<<<<< HEAD
         Page.Validate("AddAddressValidationGroup");
         if (Page.IsValid)
         {
@@ -505,7 +495,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             Address.Visible = true;
            
         }
-=======
     //    Page.Validate("RegisterUserValidationGroup");
     //    if (Page.IsValid)
     //    {
@@ -534,10 +523,5 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     //        }
     //        Response.Redirect(continueUrl, false);
     //    }
-    }
-    protected void DistrictDropDownList0_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
->>>>>>> daa64cff1a5101c8a78f91bce17f03d290e380cb
     }
 }
