@@ -252,6 +252,11 @@ public partial class ItemManagement : System.Web.UI.Page
     }
     protected void dvItem_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
     {
+        
+    }
+    protected void dvItem_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
+    {
+        Int32 quantity;
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
         {
             // Get the value of the current UPC from the DetailsView control.
@@ -260,30 +265,46 @@ public partial class ItemManagement : System.Web.UI.Page
             // Get the current quantityAvailable
             connection.Open();
             SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = N'" + lblUPC.Text + "')", connection);
-            Int32 quantity = (Int32)command.ExecuteScalar();
+            quantity = (Int32)command.ExecuteScalar();
             connection.Close();
+        }
 
-            // If quantity == 0 and is being updated to a positive number, then send email alert
-            Int32 updatedQuantity = Convert.ToInt32(((TextBox)dvItem.FindControl("EditQuantityAvailable")).Text.Trim());
-            if ((quantity == 0) && (updatedQuantity > 0)) {
-                // Create an instance of MailMessage named mail.
-                MailMessage mail = new MailMessage();
+        // If quantity == 0 and is being updated to a positive number, then send email alert
+        Int32 updatedQuantity = Convert.ToInt32(((TextBox)dvItem.FindControl("EditQuantityAvailable")).Text.Trim());
+            
+        if ((quantity == 0) && (updatedQuantity > 0))
+        {
+            // Create an instance of MailMessage named mail.
+            MailMessage mail = new MailMessage();
 
-                // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
-                SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
+            // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.ust.hk".
+            SmtpClient emailServer = new SmtpClient("smtp.ust.hk");
+            emailServer.UseDefaultCredentials = false;
+            emailServer.Port = 587;
+            emailServer.EnableSsl = true;
+            System.Net.NetworkCredential basicAuthenticationInfo = new System.Net.NetworkCredential("wliab", "vdKv42##");
+            emailServer.Credentials = basicAuthenticationInfo;
+            emailServer.Timeout = 5000;
 
-                // Prepare necessary information
-                string itemName = ((TextBox)dvItem.FindControl("EditName")).Text.Trim();
+            // Prepare necessary information
+            string itemName = ((TextBox)dvItem.FindControl("EditName")).Text.Trim();
 
-                // Set the sender (From), receiver (To), subject and message body fields of the mail message.
-                mail.From = new MailAddress("sharp@cse.ust.hk", "AsiaWebShop");
-                mail.To.Add("wliab@ust.hk");
-                mail.Subject = itemName + " is Available!";
-                mail.Body = "Dear Customer,\nThank you for your interest in  " + itemName + ". New stock for this item is available. Act now!\nAsiaWebShop";
-
-                // Send the message.
-                emailServer.Send(mail);
+            // Set the sender (From), receiver (To), subject and message body fields of the mail message.
+            mail.From = new MailAddress("sharp@cse.ust.hk", "AsiaWebShop");
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+            {
+                // Get the email addresses subscribed to the item
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT [email] FROM [Subscription] WHERE ([name] = N'" + itemName + "')", connection);
+                string subscriber = (string)command.ExecuteScalar();
+                mail.To.Add(subscriber);
+                connection.Close();
             }
+            mail.Subject = itemName + " is Available!";
+            mail.Body = "Dear Customer,\nThank you for your interest in " + itemName + ". New stock for this item is available. Act now!\nAsiaWebShop";
+                    
+            // Send the message.
+            emailServer.Send(mail);
         }
     }
 }

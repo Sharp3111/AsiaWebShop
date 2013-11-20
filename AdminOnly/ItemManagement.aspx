@@ -69,7 +69,8 @@
             GridLines="None"
             OnItemInserted="dvItem_ItemInserted"
             OnItemUpdated="dvItem_ItemUpdated"
-            OnItemDeleted="dvItem_ItemDeleted" style="text-align: left">
+            OnItemDeleted="dvItem_ItemDeleted" style="text-align: left" 
+            onitemupdating="dvItem_ItemUpdating">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
