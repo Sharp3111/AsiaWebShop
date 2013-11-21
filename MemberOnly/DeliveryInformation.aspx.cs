@@ -17,7 +17,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
         if (!Page.IsPostBack)
         {
             // Populate the DistrictDropDownList.
-            DistrictDropDownList.Items.Add("-- Select district --");
+            // DistrictDropDownList.Items.Add("-- Select district --");
             DistrictDropDownList.Items.Add("Central and Western");
             DistrictDropDownList.Items.Add("Eastern");
             DistrictDropDownList.Items.Add("Islands");
@@ -297,43 +297,47 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             command.Parameters.AddWithValue("@Nickname", nickname);
     //        command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
 
-    //        // Open the connection, execute the INSERT query and close the connection.
-    //        command.Connection.Open();
-    //        command.ExecuteNonQuery();
-    //        command.Connection.Close();
+            //Open the connection, execute the INSERT query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();                                  
+            command.Connection.Close();
         }
+
+
+        Address.Text = buidling.Trim() + " " + floor.Trim() + " " + flatSuite.Trim() + " " + blockTower.Trim() + ", " + streetAddress.Trim() + ", " + district.Trim();
+        Address.Visible = true;
     }
 
-    protected void updateAddressInOrderRecord(string connectionString, string userName, string nickname)
+    protected void updateAddressInOrderRecord(string connectionString, string userName)
     {
-        // Define the INSERT query with parameters.
-        string query1 = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "' AND [nickname] = N'" + nickname + "')";
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query1, connection))
-        {
-            // Open the connection.
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            SqlDataReader reader = command.ExecuteReader();
-            // Check if a result was returned.
-            if (reader.HasRows)
-            {
-                // Iterate through the table to get the retrieved values.
-                while (reader.Read())
-                {
-                    // Assign the data values to the web form label.
-                    string addressItem = reader["building"].ToString().Trim() + " " +
-                                        reader["floor"].ToString().Trim() + " " +
-                                        reader["flatSuite"].ToString().Trim() + " " +
-                                        reader["blockTower"].ToString().Trim() + ", " +
-                                        reader["streetAddress"].ToString().Trim() + ", " +
-                                        reader["district"].ToString().Trim();
-                    Address.Text = addressItem;
-                }
-            }
-            command.Connection.Close();
-            reader.Close();
-        }
+        //// Define the INSERT query with parameters.
+        //string query1 = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "' AND [nickname] = N'" + nickname + "')";
+        //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //using (SqlCommand command = new SqlCommand(query1, connection))
+        //{
+        //    // Open the connection.
+        //    command.Connection.Open();
+        //    // Execute the SELECT query and place the result in a DataReader.
+        //    SqlDataReader reader = command.ExecuteReader();
+        //    // Check if a result was returned.                 
+        //    if (reader.HasRows)
+        //    {
+        //        // Iterate through the table to get the retrieved values.
+        //        while (reader.Read())
+        //        {
+        //            // Assign the data values to the web form label.
+        //            string addressItem = reader["building"].ToString().Trim() + " " +
+        //                                reader["floor"].ToString().Trim() + " " +
+        //                                reader["flatSuite"].ToString().Trim() + " " +
+        //                                reader["blockTower"].ToString().Trim() + ", " +
+        //                                reader["streetAddress"].ToString().Trim() + ", " +
+        //                                reader["district"].ToString().Trim();
+        //            Address.Text = addressItem;
+        //        }
+        //    }
+        //    command.Connection.Close();
+        //    reader.Close();
+        //}
         string query2 = "UPDATE [OrderRecord] SET [address] = @Address WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -365,10 +369,10 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 
     //        //command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
 
-    //        // Open the connection, execute the INSERT query and close the connection.
-    //        command.Connection.Open();
-    //        command.ExecuteNonQuery();
-    //        command.Connection.Close();
+            // Open the connection, execute the INSERT query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
         }
     }
 
@@ -393,8 +397,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 
             // After the information is added, add the credit card data in the order record database.
             updateAddressInOrderRecord(connectionString,
-               userName.Trim(),
-               Nickname.Text.Trim());
+               userName.Trim());
 
             //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
 
@@ -453,9 +456,13 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
 
+            updateAddressInOrderRecord(connectionString,
+            userName.Trim());
+
             lblMessage0.Visible = true;
             lblMessage0.ForeColor = System.Drawing.Color.Red;
             lblMessage0.Text = "You successfully chose this delivery address. Next please specify delivery time.";
+
 
             //lblAddAddress.Visible = false;
             //lblEnterAddrInfo.Visible = false;
