@@ -304,7 +304,7 @@
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Credit Card Default" 
-                    SortExpression="creditCardDefault" Visible="False">
+                    SortExpression="creditCardDefault">
                     <EditItemTemplate>
                         <asp:CheckBox ID="EditCreditCardDefault" runat="server" 
                             Checked='<%# Bind("creditCardDefault") %>' 

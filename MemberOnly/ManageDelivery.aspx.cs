@@ -284,7 +284,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
     }
     protected void dvDelivery_ItemInserting(object sender, DetailsViewInsertEventArgs e)
     {
-        Response.Write("<script>alert('" + "Enter" + "')</script>");
+        //Response.Write("<script>alert('" + "Enter" + "')</script>");
         Page.Validate();
 
         if (Page.IsValid)
@@ -302,7 +302,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                 command.Connection.Close();
             }
 
-            Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
+            //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
 
             if (count < 1)
             {
@@ -354,7 +354,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         command.Connection.Close();
                     }
 
-                    Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
+                    //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
 
                     //Set the edited card to be default
                     string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
@@ -366,7 +366,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         command.ExecuteNonQuery();
                         command.Connection.Close();
                     }
-                    Response.Write("<script>alert('" + currentnickname + "')</script>");
+                    //Response.Write("<script>alert('" + currentnickname + "')</script>");
                     //Set the initial default to be nondefault
                     string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + initialDefaultAddress + "')";
                     using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -377,7 +377,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         command.ExecuteNonQuery();
                         command.Connection.Close();
                     }
-                    Response.Write("<script>alert('" + initialDefaultAddress + "')</script>");
+                    //Response.Write("<script>alert('" + initialDefaultAddress + "')</script>");
                     gvDelivery.DataBind();
 
                     lblMessage.ForeColor = System.Drawing.Color.Green;

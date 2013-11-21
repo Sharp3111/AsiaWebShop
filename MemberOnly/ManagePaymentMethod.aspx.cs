@@ -987,7 +987,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         command.Connection.Close();
                     }
 
-                    Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
+                    //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
 
                     //Set the edited card to be default
                     string queryUpdate1 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + currentCardNumber + "')";
@@ -1010,7 +1010,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
                         command.Connection.Close();
                     }
 
-                    Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
+                    //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
 
                     //Set the initial default to be nondefault
                     string queryUpdate2 = "UPDATE [CreditCard] SET [creditCardDefault] = @creditCardDefault WHERE ([userName] = N'" + userName + "' AND [number] = '" + initialDefaultNumber + "')";
