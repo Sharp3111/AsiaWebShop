@@ -46,42 +46,7 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
         gvDelivery.DataBind();
     }
     protected void dvDelivery_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
-    {
-        //string connectionString = "AsiaWebShopDBConnectionString";
-        //string userName = User.Identity.Name;
-
-        //Int32 count = 0;
-        ////check if only
-        //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        //using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "')", connection))
-        //{
-        //    command.Connection.Open();
-        //    count = (Int32)command.ExecuteScalar();
-        //    command.Connection.Close();
-        //}
-
-        //if (count <= 1)
-        //{
-           
-        //    //string currentNickname = ((Label)gridViewRow.FindControl("nickname")).Text.Trim();
-        //    string currentNickname = ((TextBox)dvDelivery.FindControl("nickname")).Text.Trim();
-        //    string queryUpdate = "UPDATE [Address] SET isDefault = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentNickname + "')";
-
-        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        //    using (SqlCommand command = new SqlCommand(queryUpdate, connection))
-        //    {
-        //        command.Parameters.AddWithValue("@IsDefault", true);
-        //        command.Connection.Open();
-        //        command.ExecuteNonQuery();
-        //        command.Connection.Close();
-        //    }
-        //        ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked = true;
-        //        ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Enabled = false;
-        //        lblMessage.ForeColor = System.Drawing.Color.Red;
-        //        lblMessage.Text = "This is your only address in your delivery address list. You have to have this address as the default delivery address.";
-        //        lblMessage.Visible = true;
-            
-        //}
+    {      
         gvDelivery.DataBind();
     }
     protected void RemoveButton_Click(object sender, EventArgs e)
