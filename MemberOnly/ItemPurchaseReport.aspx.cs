@@ -9,6 +9,10 @@ public partial class MemberOnly_ItemPurchaseReport : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        UserName.Text = User.Identity.Name;
+    }
+    protected void GenerateReportButton_Click(object sender, EventArgs e)
+    {
 
     }
 }

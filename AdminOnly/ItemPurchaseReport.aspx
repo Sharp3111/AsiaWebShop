@@ -215,6 +215,6 @@
     <br />
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
-        HeaderText="Following error occurred:" ValidationGroup="itemReport" />
+        HeaderText="Following error occurr:" ValidationGroup="itemReport" />
 </asp:Content>
 
