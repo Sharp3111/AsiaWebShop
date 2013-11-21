@@ -39,7 +39,6 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         userName.Text = User.Identity.Name;
-
         string SQLCmd = "SELECT SUM([unitPrice]*[quantity])AS [totalPrice] FROM [OrderRecord] WHERE [isConfirmed] = 0 AND [userName] = '" + User.Identity.Name + "' GROUP BY [userName]";
         string connectionString = "AsiaWebShopDBConnectionString";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -166,11 +165,10 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
         if (IsValid)
         {
             string authNum = "";
-            char[] confirmationNum = {'A','A','0','0','0','0','0','0'};
+            char[] confirmationNum = new char[] {'A','A','0','0','0','0','0','0'};
 
-            Int32 cardNumberHead = 0;            
+            /*Int32 cardNumberHead = 0;            
             Int32 cardNumberTail = 0;
-
             
             string query = "SELECT [creditCardNumber] FROM [OrderRecord] WHERE [isConfirmed] = 0 AND [username] = N'" + User.Identity.Name + "' GROUP BY [username], [creditCardNumber]";
 
@@ -198,10 +196,11 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 command.Connection.Close();
                 reader.Close();
             }
+            */
 
             do
             {
-                Random random = new Random(cardNumberHead + cardNumberTail);
+                Random random = new Random((unchecked((int)DateTime.Now.Ticks)));
                 StringBuilder builder = new StringBuilder();
                 char ch;
                 for (int i = 0; i < 4; i++)
@@ -218,9 +217,11 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             {
                 confirmationNum[7] ++;
                 for ( int i = 0; i < 6; i++) {
-                    if (confirmationNum[7-i] == '9'+1)
-                        confirmationNum[7-i] = '0';
-                        confirmationNum[6-i] ++;
+                    if (confirmationNum[7 - i] == '9' + 1)
+                    {
+                        confirmationNum[7 - i] = '0';
+                        confirmationNum[6 - i]++;
+                    }
                     if (i == 5) {
                         if(confirmationNum[1] == 'Z'+1) {
                             confirmationNum[1] = 'A';
@@ -234,7 +235,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             }
             while (!codeCheck(new string(confirmationNum),"confirmationNumber"));//count the docNum in DB if > 0, redo
             codeInsert(new string(confirmationNum), "confirmationNumber");
-
+            //finalConfirmCode.Text = new string(confirmationNum);
             // Create an instance of MailMessage named mail.
             MailMessage mail = new MailMessage();
 

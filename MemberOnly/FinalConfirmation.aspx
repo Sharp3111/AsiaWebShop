@@ -179,6 +179,8 @@
         </table>
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
+        &nbsp;</p>
+    <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         <asp:SqlDataSource ID="AsiaWebDataSource" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
