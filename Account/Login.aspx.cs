@@ -25,4 +25,10 @@ public partial class Account_Login : System.Web.UI.Page
             }
         }      
     }
+    protected void LoginUser_LoggedIn(object sender, EventArgs e)
+    {
+        Session["Username"] = LoginUser.UserName;
+        System.Diagnostics.Debug.Write("Login Username:");
+        System.Diagnostics.Debug.WriteLine(Session["Username"].ToString());
+    }
 }

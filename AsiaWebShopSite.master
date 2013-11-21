@@ -1,26 +1,13 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="AsiaWebShopSite.master.cs" Inherits="SiteMaster" %>
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head runat="server">
-<script type="text/javascript" language="javascript">
-
-    function DisableBackButton() {
-
-        window.history.forward()
-
-    }
-
-    DisableBackButton();
-
-    window.onload = DisableBackButton;
-
-    window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
-
-    window.onunload = function () { void (0) }
-
-</script>
     <title></title>
+
+
+
     <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
     </asp:ContentPlaceHolder>
@@ -35,9 +22,56 @@
             font-family: "Segoe UI";
         }
     </style>
+
 </head>
-<body>
+    <script language="javascript" type="text/javascript">
+//<![CDATA[
+
+        var clicked = false;
+        function CheckBrowser() {
+            if (clicked == false) {
+                //Browser closed   
+            } else {
+                //redirected
+                clicked = false;
+            }
+        }
+        function bodyUnload() {
+            if (clicked == false)//browser is closed  
+            {
+                var request = GetRequest();
+                request.open("GET", "LogOut.aspx", true);
+                request.send();
+            }
+        }
+
+        function GetRequest() {
+            var xmlHttp = null;
+            try {
+                // Firefox, Opera 8.0+, Safari
+                xmlHttp = new XMLHttpRequest();
+            }
+            catch (e) {
+                //Internet Explorer
+                try {
+                    xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+                }
+                catch (e) {
+                    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+            }
+            return xmlHttp;
+
+        } 
+ 
+
+//]]> 
+
+</script>
+<body onunload="bodyUnload();" onclick="clicked=true;">
     <form runat="server">
+       
+
     <div class="page">
         <div class="header">
             <div class="title">
@@ -53,9 +87,10 @@
                     <LoggedInTemplate>
                         Welcome <span class="bold"><asp:LoginName ID="HeadLoginName" runat="server" /></span>!
                         [ <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" 
-                            LogoutText="Log Out" LogoutPageUrl="~/Default.aspx"/> ]
+                            LogoutText="Log Out" LogoutPageUrl="~/Default.aspx" OnLoggingOut="LoginStatus_LoggingOut" /> ]
                     </LoggedInTemplate>
                 </asp:LoginView>
+
             </div>
             <div class="clear hideSkiplink">
                 <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">
@@ -76,6 +111,7 @@
     </div>
     <div class="style1">
         &copy; <%: DateTime.Now.Year %>- Sharp</div>
+
     </form>
 </body>
 </html>

@@ -36,7 +36,7 @@
         BackColor="#F7F7DE" BorderColor="#CCCC99" BorderStyle="Solid" BorderWidth="1px" 
         Font-Names="Verdana" Font-Size="10pt" Width="436px" 
         style="font-size: medium; font-family: 'Maiandra GD'" 
-        onloggingin="LoginUser_LoggingIn">
+        onloggingin="LoginUser_LoggingIn" onloggedin="LoginUser_LoggedIn">
         <LayoutTemplate>
             <span class="failureNotification">
                 <asp:Literal ID="FailureText" runat="server"></asp:Literal>

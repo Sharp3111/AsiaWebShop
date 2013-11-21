@@ -31,7 +31,7 @@
     void Session_Start(object sender, EventArgs e) 
     {
         // Code that runs when a new session is started
-
+        Session["Username"] = User.Identity.Name; 
     }
 
     void Session_End(object sender, EventArgs e) 
@@ -40,7 +40,26 @@
         // Note: The Session_End event is raised only when the sessionstate mode
         // is set to InProc in the Web.config file. If session mode is set to StateServer 
         // or SQLServer, the event is not raised.
+        System.Diagnostics.Debug.Write("Username:");
+        System.Diagnostics.Debug.WriteLine(Session["Username"].ToString());
+        
+        string username = Session["Username"].ToString();
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string query = "UPDATE [Sho] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + upc + "')";
+        
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        {
+            SqlCommand command = new SqlCommand(query, connection);
+            {
+                //Define the UPDATE query parameters with corresponding values
+                command.Parameters.AddWithValue("@QuantityAvailable", currentQuantityAvailable.ToString());
 
+                // Open the connection, execute the INSERT query and close the connection.
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+        }
     }
 
     void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
