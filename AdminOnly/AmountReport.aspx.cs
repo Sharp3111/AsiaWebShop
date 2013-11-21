@@ -42,7 +42,6 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
         dayFrom.Items.Clear();
         //getting numbner of days in selected month & year
         int noofdays = DateTime.DaysInMonth(Convert.ToInt32(yearFrom.SelectedValue), Convert.ToInt32(monthFrom.SelectedValue));
-        //Response.Write("<script>alert('"+Convert.ToInt32(yearFrom.SelectedValue)+Convert.ToInt32(monthFrom.SelectedValue)+noofdays+"')</script>");
         //Fill days
         for (int i = 1; i <= noofdays; i++)
         {
@@ -56,7 +55,6 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
         dayTo.Items.Clear();
         //getting numbner of days in selected month & year
         int noofdays = DateTime.DaysInMonth(Convert.ToInt32(yearTo.SelectedValue), Convert.ToInt32(monthTo.SelectedValue));
-        //Response.Write("<script>alert('"+Convert.ToInt32(yearFrom.SelectedValue)+Convert.ToInt32(monthFrom.SelectedValue)+noofdays+"')</script>");
         //Fill days
         for (int i = 1; i <= noofdays; i++)
         {
@@ -127,7 +125,6 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
             if (userName.Text.Trim() != "")
                 SQLCmd3 = "AND [Member].[userName] = '" + userName.Text.Trim() + "' ";
 
- //           if (userName.Text.Trim() == "") {
                 if (groupDistrict.Checked) {
                     SQLCmd = "SELECT [Member].[userName], [Member].[firstName], [Member].[lastName],[OrderRecord].[orderDateTime], SUM (OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
                              "FROM [OrderRecord] " +
@@ -154,34 +151,6 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                                  "ORDER BY ";// [Expr1]";
                  }
 
- /*           }
-            else if (userName.Text.Trim() != "") {
-                if (groupDistrict.Checked)
-                { 
-                        SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
-                                 "FROM [OrderRecord] " +
-                                 "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
-                                 "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
-                                 //"WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00' " +
-                                 //"AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59' " +
-                                 //3"AND [Member].[userName] = '"+ userName.Text.Trim() +"' "+
-                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district]" +
-                                 "ORDER BY [Address].[district], ";
-                                 //"ORDER BY [Member].[lastName]";
-                }
-                else {
-                        SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
-                                 "FROM [OrderRecord] " +
-                                 "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName]" +
-                                 "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
-                                 //"WHERE [OrderRecord].[orderDateTime]>='" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
-                                 //"AND [OrderRecord].[orderDateTime]<='" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
-                                 //3"AND [Member].[userName] = '" + userName.Text.Trim() + "' " +                               
-                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName]"+
-                                 "ORDER BY ";// [Expr1]";
-                }
-            }
-  */
             if(SQLCmd != "") {
                 if (orderBy.SelectedValue == "name")
                     SQLCmd = SQLCmd + "[Member].[lastName]";

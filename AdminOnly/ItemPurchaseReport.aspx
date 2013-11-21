@@ -195,8 +195,38 @@
         ForeColor="Red"></asp:Label>
     <br />
     <asp:GridView ID="report" runat="server" CellPadding="4" ForeColor="#333333" 
-        GridLines="None">
+        GridLines="None" AutoGenerateColumns="False" DataKeyNames="userName" 
+        DataSourceID="SqlDataSource1">
         <AlternatingRowStyle BackColor="White" />
+        <Columns>
+            <asp:BoundField DataField="userName" HeaderText="User" ReadOnly="True" 
+                SortExpression="userName" />
+            <asp:BoundField DataField="category" HeaderText="Category" 
+                SortExpression="category" />
+            <asp:BoundField DataField="name" HeaderText="Item Name" SortExpression="name" />
+            <asp:BoundField DataField="totalQuantity" HeaderText="Total Quantity" 
+                ReadOnly="True" SortExpression="totalQuantity" />
+            <asp:BoundField DataField="unitPrice" HeaderText="Unit Price" 
+                SortExpression="unitPrice" />
+            <asp:BoundField DataField="totalPrice" HeaderText="Total Price" ReadOnly="True" 
+                SortExpression="totalPrice" />
+            <asp:BoundField DataField="saving" HeaderText="Amount Saving" ReadOnly="True" 
+                SortExpression="saving" />
+            <asp:BoundField DataField="customerName" HeaderText="Name" ReadOnly="True" 
+                SortExpression="customerName" />
+            <asp:BoundField DataField="email" HeaderText="Email" SortExpression="email" />
+            <asp:BoundField DataField="phoneNumber" HeaderText="Phone Number" 
+                SortExpression="phoneNumber" />
+            <asp:BoundField DataField="address" HeaderText="Address" 
+                SortExpression="address" />
+            <asp:BoundField DataField="cardnumber" HeaderText="Card Number" ReadOnly="True" 
+                SortExpression="cardnumber" />
+            <asp:BoundField DataField="type" HeaderText="Type" SortExpression="type" />
+            <asp:BoundField DataField="authorizationCode" HeaderText="Authorization Code" 
+                SortExpression="authorizationCode" />
+            <asp:BoundField DataField="orderDateTime" HeaderText="Order Time" 
+                SortExpression="orderDateTime" />
+        </Columns>
         <EditRowStyle BackColor="#2461BF" />
         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -211,10 +241,11 @@
     <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT * FROM [Address]"></asp:SqlDataSource>
+        
+        SelectCommand="SELECT Item.name, Item.category, SUM(OrderRecord.quantity) AS totalQuantity, OrderRecord.unitPrice, SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS totalPrice, SUM(OrderRecord.quantity * (Item.normalPrice - OrderRecord.unitPrice)) AS saving, Member.firstName + ' ' + Member.lastName AS customerName, OrderRecord.email, OrderRecord.phoneNumber, OrderRecord.address, '**** **** **** ' + RIGHT (CreditCard.number, 4) AS cardnumber, CreditCard.type, OrderRecord.authorizationCode, OrderRecord.orderDateTime, Member.userName FROM OrderRecord INNER JOIN Member ON OrderRecord.userName = Member.userName INNER JOIN Item ON OrderRecord.upc = Item.upc INNER JOIN CreditCard ON OrderRecord.creditCardNumber = CreditCard.number GROUP BY Item.name, Item.category, OrderRecord.unitPrice, Member.firstName, Member.lastName, OrderRecord.email, OrderRecord.phoneNumber, OrderRecord.address, CreditCard.number, CreditCard.type, OrderRecord.authorizationCode, OrderRecord.orderDateTime, Member.userName"></asp:SqlDataSource>
     <br />
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
-        HeaderText="Following error occurr:" ValidationGroup="itemReport" />
+        HeaderText="Following error occurred:" ValidationGroup="itemReport" />
 </asp:Content>
 

@@ -117,26 +117,45 @@ public partial class AdminOnly_ItemPurchaseReport : System.Web.UI.Page
         if (IsValid)
         {
             if (date.SelectedValue == "certain")
-                SQLCmd2 = "WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                SQLCmd2 = "AND [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
                              "AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'";
             if (userName.Text.Trim() != "")
                 SQLCmd3 = "AND [Member].[userName] = '" + userName.Text.Trim() + "' ";
 
 
-            SQLCmd = "SELECT [Item].[name], [Item].[category], [OrderRecord].[quantity], [OrderRecord].[unitPrice], SUM ([OrderRecord].[quantity] * [OrderRecord].[unitPrice]) AS totalPrice" +
-                            "[Member].[firstName], [Member].[lastName],[Member].[email], [Member].[phoneNumber]," +
-                            "[OrderRecord].[Address], " +
-                            "RIGHT([CreditCard].[number],4), + [CreditCard].[type]" +
-                            "[OrderRecord].[authorizationCode]" +
+            SQLCmd = "SELECT [Item].[name], [Item].[category], SUM(OrderRecord.quantity) AS totalQuantity, [OrderRecord].[unitPrice], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS totalPrice, SUM(OrderRecord.quantity * (Item.normalPrice - OrderRecord.unitPrice)) AS saving," +
+                            "[Member].[firstName] + ' ' + [Member].[lastName] AS customerName," +
+                            "[OrderRecord].[email], [OrderRecord].[phoneNumber], [OrderRecord].[address]," +
+                            "'**** **** **** ' + RIGHT([CreditCard].[number],4) AS cardnumber, + [CreditCard].[type]," +
+                            "[OrderRecord].[authorizationCode], [OrderRecord].[orderDateTime], [Member].[userName]" +
                      "FROM [OrderRecord] " +
                      "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
-                     "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
                      "JOIN [Item] ON [OrderRecord].[upc] = [Item].[upc]" +
                      "JOIN [CreditCard] ON [OrderRecord].[creditCardNumber] = [CreditCard].[number]" +
+                     "WHERE [OrderRecord].[isConfirmed] = 'True'" +
                      SQLCmd2 +
                      SQLCmd3 +
-                     "GROUP BY  " +
-                     "ORDER BY  ";
+                     "GROUP BY [Item].[name], [Item].[category], [Member].[userName]," +
+                     "[Member].[firstName], [Member].[lastName],[CreditCard].[number], [CreditCard].[type]," +
+                     "[OrderRecord].[unitPrice],[OrderRecord].[email],[OrderRecord].[phoneNumber],[OrderRecord].[address],[OrderRecord].[authorizationCode],[OrderRecord].[orderDateTime]" +
+                     "ORDER BY [Item].[category], [Item].[name]";
+            SqlDataSource1.SelectCommand = SQLCmd;
+            SqlDataSource1.Select(DataSourceSelectArguments.Empty);
+
+            // Bind the search result to the GridView control.
+            report.DataBind();
+            report.Visible = true;
+            // Display a no result message if nothing was retrieved from the database.
+            if (report.Rows.Count == 0)
+            {
+                result.Text = "No records match your query." + result.Text;
+                result.Visible = true;
+            }
+            else
+            {
+                result.Text = "The following records match your query." + result.Text;
+                result.Visible = true;
+            }
         }
     }
 }

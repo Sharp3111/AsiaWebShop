@@ -4,145 +4,229 @@
     <style type="text/css">
         .style2
         {
-            width: 73%;
+            width: 96%;
         }
         .style3
         {
-            width: 131px;
+            width: 149px;
         }
         .style4
         {
-            width: 107px;
+            width: 99px;
         }
         .style5
         {
-            height: 26px;
+            width: 85px;
         }
         .style6
         {
-            width: 131px;
-            height: 26px;
+            width: 123px;
         }
         .style7
         {
-            width: 107px;
-            height: 26px;
+            width: 31px;
         }
         .style8
         {
-            width: 87px;
-            height: 26px;
-            font-family: "Segoe UI";
-            color: #000080;
+            width: 29px;
         }
         .style9
         {
-            width: 87px;
-            font-family: "Segoe UI";
-            color: #000080;
+            width: 63px;
         }
         .style10
         {
-            width: 76px;
-            height: 26px;
+            width: 19px;
         }
         .style11
         {
-            width: 76px;
         }
         .style12
         {
-            width: 94px;
-            height: 26px;
+            width: 9px;
         }
         .style13
         {
-            width: 94px;
+            width: 14px;
         }
         .style14
         {
-            color: #000080;
-        }
-        .style15
-        {
-            font-family: "Segoe UI";
-            color: #000080;
-        }
-        .style16
-        {
-            height: 26px;
-            font-family: "Segoe UI";
-            color: #000080;
+            width: 44px;
         }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p style="font-family: Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; text-decoration: underline; color: #000080">
         Item Purchase Report</p>
-    <p class="style14">
-        Dear
-        <asp:HyperLink ID="UserName" runat="server">[UserName]</asp:HyperLink>
-        , please specify the date range over which you want to generate a report: (Note 
-        that if no date range is specified, then it is assumed that all dates are to be 
-        included)</p>
     <table class="style2">
         <tr>
-            <td class="style12">
-                <span class="style15">From</td>
-            <td class="style10">
-                Year</span></td>
-            <td class="style6">
-                <asp:DropDownList ID="yearFromDropDownList" runat="server">
-                </asp:DropDownList>
+            <td class="style3">
+                Item purchased by user:</td>
+            <td class="style4">
+                <asp:Label ID="userName" runat="server"></asp:Label>
             </td>
-            <td class="style8">
-                Month</td>
-            <td class="style7">
-                <asp:DropDownList ID="monthFromDropDownList" runat="server">
-                </asp:DropDownList>
-            </td>
-            <td class="style16">
-                Day</td>
             <td class="style5">
-                <asp:DropDownList ID="dayFromDropDownList" runat="server">
+                (empty for all)</td>
+            <td rowspan="3" class="style6">
+                <asp:RadioButtonList ID="date" runat="server" Width="115px" 
+                    ValidationGroup="itemReport" Height="70px" RepeatLayout="Flow">
+                    <asp:ListItem Value="certain">in certain date: <br></br></asp:ListItem>
+                    <asp:ListItem Value="any">at any time</asp:ListItem>
+                </asp:RadioButtonList>
+            </td>
+            <td class="style7">
+                from</td>
+            <td class="style8">
+                Year:</td>
+            <td class="style9">
+                <asp:DropDownList ID="yearFrom" runat="server" AutoPostBack="True" 
+                    ValidationGroup="itemReport" 
+                    onselectedindexchanged="yearFrom_SelectedIndexChanged">
                 </asp:DropDownList>
+            </td>
+            <td class="style10">
+                Month:</td>
+            <td class="style11">
+                <asp:DropDownList ID="monthFrom" runat="server" AutoPostBack="True" 
+                    ValidationGroup="itemReport" 
+                    onselectedindexchanged="monthFrom_SelectedIndexChanged">
+                </asp:DropDownList>
+            </td>
+            <td class="style12">
+                Day:</td>
+            <td class="style13">
+                <asp:DropDownList ID="dayFrom" runat="server" AutoPostBack="True" ValidationGroup="itemReport">
+                </asp:DropDownList>
+            </td>
+            <td class="style14">
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style3">
+                &nbsp;</td>
+            <td class="style4">
+                &nbsp;</td>
+            <td class="style5">
+                &nbsp;</td>
+            <td class="style7">
+                to</td>
+            <td class="style8">
+                Year</td>
+            <td class="style9">
+                <asp:DropDownList ID="yearTo" runat="server" AutoPostBack="True" 
+                    ValidationGroup="itemReport" 
+                    onselectedindexchanged="yearTo_SelectedIndexChanged">
+                </asp:DropDownList>
+            </td>
+            <td class="style10">
+                Month:</td>
+            <td class="style11">
+                <asp:DropDownList ID="monthTo" runat="server" AutoPostBack="True" 
+                    ValidationGroup="itemReport" 
+                    onselectedindexchanged="monthTo_SelectedIndexChanged">
+                </asp:DropDownList>
+            </td>
+            <td class="style12">
+                Day:</td>
+            <td class="style13">
+                <asp:DropDownList ID="dayTo" runat="server" AutoPostBack="True" ValidationGroup="itemReport">
+                </asp:DropDownList>
+            </td>
+            <td class="style14">
+                <asp:CustomValidator ID="CustomValidator2" runat="server" Display="Dynamic" 
+                    EnableClientScript="False" ErrorMessage="Invalid date range." ForeColor="Red" 
+                    ValidationGroup="itemReport" 
+                    onservervalidate="CustomValidator2_ServerValidate">*</asp:CustomValidator>
             </td>
         </tr>
         <tr>
-            <td class="style13">
-                <span class="style15">To</td>
-            <td class="style11">
-                Year</span></td>
             <td class="style3">
-                <asp:DropDownList ID="yearToDropDownList" runat="server">
-                </asp:DropDownList>
-            </td>
-            <td class="style9">
-                Month</td>
+                &nbsp;</td>
             <td class="style4">
-                <asp:DropDownList ID="monthToDropDownList" runat="server">
-                </asp:DropDownList>
+                &nbsp;</td>
+            <td class="style5">
+                &nbsp;</td>
+            <td class="style7">
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                    ControlToValidate="date" Display="Dynamic" EnableClientScript="False" 
+                    ErrorMessage="You need to select a time range." ForeColor="Red" 
+                    ValidationGroup="itemReport">*</asp:RequiredFieldValidator>
             </td>
-            <td class="style15">
-                Day</td>
-            <td>
-                <asp:DropDownList ID="dayToDropDownList" runat="server">
-                </asp:DropDownList>
-            </td>
+            <td class="style8">
+                &nbsp;</td>
+            <td class="style9">
+                &nbsp;</td>
+            <td class="style10">
+                &nbsp;</td>
+            <td class="style11" colspan="2">
+                &nbsp;</td>
+            <td class="style13">
+                &nbsp;</td>
+            <td class="style14">
+                &nbsp;</td>
         </tr>
-    </table>
-    <p>
-        <asp:Button ID="GenerateReportButton" runat="server" BackColor="Silver" 
-            BorderColor="Silver" BorderStyle="Solid" Height="22px" 
-            onclick="GenerateReportButton_Click" Text="Generate Report" Width="150px" />
-    </p>
-    <p>
-    <asp:Label ID="lblResult" runat="server" Font-Bold="True" Font-Size="Medium" 
+        <tr>
+            <td class="style3">
+                &nbsp;</td>
+            <td class="style4">
+                &nbsp;</td>
+            <td class="style5">
+                &nbsp;</td>
+            <td class="style6">
+                &nbsp;</td>
+            <td class="style7">
+                &nbsp;</td>
+            <td class="style8">
+                &nbsp;</td>
+            <td class="style9">
+                &nbsp;</td>
+            <td class="style10">
+                &nbsp;</td>
+            <td class="style11" colspan="3">
+                <asp:Button ID="Button1" runat="server" Text="General Report" 
+                    ValidationGroup="itemReport" Width="117px" onclick="Button1_Click" />
+            </td>
+            <td class="style14">
+                &nbsp;</td>
+        </tr>
+        </table>
+    <br />
+    <asp:Label ID="result" runat="server" Font-Bold="True" Font-Size="Medium" 
         ForeColor="Red"></asp:Label>
-    </p>
-    <asp:GridView ID="gvReport" runat="server" CellPadding="4" ForeColor="#333333" 
-        GridLines="None" Width="365px">
+    <br />
+    <asp:GridView ID="report" runat="server" CellPadding="4" ForeColor="#333333" 
+        GridLines="None" AutoGenerateColumns="False" DataKeyNames="userName" 
+        DataSourceID="SqlDataSource1">
         <AlternatingRowStyle BackColor="White" />
+        <Columns>
+            <asp:BoundField DataField="userName" HeaderText="User" ReadOnly="True" 
+                SortExpression="userName" />
+            <asp:BoundField DataField="category" HeaderText="Category" 
+                SortExpression="category" />
+            <asp:BoundField DataField="name" HeaderText="Item Name" SortExpression="name" />
+            <asp:BoundField DataField="unitPrice" HeaderText="Unit Price" 
+                SortExpression="unitPrice" />
+            <asp:BoundField DataField="totalQuantity" HeaderText="Total Quantity" 
+                ReadOnly="True" SortExpression="totalQuantity" />
+            <asp:BoundField DataField="totalPrice" HeaderText="Total Price" ReadOnly="True" 
+                SortExpression="totalPrice" />
+            <asp:BoundField DataField="saving" HeaderText="Amount Saving" ReadOnly="True" 
+                SortExpression="saving" />
+            <asp:BoundField DataField="customerName" HeaderText="Name" ReadOnly="True" 
+                SortExpression="customerName" />
+            <asp:BoundField DataField="email" HeaderText="Email" SortExpression="email" />
+            <asp:BoundField DataField="phoneNumber" HeaderText="Phone Number" 
+                SortExpression="phoneNumber" />
+            <asp:BoundField DataField="address" HeaderText="Address" 
+                SortExpression="address" />
+            <asp:BoundField DataField="cardnumber" HeaderText="Card Number" ReadOnly="True" 
+                SortExpression="cardnumber" />
+            <asp:BoundField DataField="type" HeaderText="Type" SortExpression="type" />
+            <asp:BoundField DataField="authorizationCode" HeaderText="Authorization Code" 
+                SortExpression="authorizationCode" />
+            <asp:BoundField DataField="orderDateTime" HeaderText="Order Time" 
+                SortExpression="orderDateTime" />
+        </Columns>
         <EditRowStyle BackColor="#2461BF" />
         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -154,15 +238,14 @@
         <SortedDescendingCellStyle BackColor="#E9EBEF" />
         <SortedDescendingHeaderStyle BackColor="#4870BE" />
     </asp:GridView>
-    <asp:SqlDataSource ID="SqlDataSource" runat="server" 
+    <br />
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT * FROM [Address]"></asp:SqlDataSource>
-    <p>
-        <asp:Button ID="return" runat="server" BackColor="Silver" BorderColor="Silver" 
-            BorderStyle="Solid" Height="22px" PostBackUrl="~/Default.aspx" Text="Return" 
-            Width="150px" />
+        
+        SelectCommand="SELECT Item.name, Item.category, SUM(OrderRecord.quantity) AS totalQuantity, OrderRecord.unitPrice, SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS totalPrice, SUM(OrderRecord.quantity * (Item.normalPrice - OrderRecord.unitPrice)) AS saving, Member.firstName + ' ' + Member.lastName AS customerName, OrderRecord.email, OrderRecord.phoneNumber, OrderRecord.address, '**** **** **** ' + RIGHT (CreditCard.number, 4) AS cardnumber, CreditCard.type, OrderRecord.authorizationCode, OrderRecord.orderDateTime, Member.userName FROM OrderRecord INNER JOIN Member ON OrderRecord.userName = Member.userName INNER JOIN Item ON OrderRecord.upc = Item.upc INNER JOIN CreditCard ON OrderRecord.creditCardNumber = CreditCard.number GROUP BY Item.name, Item.category, OrderRecord.unitPrice, Member.firstName, Member.lastName, OrderRecord.email, OrderRecord.phoneNumber, OrderRecord.address, CreditCard.number, CreditCard.type, OrderRecord.authorizationCode, OrderRecord.orderDateTime, Member.userName"></asp:SqlDataSource>
+    <br />
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
-        HeaderText="Following error occurr:" ValidationGroup="itemReport" />
+        HeaderText="Following error occurred:" ValidationGroup="itemReport" />
 </asp:Content>
 
