@@ -240,7 +240,8 @@
                         <asp:CustomValidator ID="cvEditDistrict" runat="server" Display="Dynamic" 
                             EnableClientScript="False" 
                             ErrorMessage="You have to choose from the following: Central and Western, Eastern, Islands, Kowloon City, Kwai Tsing, Kwun Tong, North, Sai Kung, Sha Tin, Sham Shui Po, Southern, Tai Po, Tsuen Wan, Tuen Mun, Wan Chai, Wong Tai Sin, Yau Tsim Mong, Yuen Long." 
-                            ForeColor="Red" onservervalidate="cvEditDistrict_ServerValidate">*</asp:CustomValidator>
+                            ForeColor="Red" onservervalidate="cvEditDistrict_ServerValidate" 
+                            ControlToValidate="EditDistrict">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:TextBox ID="InsertDistrict" runat="server" MaxLength="20" 
@@ -251,7 +252,8 @@
                         <asp:CustomValidator ID="cvInsertDistrict" runat="server" Display="Dynamic" 
                             EnableClientScript="False" 
                             ErrorMessage="You have to choose from the following: Central and Western, Eastern, Islands, Kowloon City, Kwai Tsing, Kwun Tong, North, Sai Kung, Sha Tin, Sham Shui Po, Southern, Tai Po, Tsuen Wan, Tuen Mun, Wan Chai, Wong Tai Sin, Yau Tsim Mong, Yuen Long." 
-                            ForeColor="Red" onservervalidate="cvInsertDistrict_ServerValidate">*</asp:CustomValidator>
+                            ForeColor="Red" onservervalidate="cvInsertDistrict_ServerValidate" 
+                            ControlToValidate="InsertDistrict">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label7" runat="server" Text='<%# Bind("district") %>'></asp:Label>

@@ -3,6 +3,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head runat="server">
+<script type="text/javascript" language="javascript">
+
+    function DisableBackButton() {
+
+        window.history.forward()
+
+    }
+
+    DisableBackButton();
+
+    window.onload = DisableBackButton;
+
+    window.onpageshow = function (evt) { if (evt.persisted) DisableBackButton() }
+
+    window.onunload = function () { void (0) }
+
+</script>
     <title></title>
     <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
