@@ -71,36 +71,76 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
 
     protected void AddCreditCard(string connectionString, string userName, string number, string type, string cardHolderName, string expiryMonth, string expiryYear)
     {
-        // Define the INSERT query with parameters.
-        string query = "INSERT INTO [CreditCard]([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear])" +
-                       "VALUES (@Username, @Number, @Type, @CardHolderName, @ExpiryMonth, @ExpiryYear)";
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@Username", userName);
-            command.Parameters.AddWithValue("@Number", number);
-            command.Parameters.AddWithValue("@Type", type);
-            command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
-            command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
 
-            //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
-            //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
+        ////Check whether there is any credit card in CreditCard DB for the current user            
+        //Int32 countCreditCard = 0;
+        ////check if the credit card has already been added into the DB
+        //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE ([userName] = N'" + userName + "' AND [number] = N'" + number + "')", connection))
+        //{
+        //    command.Connection.Open();
+        //    countCreditCard = (Int32)command.ExecuteScalar();
+        //    command.Connection.Close();
+        //}
+        //// Define the INSERT query with parameters.
+        //if (countCreditCard == 0)
+        //{
+            string query = "INSERT INTO [CreditCard]([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear])" +
+                           "VALUES (@Username, @Number, @Type, @CardHolderName, @ExpiryMonth, @ExpiryYear)";
+            // Create the connection and the SQL command.
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                // Define the UPDATE query parameters and their values.
+                command.Parameters.AddWithValue("@Username", userName);
+                command.Parameters.AddWithValue("@Number", number);
+                command.Parameters.AddWithValue("@Type", type);
+                command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
+                command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth);
 
-            command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+                //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
+                //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
 
-            // Open the connection, execute the INSERT query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
-            command.Connection.Close();
-        }
+                command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+
+                // Open the connection, execute the INSERT query and close the connection.
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+        //}
+        ////else
+        //{
+        //    string query1 = "UPDATE [CreditCard] SET [Number] = @Number, [type] = @Type, [cardHolderName] = @CardHolderName, [expiryMonth] = @ExpiryMonth, [expiryYear] = @ExpiryYear WHERE [userName] = @UserName";
+        //    // Create the connection and the SQL command.
+        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //    using (SqlCommand command = new SqlCommand(query1, connection))
+        //    {
+        //        // Define the UPDATE query parameters and their values.
+        //        command.Parameters.AddWithValue("@Username", userName);
+        //        command.Parameters.AddWithValue("@Number", number);
+        //        command.Parameters.AddWithValue("@IsConfirmed", false);
+        //        /*command.Parameters.AddWithValue("@Type", type);
+        //        command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
+        //        command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
+
+        //        //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
+        //        //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
+
+        //        //command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
+
+        //        // Open the connection, execute the INSERT query and close the connection.
+        //        command.Connection.Open();
+        //        command.ExecuteNonQuery();
+        //        command.Connection.Close();
+        ////    }
+        //}
     }
 
     protected void updateCreditCardInOrderRecord(string connectionString, string userName, string creditCardNumber)
     {
         // Define the INSERT query with parameters.
-        string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
+        string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE ([userName] = @UserName AND [isConfirmed] = 'false')";
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
@@ -108,7 +148,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             // Define the UPDATE query parameters and their values.
             command.Parameters.AddWithValue("@Username", userName);
             command.Parameters.AddWithValue("@CreditCardNumber", creditCardNumber);
-            command.Parameters.AddWithValue("@IsConfirmed", false);
+            //command.Parameters.AddWithValue("@IsConfirmed", false);
             /*command.Parameters.AddWithValue("@Type", type);
             command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
             command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
