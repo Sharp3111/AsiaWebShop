@@ -46,7 +46,7 @@
     void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
     {
         // Read in past quantities from log file and store them into quantityPast
-        String File1 = HostingEnvironment.MapPath("~/Quantity.log");
+        String File1 = HostingEnvironment.MapPath("~/Quantity.md");
         FileStream t1 = new System.IO.FileStream(File1, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         StreamReader readFile = new StreamReader(t1);
         List<Int32> quantityPast = new List<Int32>();
@@ -93,7 +93,7 @@
 
                         // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
                         SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
-                        emailServer.Timeout = 5000;
+                        emailServer.Timeout = 30000;
 
                         // Set the sender (From), receiver (To), subject and message body fields of the mail message.
                         mail.From = new MailAddress("wliab@stu.ust.hk", "AsiaWebShop");
