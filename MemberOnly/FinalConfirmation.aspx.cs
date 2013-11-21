@@ -254,12 +254,13 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             Decimal unitPurchasePrice = 0;
             Decimal totalPurchasePriceOfEachItem = 0;
             string totalPurchasePrice = totalPrice.Text.Trim();
-            //string amountSaved = ""; ??????????????????????????????????????????????????????????????????????????????????????????//DB needs modification
+            Decimal totalPurchaseOriginalPrice = 0;
+            string amountSaved = ""; //??????????????????????????????????????????????????????????????????????????????????????????//DB needs modification
             string authorizationCode = "";
             string deliveryInformation = "";
             string orderDateTime = DateTime.Now.ToString().Trim();
 
-            string query1 = "SELECT upc, unitPrice, quantity FROM [OrderRecord] WHERE (userName = '" + userName + "' AND isConfirmed = 'False')";
+            string query1 = "SELECT upc, unitPrice, normalPrice, quantity FROM [OrderRecord] WHERE (userName = '" + userName + "' AND isConfirmed = 'False')";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand(query1, connection))
             {
@@ -268,17 +269,22 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 // Check if a result was returned.
                 if (reader.HasRows)
                 {
+
                     // Iterate through the table to get the retrieved values.
                     while (reader.Read())
                     {
                         itemPurchased = ConvertUPCToItemName(reader["upc"].ToString().Trim());
+                        Decimal unitNormalPrice = Convert.ToDecimal(reader["normalPrice"].ToString().Trim());
                         unitPurchasePrice = Convert.ToDecimal(reader["unitPrice"].ToString().Trim());
                         quantityPurchased = Convert.ToInt32(reader["quantity"].ToString().Trim());
                         totalPurchasePriceOfEachItem = unitPurchasePrice * quantityPurchased;
 
+                        //totalPurchaseOriginalPrice is used to calculate the amount saved
+                        totalPurchaseOriginalPrice += unitNormalPrice * quantityPurchased;
+
                         itemsInformation +="Item name:                            " + itemPurchased.ToString().Trim() + '\n';
                         itemsInformation +="Quanity purchased:                    " + quantityPurchased.ToString().Trim() + '\n';
-                        itemsInformation += "Unit purchase price:             HKD " + unitPurchasePrice.ToString().Trim() + '\n';
+                        itemsInformation +="Unit purchase price:              HKD " + unitPurchasePrice.ToString().Trim() + '\n';
                         itemsInformation +="Total purchase price of this item:HKD " + totalPurchasePriceOfEachItem.ToString().Trim() + '\n';                        
                     }
                 }
@@ -287,9 +293,12 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 command.Connection.Close();
                 reader.Close();
             }
-            itemsInformation += "\nTotal purchase price:            HKD ";
+            itemsInformation += "\nTotal purchase price:                   HKD ";
             itemsInformation += totalPurchasePrice;
 
+            amountSaved = (totalPurchaseOriginalPrice - Convert.ToDecimal(totalPurchasePrice)).ToString().Trim();
+            itemsInformation += "\nAmount saved from current normal price: HKD ";
+            itemsInformation += amountSaved;
 
             string query2 = "SELECT confirmationNumber, authorizationCode, name, phoneNumber, address, deliveryDate, deliveryTime FROM [OrderRecord] WHERE (userName = '" + userName + "' AND isConfirmed = 'False')";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -305,8 +314,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                     {
                         confirmationNumber = reader["confirmationNumber"].ToString().Trim();
                         authorizationCode = reader["authorizationCode"].ToString().Trim();
-                        deliveryInformation = "Delivery information:\n" 
-                                         + "Name:               " + reader["name"].ToString().Trim() + '\n'
+                        deliveryInformation = "Name:               " + reader["name"].ToString().Trim() + '\n'
                                          + "phoneNumber:        " + reader["phoneNumber"].ToString().Trim() + '\n'
                                          + "Address:            " + reader["address"].ToString().Trim() + '\n'
                                          + "Delivery Address:   " + reader["deliveryDate"].ToString().Trim() + '\n'
@@ -371,6 +379,9 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             // Send the message.
             emailServer.Send(mail);
 
+            //delete corresponding items in the shopping cart
+            UpdateShoppingCart(connectionString, userName);
+
             //final confirm
             finalConfirm();
         }
@@ -416,4 +427,25 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
 
         return itemName;
     }
+
+    private void UpdateShoppingCart(string connectionString, string userName)
+    {
+        
+
+        Int32 MaxRows = itemPurchase.Rows.Count;
+        for (int i = 0; i < MaxRows; i++)
+        {
+            string currentUPC = ((Label)itemPurchase.Rows[i].FindControl("upcLabel")).Text.Trim();
+            string queryDelete = "DELETE FROM [ShoppingCart] WHERE (userName = '" + userName + "' AND upc = '" + currentUPC + "')";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(queryDelete, connection))
+            {
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+        }
+    }
+
+
 }

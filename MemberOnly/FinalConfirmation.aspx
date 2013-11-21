@@ -19,6 +19,10 @@
         {
             width: 96px;
         }
+        .style6
+        {
+            color: #000080;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -34,15 +38,23 @@
     <p>
         <asp:GridView ID="itemPurchase" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="AsiaWebDataSource" ForeColor="#333333" 
-            GridLines="None" Width="383px">
+            GridLines="None" Width="383px" DataKeyNames="upc">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
+                <asp:TemplateField HeaderText="upc" SortExpression="upc" Visible="False">
+                    <EditItemTemplate>
+                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("upc") %>'></asp:Label>
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="upcLabel" runat="server" Text='<%# Bind("upc") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
                 <asp:BoundField DataField="name" HeaderText="Item Name" SortExpression="name" />
                 <asp:BoundField DataField="unitPrice" HeaderText="Unit Price" 
                     SortExpression="unitPrice" />
                 <asp:BoundField DataField="quantity" HeaderText="Quantity" 
                     SortExpression="quantity" />
-                <asp:BoundField DataField="product" HeaderText="Total Price" ReadOnly="True" 
+                <asp:BoundField DataField="product" HeaderText="Total Price Of Each Item" ReadOnly="True" 
                     SortExpression="product" />
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
@@ -56,11 +68,13 @@
             <SortedDescendingCellStyle BackColor="#E9EBEF" />
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
-        Total Price:<asp:Label ID="totalPrice" runat="server"></asp:Label>
+        <span class="style6">Total Price:<asp:Label ID="totalPrice" runat="server"></asp:Label>
+        </span>
     </p>
     <p>
         <asp:Button ID="shoppingCart" runat="server" 
-            PostBackUrl="~/MemberOnly/ShoppingCart.aspx" Text="Back to Shopping Cart" />
+            PostBackUrl="~/MemberOnly/ShoppingCart.aspx" Text="Back to Shopping Cart" 
+             />
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         Your delivery address:</p>
@@ -166,7 +180,8 @@
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         <asp:SqlDataSource ID="AsiaWebDataSource" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT Item.name, OrderRecord.unitPrice, OrderRecord.quantity, OrderRecord.unitPrice * OrderRecord.quantity AS product FROM OrderRecord INNER JOIN Item ON Item.upc = OrderRecord.upc WHERE (OrderRecord.userName = @userName)">
+            
+            SelectCommand="SELECT Item.upc, Item.name, OrderRecord.unitPrice, OrderRecord.quantity, OrderRecord.unitPrice * OrderRecord.quantity AS product FROM OrderRecord INNER JOIN Item ON Item.upc = OrderRecord.upc WHERE (OrderRecord.userName = @userName)">
             <SelectParameters>
                 <asp:ControlParameter ControlID="userName" Name="userName" 
                     PropertyName="Text" />

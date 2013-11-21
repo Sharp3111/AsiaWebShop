@@ -371,6 +371,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 string itemName = ((Label)gvShoppingCart.Rows[i].FindControl("NameLabel")).Text.Trim(); //for name in OrderRecord
                 string itemUPC = ((Label)gvShoppingCart.Rows[i].FindControl("lbUPC")).Text.Trim(); //for upc in OrderRecord
                 string quantity = ((TextBox)gvShoppingCart.Rows[i].FindControl("QuantityTextBox")).Text.Trim(); //for quantity in OrderRecord
+
+                //unitPuchasePrice is from DB Item
                 string unitPuchasePrice = ((Label)gvShoppingCart.Rows[i].FindControl("UnitPurchasePriceLabel")).Text.Trim(); //for unitPrice in OrderRecord
 
                 string IsConfirmed = "0"; //for isConfirmed in OrderRecord
@@ -393,6 +395,29 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                             // Assign the data values to userEmail, userPhoneNumber
                             userEmail = reader["email"].ToString().Trim();
                             userPhoneNumber = reader["phoneNumber"].ToString().Trim();
+                        }
+                    }
+
+                    // Close the connection and the DataReader.
+                    command.Connection.Close();
+                    reader.Close();
+                }
+
+                //get unit Normal Price for later use : OrderRecord.normalPrice
+                string unitPurchaseNormalPrice = "";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [normalPrice] FROM [Item] WHERE ([upc] = '" + itemUPC + "')", connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            // Assign the data values to unitPurchaseNormalPrice
+                            unitPurchaseNormalPrice = reader["normalPrice"].ToString().Trim();
                         }
                     }
 
@@ -457,7 +482,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 Int32 count = 0;
                 //check if the item has already added into the shopping cart
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [OrderRecord] WHERE ([userName] = N'" + userName + "' AND [upc] = N'" + itemUPC + "')", connection))
+                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [OrderRecord] WHERE ([userName] = N'" + userName + "' AND [upc] = N'" + itemUPC + "' AND [isConfirmed] = 'False')", connection))
                 {
                     command.Connection.Open();
                     count = (Int32)command.ExecuteScalar();
@@ -473,6 +498,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                                        + "[email], "
                                        + "[phoneNumber], "
                                        + "[upc], "
+                                       + "[normalPrice], "
                                        + "[unitPrice], "
                                        + "[quantity], "
                                        + "[address], "
@@ -487,6 +513,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                                        + "@Email, "
                                        + "@PhoneNumber, "
                                        + "@Upc, "
+                                       + "@NormalPrice, "
                                        + "@UnitPrice, "
                                        + "@Quantity, "
                                        + "@Address, "
@@ -504,6 +531,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                         command.Parameters.AddWithValue("@Email", userEmail);
                         command.Parameters.AddWithValue("@PhoneNumber", userPhoneNumber);
                         command.Parameters.AddWithValue("@Upc", itemUPC);
+                        command.Parameters.AddWithValue("@NormalPrice", unitPurchaseNormalPrice);
                         command.Parameters.AddWithValue("@UnitPrice", unitPuchasePrice);
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@Address", userAddress);
@@ -516,20 +544,59 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                         command.Connection.Close();
                     }
                 }
-                //else if checkBox.Checked && count != 0 Update Order
+                //else if checkBox.Checked && count != 0 Update Order ??????????????? Discount Price has to be up-to-date, how abt Normal Price
                 else if (selected && count != 0)
                 {
+                    Decimal currentUnitDiscountPrice = Convert.ToDecimal(unitPuchasePrice); // From DB Item
+                    Decimal pastUnitDiscountPrice = 0; // From DB OrderRecord
+                    //get pastUnitDiscountPrice from OrderRecord
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand("SELECT [unitPrice] FROM [OrderRecord] WHERE ([upc] = '" + itemUPC + "')", connection))
+                    {
+                        command.Connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        // Check if a result was returned.
+                        if (reader.HasRows)
+                        {
+                            // Iterate through the table to get the retrieved values.
+                            while (reader.Read())
+                            {
+                                // Assign the data values to unitPurchaseNormalPrice
+                                pastUnitDiscountPrice = Convert.ToDecimal(reader["unitPrice"].ToString().Trim());
+                            }
+                        }
+
+                        // Close the connection and the DataReader.
+                        command.Connection.Close();
+                        reader.Close();
+                    }
+
+
+                    //set up To be UpdateDiscountPrice
+                    string UpdateDiscountPrice = "";
+                    if (pastUnitDiscountPrice < currentUnitDiscountPrice)
+                    {
+                        UpdateDiscountPrice = pastUnitDiscountPrice.ToString().Trim();
+                    }
+                    else
+                    {
+                        UpdateDiscountPrice = currentUnitDiscountPrice.ToString().Trim();
+                    }
+                    
+                    
+
                     string queryUpdate = "UPDATE [OrderRecord] SET "
                                        + "[name] = @Name, "
                                        + "[email] = @Email, "
                                        + "[phoneNumber] = @PhoneNumber, "
+                                       + "[normalPrice] = @NormalPrice, "
                                        + "[unitPrice] = @UnitPrice, "
                                        + "[quantity] = @Quantity, "
                                        + "[address] = @Address, "
                                        + "[creditCardNumber] = @CreditCardNumber, "
                                        + "[orderDateTime] = CURRENT_TIMESTAMP, "
                                        + "[isConfirmed] = @IsConfirmed "
-                                       + " WHERE ([userName] = N'" + userName + "' AND [upc] = N'" + itemUPC + "')";
+                                       + " WHERE ([userName] = N'" + userName + "' AND [upc] = N'" + itemUPC + "' AND [isConfirmed] = 'False')";
 
                     using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                     using (SqlCommand command = new SqlCommand(queryUpdate, connection))
@@ -540,7 +607,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                         command.Parameters.AddWithValue("@Email", userEmail);
                         command.Parameters.AddWithValue("@PhoneNumber", userPhoneNumber);
                         command.Parameters.AddWithValue("@Upc", itemUPC);
-                        command.Parameters.AddWithValue("@UnitPrice", unitPuchasePrice);
+                        command.Parameters.AddWithValue("@NormalPrice", unitPurchaseNormalPrice); //Normal Price up-to-date ???? Needs verification from Professor
+                        command.Parameters.AddWithValue("@UnitPrice", UpdateDiscountPrice);
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@Address", userAddress);
                         command.Parameters.AddWithValue("@CreditCardNumber", userCreditCardNumber);
@@ -556,7 +624,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 //delete corresponding items in OrderRecord
                 else if (!selected && count != 0) 
                 {
-                    string queryDelete = "DELETE FROM [OrderRecord] WHERE ([userName] = N'" + userName + "' AND [upc] = '" + itemUPC + "')";
+                    string queryDelete = "DELETE FROM [OrderRecord] WHERE ([userName] = N'" + userName + "' AND [upc] = '" + itemUPC + "' AND [isConfirmed] = 'False')";
                     using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                     using (SqlCommand command = new SqlCommand(queryDelete, connection))
                     {
