@@ -43,16 +43,14 @@
         System.Diagnostics.Debug.Write("Username:");
         System.Diagnostics.Debug.WriteLine(Session["Username"].ToString());
         
-        string username = Session["Username"].ToString();
+        string username = Session["Username"].ToString().Trim();
         string connectionString = "AsiaWebShopDBConnectionString";
-        string query = "UPDATE [Sho] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + upc + "')";
+        string query = "UPDATE [ShoppingCart] SET [isReleased] = 'True' WHERE ([userName] = '" + username + "')";
         
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         {
             SqlCommand command = new SqlCommand(query, connection);
             {
-                //Define the UPDATE query parameters with corresponding values
-                command.Parameters.AddWithValue("@QuantityAvailable", currentQuantityAvailable.ToString());
 
                 // Open the connection, execute the INSERT query and close the connection.
                 command.Connection.Open();
@@ -60,6 +58,21 @@
                 command.Connection.Close();
             }
         }
+
+        query = "UPDATE [Item] SET [quantityAvailable] = ([Item].[quantityAvailable] + [ShoppingCart].[quantity]) FROM [Item] JOIN [ShoppingCart] ON ([ShoppingCart].[upc] = [Item].[upc]) WHERE ([ShoppingCart].[userName] = '" + username + "')";
+
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        {
+            SqlCommand command = new SqlCommand(query, connection);
+            {
+
+                // Open the connection, execute the INSERT query and close the connection.
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+        }
+
     }
 
     void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
