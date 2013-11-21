@@ -23,6 +23,8 @@
         {
             width: 293px;
             height: 21px;
+            font-family: "Segoe UI";
+            color: #000080;
         }
         .style8
         {
@@ -42,6 +44,8 @@
         {
             width: 78px;
             height: 21px;
+            font-family: "Segoe UI";
+            color: #000080;
         }
         .style15
         {
@@ -52,7 +56,8 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p style="font-family: Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; color: #000080;">
-    Request Notification by Email when Item Available
+    Request notification by email when Item 
+        is available
 </p>
 <table class="style2">
     <tr>

@@ -72,8 +72,9 @@ public partial class MemberOnly_StockAvailableAlert : System.Web.UI.Page
     {
         if (IsValid)
         {
-            
-            string SQLCmd = "INSERT INTO [Subscription]([email],[name]) VALUES ('" + email.SelectedValue + " ',' " + itemBox.Text.Trim() +" ')";
+            string upc = Request.QueryString["upc"];
+            string userName = User.Identity.Name;
+            string SQLCmd = "INSERT INTO [Subscription]([email], [userName], [upc], [name]) VALUES ('" + email.SelectedValue + "', '" + userName + "', '" + upc + "', '" + itemBox.Text.Trim() + "')";
             string connectionString = "AsiaWebShopDBConnectionString";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand(SQLCmd, connection))
@@ -82,7 +83,7 @@ public partial class MemberOnly_StockAvailableAlert : System.Web.UI.Page
                 command.ExecuteScalar();
                 command.Connection.Close();
             }
-            result.Text = "Record Added!";
+            result.Text = "Your record has been added. You will be notified via email when the item is available!";
             result.Visible = true;
         }
     }
