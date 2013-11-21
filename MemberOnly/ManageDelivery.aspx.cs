@@ -47,6 +47,41 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
     }
     protected void dvDelivery_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
     {
+        //string connectionString = "AsiaWebShopDBConnectionString";
+        //string userName = User.Identity.Name;
+
+        //Int32 count = 0;
+        ////check if only
+        //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "')", connection))
+        //{
+        //    command.Connection.Open();
+        //    count = (Int32)command.ExecuteScalar();
+        //    command.Connection.Close();
+        //}
+
+        //if (count <= 1)
+        //{
+           
+        //    //string currentNickname = ((Label)gridViewRow.FindControl("nickname")).Text.Trim();
+        //    string currentNickname = ((TextBox)dvDelivery.FindControl("nickname")).Text.Trim();
+        //    string queryUpdate = "UPDATE [Address] SET isDefault = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentNickname + "')";
+
+        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //    using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+        //    {
+        //        command.Parameters.AddWithValue("@IsDefault", true);
+        //        command.Connection.Open();
+        //        command.ExecuteNonQuery();
+        //        command.Connection.Close();
+        //    }
+        //        ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked = true;
+        //        ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Enabled = false;
+        //        lblMessage.ForeColor = System.Drawing.Color.Red;
+        //        lblMessage.Text = "This is your only address in your delivery address list. You have to have this address as the default delivery address.";
+        //        lblMessage.Visible = true;
+            
+        //}
         gvDelivery.DataBind();
     }
     protected void RemoveButton_Click(object sender, EventArgs e)
@@ -284,164 +319,164 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
     }
     protected void dvDelivery_ItemInserting(object sender, DetailsViewInsertEventArgs e)
     {
-        //Response.Write("<script>alert('" + "Enter" + "')</script>");
-        Page.Validate();
+        ////Response.Write("<script>alert('" + "Enter" + "')</script>");
+        //Page.Validate();
 
-        if (Page.IsValid)
-        {
-            string connectionString = "AsiaWebShopDBConnectionString";
-            string userName = User.Identity.Name;
+        //if (Page.IsValid)
+        //{
+        //    string connectionString = "AsiaWebShopDBConnectionString";
+        //    string userName = User.Identity.Name;
 
-            Int32 count = 0;
-            //check if the item has already added into the shopping cart
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "')", connection))
-            {
-                command.Connection.Open();
-                count = (Int32)command.ExecuteScalar();
-                command.Connection.Close();
-            }
+        //    Int32 count = 0;
+        //    //check if the item has already added into the shopping cart
+        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //    using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "')", connection))
+        //    {
+        //        command.Connection.Open();
+        //        count = (Int32)command.ExecuteScalar();
+        //        command.Connection.Close();
+        //    }
 
-            //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
+        //    //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
 
-            if (count < 1)
-            {
-                //if the edited credit card changes from default to non default, error message.
-                if (((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked == false)
-                {
-                    ((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked = true;
-                    ((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Enabled = false;
-                    lblMessage.ForeColor = System.Drawing.Color.Red;
-                    lblMessage.Text = "This is your only delivery address in your address list. You have to use this address as the default delivery address.";
-                    lblMessage.Visible = true;
-                }
-            }
-                
-            else
-            {
-                //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
-                if (((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked == true)
-                {
-                    //find the initial default address for later update
-                    string currentnickname = ((TextBox)dvDelivery.FindControl("InsertNickname")).Text.Trim();
-                    string initialDefaultAddress = "";
+        //    if (count < 1)
+        //    {
+        //        //if the edited credit card changes from default to non default, error message.
+        //        if (((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked == false)
+        //        {
+        //            ((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked = true;
+        //            ((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Enabled = false;
+        //            lblMessage.ForeColor = System.Drawing.Color.Red;
+        //            lblMessage.Text = "This is your only delivery address in your address list. You have to use this address as the default delivery address.";
+        //            lblMessage.Visible = true;
+        //        }
+        //    }
 
-                    string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(true) + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(querySelect, connection))
-                    {
-                        command.Connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                initialDefaultAddress = reader.GetString(0);
-                            }
-                        }
+        //    else
+        //    {
+        //        //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
+        //        if (((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked == true)
+        //        {
+        //            //find the initial default address for later update
+        //            string currentnickname = ((TextBox)dvDelivery.FindControl("InsertNickname")).Text.Trim();
+        //            string initialDefaultAddress = "";
 
-                        reader.Close();
-                        command.Connection.Close();
-                    }
+        //            string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(true) + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(querySelect, connection))
+        //            {
+        //                command.Connection.Open();
+        //                SqlDataReader reader = command.ExecuteReader();
+        //                if (reader.HasRows)
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        initialDefaultAddress = reader.GetString(0);
+        //                    }
+        //                }
 
-                    count = 0;
-                    //check if the item has already added into the shopping cart
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')", connection))
-                    {
-                        command.Connection.Open();
-                        count = (Int32)command.ExecuteScalar();
-                        command.Connection.Close();
-                    }
+        //                reader.Close();
+        //                command.Connection.Close();
+        //            }
 
-                    //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
+        //            count = 0;
+        //            //check if the item has already added into the shopping cart
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')", connection))
+        //            {
+        //                command.Connection.Open();
+        //                count = (Int32)command.ExecuteScalar();
+        //                command.Connection.Close();
+        //            }
 
-                    //Set the edited card to be default
-                    string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", true);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
-                    //Response.Write("<script>alert('" + currentnickname + "')</script>");
-                    //Set the initial default to be nondefault
-                    string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + initialDefaultAddress + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", false);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
-                    //Response.Write("<script>alert('" + initialDefaultAddress + "')</script>");
-                    gvDelivery.DataBind();
+        //            //Response.Write("<script>alert( count = '" + count.ToString().Trim() + "')</script>");
 
-                    lblMessage.ForeColor = System.Drawing.Color.Green;
-                    lblMessage.Text = "Your default delivery address has changed.";
-                    lblMessage.Visible = true;
-                }
-                //else the edited credit card changes from default to nondefault, then this card is set to the default
-                else
-                {
-                    string currentnickname = ((TextBox)dvDelivery.FindControl("InsertNickname")).Text.Trim();
-                    string changedDefaultAddress = "";
+        //            //Set the edited card to be default
+        //            string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+        //            {
+        //                command.Connection.Open();
+        //                command.Parameters.AddWithValue("@IsDefault", true);
+        //                command.ExecuteNonQuery();
+        //                command.Connection.Close();
+        //            }
+        //            //Response.Write("<script>alert('" + currentnickname + "')</script>");
+        //            //Set the initial default to be nondefault
+        //            string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + initialDefaultAddress + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+        //            {
+        //                command.Connection.Open();
+        //                command.Parameters.AddWithValue("@IsDefault", false);
+        //                command.ExecuteNonQuery();
+        //                command.Connection.Close();
+        //            }
+        //            //Response.Write("<script>alert('" + initialDefaultAddress + "')</script>");
+        //            gvDelivery.DataBind();
 
-                    string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(false) + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(querySelect, connection))
-                    {
-                        command.Connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                changedDefaultAddress = reader.GetString(0); break;
-                            }
-                        }
+        //            lblMessage.ForeColor = System.Drawing.Color.Green;
+        //            lblMessage.Text = "Your default delivery address has changed.";
+        //            lblMessage.Visible = true;
+        //        }
+        //        ////else the edited credit card changes from default to nondefault, then this card is set to the default
+        //        //else
+        //        //{
+        //        //    string currentnickname = ((TextBox)dvDelivery.FindControl("InsertNickname")).Text.Trim();
+        //        //    string changedDefaultAddress = "";
 
-                        reader.Close();
-                        command.Connection.Close();
-                    }
+        //        //    string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(false) + "')";
+        //        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //        //    using (SqlCommand command = new SqlCommand(querySelect, connection))
+        //        //    {
+        //        //        command.Connection.Open();
+        //        //        SqlDataReader reader = command.ExecuteReader();
+        //        //        if (reader.HasRows)
+        //        //        {
+        //        //            while (reader.Read())
+        //        //            {
+        //        //                changedDefaultAddress = reader.GetString(0); break;
+        //        //            }
+        //        //        }
 
-                    //Set the edited card to be default
-                    string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + changedDefaultAddress + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", true);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
-                    
-                    //Set the initial default to be nondefault
-                    string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", false);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
-                    
-                    gvDelivery.DataBind();
+        //        //        reader.Close();
+        //        //        command.Connection.Close();
+        //        //    }
 
-                    lblMessage.ForeColor = System.Drawing.Color.Green;
-                    lblMessage.Text = "Your default delivery address has changed.";
-                    lblMessage.Visible = true;
-                }
-            }
-        }
-        else
-        {
-            ((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked = false;
-        }
+        //        //    //Set the edited card to be default
+        //        //    string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + changedDefaultAddress + "')";
+        //        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //        //    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+        //        //    {
+        //        //        command.Connection.Open();
+        //        //        command.Parameters.AddWithValue("@IsDefault", true);
+        //        //        command.ExecuteNonQuery();
+        //        //        command.Connection.Close();
+        //        //    }
+
+        //        //    //Set the initial default to be nondefault
+        //        //    string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
+        //        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //        //    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+        //        //    {
+        //        //        command.Connection.Open();
+        //        //        command.Parameters.AddWithValue("@IsDefault", false);
+        //        //        command.ExecuteNonQuery();
+        //        //        command.Connection.Close();
+        //        //    }
+
+        //        //    gvDelivery.DataBind();
+
+        //        //    lblMessage.ForeColor = System.Drawing.Color.Green;
+        //        //    lblMessage.Text = "Your default delivery address has changed.";
+        //        //    lblMessage.Visible = true;
+        //        //}
+        //    }
+        //}
+        //else
+        //{
+        //    ((CheckBox)(dvDelivery.FindControl("InsertIsDefault"))).Checked = false;
+        //}
     }
 
     protected void gvDelivery_SelectedIndexChanged(object sender, EventArgs e)
