@@ -294,7 +294,8 @@
         <asp:Button ID="Return" runat="server" BackColor="Silver" BorderColor="Silver" 
             BorderStyle="Solid" Height="30px" 
             PostBackUrl="~/MemberOnly/EditMemberInformation.aspx" 
-            Text="Return to Manage Member Information" Width="300px" />
+            Text="Return to Manage Member Information" Width="300px" 
+             />
     </p>
     <p>
         &nbsp;</p>

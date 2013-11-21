@@ -129,7 +129,7 @@ public partial class ItemManagement : System.Web.UI.Page
 
 
 
-        string[] matchExtension = { ".jpg" };
+        string[] matchExtension = { ".jpg", ".jpeg", ".JPG", "JPEG" };
 
         string[] matchMimeType = { "image/jpeg" };
 
@@ -169,7 +169,7 @@ public partial class ItemManagement : System.Web.UI.Page
 
 
 
-        string[] matchExtension = { ".jpg" };
+        string[] matchExtension = { ".jpg", ".jpeg", ".JPG", "JPEG" };
 
         string[] matchMimeType = { "image/jpeg" };
 

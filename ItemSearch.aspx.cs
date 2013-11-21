@@ -218,7 +218,7 @@ public partial class _Default : System.Web.UI.Page
                 if (count == 0)
                 {
                     string SQLCmd = "INSERT INTO [ShoppingCart] " +
-                        "VALUES (@UserName, @Upc, @Quantity, CURRENT_TIMESTAMP, @IsChecked)";
+                        "VALUES (@UserName, @Upc, @Quantity, CURRENT_TIMESTAMP, @IsChecked, @IsReleased)";
 
                     using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                     using (SqlCommand command = new SqlCommand(SQLCmd, connection))
@@ -228,6 +228,7 @@ public partial class _Default : System.Web.UI.Page
                         command.Parameters.AddWithValue("@Upc", upc);
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@IsChecked", Convert.ToString(true));
+                        command.Parameters.AddWithValue("@IsReleased", Convert.ToString(false));
 
                         // Open the connection, execute the INSERT query and close the connection.
                         command.Connection.Open();

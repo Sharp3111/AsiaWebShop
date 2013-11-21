@@ -19,7 +19,7 @@
     <p>
         <asp:GridView ID="gvItem" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataKeyNames="upc" DataSourceID="AsiaWebShopDBSqlDataSource1" 
-            ForeColor="#333333" GridLines="None" AllowPaging="True" PageSize="5" 
+            ForeColor="#333333" GridLines="None" PageSize="5" 
             AllowSorting="True" style="text-align: left">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
@@ -183,14 +183,14 @@ Women." ForeColor="Red" onservervalidate="cvInsertCategory_ServerValidate">*</as
                         <asp:FileUpload ID="pictureFileUpload" runat="server" FileBytes='<%# Bind("Picture") %>'></asp:FileUpload>
                         <asp:CustomValidator ID="cvEditPicture" runat="server" 
                             ControlToValidate="pictureFileUpload" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="The picture must be in jpg format and can be at most 512KB. 
+                            EnableClientScript="False" ErrorMessage="The picture must be in jpg/jpeg format and can be at most 512KB. 
 " ForeColor="Red" onservervalidate="cvEditPicture_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:FileUpload ID="pictureFileUpload" runat="server" FileBytes='<%# Bind("Picture") %>'></asp:FileUpload>
                         <asp:CustomValidator ID="cvInsertPicture" runat="server" 
                             ControlToValidate="pictureFileUpload" Display="Dynamic" 
-                            EnableClientScript="False" ErrorMessage="The picture must be in jpg format and can be at most 512KB. 
+                            EnableClientScript="False" ErrorMessage="The picture must be in jpg/jpeg format and can be at most 512KB. 
 " ForeColor="Red" onservervalidate="cvInsertPicture_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
