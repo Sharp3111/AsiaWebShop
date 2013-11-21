@@ -256,7 +256,7 @@ public partial class ItemManagement : System.Web.UI.Page
     }
     protected void dvItem_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
     {
-        Int32 quantity;
+        /*Int32 quantity;
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
         {
             // Get the value of the current UPC from the DetailsView control.
@@ -309,6 +309,6 @@ public partial class ItemManagement : System.Web.UI.Page
                 connection.Close();
             }
             
-        }
+        }*/
     }
 }
