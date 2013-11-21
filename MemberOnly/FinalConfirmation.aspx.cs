@@ -56,7 +56,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                 reader.Close();
             }
 
-
+    }
 
         /*
         string SQLCmd2 = "SELECT [email] FROM [Member] WHERE [userName] = '"+User.Identity.Name+"'";
@@ -79,7 +79,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             }
 
         */
-    }
+    
 
     /*private Random random = new Random((int)DateTime.Now.Ticks);
     private string RandomLetter()
@@ -166,7 +166,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
         if (IsValid)
         {
             string authNum = "";
-            string confirmationNum = "";
+            char[] confirmationNum = {'A','A','0','0','0','0','0','0'};
 
             Int32 cardNumberHead = 0;            
             Int32 cardNumberTail = 0;
@@ -201,38 +201,39 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
 
             do
             {
-                Random random_ = new Random(cardNumberHead + cardNumberTail);
-                StringBuilder builder_ = new StringBuilder();
-                char ch_;
+                Random random = new Random(cardNumberHead + cardNumberTail);
+                StringBuilder builder = new StringBuilder();
+                char ch;
                 for (int i = 0; i < 4; i++)
                 {
-                    ch_ = (char)random_.Next('0', '9' + 1);
-                    builder_.Append(ch_);
+                    ch = (char)random.Next('0', '9' + 1);
+                    builder.Append(ch);
                 }
-                authNum = builder_.ToString();
+                authNum = builder.ToString();
             }
             while (!codeCheck(authNum, "authorizationCode"));
             codeInsert(authNum, "authorizationCode");
 
             do
             {
-                Random random = new Random((int)DateTime.Now.Ticks);
-                StringBuilder builder = new StringBuilder();
-                char ch;
-                for (int i = 0; i < 2; i++)
-                {
-                    ch = (char)random.Next('A', 'Z' + 1);
-                    builder.Append(ch);
+                confirmationNum[7] ++;
+                for ( int i = 0; i < 6; i++) {
+                    if (confirmationNum[7-i] == '9'+1)
+                        confirmationNum[7-i] = '0';
+                        confirmationNum[6-i] ++;
+                    if (i == 5) {
+                        if(confirmationNum[1] == 'Z'+1) {
+                            confirmationNum[1] = 'A';
+                            confirmationNum[0] ++;
+                        }
+                        if(confirmationNum[0] == 'Z'+1) {
+                            confirmationNum[0] = 'A';
+                        }
+                    }
                 }
-                for (int i = 0; i < 6; i++)
-                {
-                    ch = (char)random.Next('0', '9' + 1);
-                    builder.Append(ch);
-                }
-                confirmationNum = builder.ToString(); 
             }
-            while (!codeCheck(confirmationNum,"confirmationNumber"));//count the docNum in DB if > 0, redo
-            codeInsert(confirmationNum, "confirmationNumber");
+            while (!codeCheck(new string(confirmationNum),"confirmationNumber"));//count the docNum in DB if > 0, redo
+            codeInsert(new string(confirmationNum), "confirmationNumber");
 
             // Create an instance of MailMessage named mail.
             MailMessage mail = new MailMessage();
@@ -383,7 +384,8 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             UpdateShoppingCart(connectionString, userName);
 
             //final confirm
-            finalConfirm();
+            //finalConfirm();
+            Server.Transfer("FinalConfirmDisplay.aspx");
         }
 
 

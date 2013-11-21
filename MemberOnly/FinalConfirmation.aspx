@@ -49,13 +49,14 @@
                         <asp:Label ID="upcLabel" runat="server" Text='<%# Bind("upc") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="name" HeaderText="Item Name" SortExpression="name" />
+                <asp:BoundField DataField="name" HeaderText="Item Name" 
+                    SortExpression="name" />
                 <asp:BoundField DataField="unitPrice" HeaderText="Unit Price" 
                     SortExpression="unitPrice" />
                 <asp:BoundField DataField="quantity" HeaderText="Quantity" 
                     SortExpression="quantity" />
-                <asp:BoundField DataField="product" HeaderText="Total Price Of Each Item" ReadOnly="True" 
-                    SortExpression="product" />
+                <asp:BoundField DataField="product" HeaderText="Total Price of Item" 
+                    ReadOnly="True" SortExpression="product" />
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -84,19 +85,19 @@
             GridLines="None" ondatabound="deliverAddress_DataBound">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:BoundField DataField="name" HeaderText="Name" 
+                <asp:BoundField DataField="name" HeaderText="Username" 
                     SortExpression="name" />
                 <asp:TemplateField HeaderText="Email" SortExpression="email">
-                    <ItemTemplate>
-                        <asp:Label ID="EmailLabel" runat="server" Text='<%# Bind("email") %>'></asp:Label>
-                    </ItemTemplate>
                     <EditItemTemplate>
                         <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("email") %>'></asp:TextBox>
                     </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="EmailLabel" runat="server" Text='<%# Bind("email") %>'></asp:Label>
+                    </ItemTemplate>
                 </asp:TemplateField>
                 <asp:BoundField DataField="phoneNumber" HeaderText="Phone Number" 
                     SortExpression="phoneNumber" />
-                <asp:BoundField DataField="address" HeaderText="Delivery Address" 
+                <asp:BoundField DataField="address" HeaderText="Deliver Address" 
                     SortExpression="address" />
                 <asp:BoundField DataField="deliveryDate" HeaderText="Delivery Date" 
                     SortExpression="deliveryDate" />
@@ -181,7 +182,8 @@
         <asp:SqlDataSource ID="AsiaWebDataSource" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
-            SelectCommand="SELECT Item.upc, Item.name, OrderRecord.unitPrice, OrderRecord.quantity, OrderRecord.unitPrice * OrderRecord.quantity AS product FROM OrderRecord INNER JOIN Item ON Item.upc = OrderRecord.upc WHERE (OrderRecord.userName = @userName)">
+            
+            SelectCommand="SELECT Item.upc, Item.name, OrderRecord.unitPrice, OrderRecord.quantity, OrderRecord.unitPrice * OrderRecord.quantity AS product FROM OrderRecord INNER JOIN Item ON Item.upc = OrderRecord.upc WHERE (OrderRecord.userName = @userName) AND (OrderRecord.isConfirmed = 'False')">
             <SelectParameters>
                 <asp:ControlParameter ControlID="userName" Name="userName" 
                     PropertyName="Text" />
@@ -192,7 +194,8 @@
         <asp:SqlDataSource ID="AsiaWebDataSource2" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
-            SelectCommand="SELECT name, email, phoneNumber, address, deliveryDate, deliveryTime FROM OrderRecord WHERE (userName = @userName) GROUP BY name, email, phoneNumber, address, deliveryDate, deliveryTime">
+            
+            SelectCommand="SELECT name, email, phoneNumber, address, deliveryDate, deliveryTime FROM OrderRecord WHERE (userName = @userName) AND (isConfirmed = 'False') GROUP BY name, email, phoneNumber, address, deliveryDate, deliveryTime">
             <SelectParameters>
                 <asp:ControlParameter ControlID="userName" Name="userName" 
                     PropertyName="Text" />
