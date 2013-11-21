@@ -304,7 +304,7 @@
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Credit Card Default" 
-                    SortExpression="creditCardDefault">
+                    SortExpression="creditCardDefault" Visible="False">
                     <EditItemTemplate>
                         <asp:CheckBox ID="EditCreditCardDefault" runat="server" 
                             Checked='<%# Bind("creditCardDefault") %>' 
@@ -358,12 +358,13 @@
             
             SelectCommand="SELECT * FROM [CreditCard] WHERE ([userName] = @userName AND [number] = @number)" 
             DeleteCommand="DELETE FROM [CreditCard] WHERE ([number] = @number)" 
-            InsertCommand="INSERT INTO [CreditCard] ([userName], [cardHolderName], [type], [number], [expiryMonth], [expiryYear], [creditCardDefault]) VALUES (@userName, @cardHolderName, @type, @number, @expiryMonth, @expiryYear, @creditCardDefault)" 
+            InsertCommand="INSERT INTO [CreditCard] ([userName], [cardHolderName], [type], [number], [expiryMonth], [expiryYear]) VALUES (@userName, @cardHolderName, @type, @number, @expiryMonth, @expiryYear)" 
             
             
             
             
-            UpdateCommand="UPDATE CreditCard SET cardHolderName = @cardHolderName, type = @type, number = @number, expiryMonth = @expiryMonth, expiryYear = @expiryYear, creditCardDefault = @creditCardDefault WHERE (userName = @userName) AND (isSelected = 'true')">
+            
+            UpdateCommand="UPDATE CreditCard SET cardHolderName = @cardHolderName, type = @type, number = @number, expiryMonth = @expiryMonth, expiryYear = @expiryYear WHERE (userName = @userName) AND (isSelected = 'true')">
             <DeleteParameters>
                 <asp:Parameter Name="number" />
             </DeleteParameters>
@@ -374,7 +375,6 @@
                 <asp:Parameter Name="number" />
                 <asp:Parameter Name="expiryMonth" />
                 <asp:Parameter Name="expiryYear" />
-                <asp:Parameter Name="creditCardDefault" />
             </InsertParameters>
             <SelectParameters>
                 <asp:ControlParameter ControlID="UserName" Name="userName" 
@@ -388,7 +388,6 @@
                 <asp:Parameter Name="number" />
                 <asp:Parameter Name="expiryMonth" />
                 <asp:Parameter Name="expiryYear" />
-                <asp:Parameter Name="creditCardDefault" />
                 <asp:Parameter Name="userName" />
             </UpdateParameters>
         </asp:SqlDataSource>
