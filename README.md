@@ -14,3 +14,5 @@ user: sharper (sharper##)
 Database last update: 1/11/2013 2:34 PM
 
 Please manually delete non-existing users from ASP.NET besides deleting them from DB to avoid SQL runtime errors.
+
+Remember to manually copy from Z: drive the App_Data folder AND Quantity.log to the root directory!
