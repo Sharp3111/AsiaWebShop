@@ -24,7 +24,6 @@
     {
         width: 239px;
         font-size: large;
-        text-decoration: underline;
         color: #000080;
         font-family: Arial, Helvetica, sans-serif;
     }
@@ -32,7 +31,6 @@
     {
         font-family: Arial, Helvetica, sans-serif;
         font-size: large;
-        text-decoration: underline;
         color: #000080;
             width: 682px;
         }

@@ -52,10 +52,15 @@
             width: 150px;
             height: 21px;
         }
+        .style16
+        {
+            font-family: "Times New Roman", Times, serif;
+            font-size: x-large;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <p style="font-family: Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; color: #000080;">
+    <p style="font-weight: bold; color: #000080;" class="style16">
     Request notification by email when Item 
         is available
 </p>
@@ -97,7 +102,9 @@
         <td colspan="3" style="text-align: left">
             <asp:Button ID="request" runat="server" Text="Request notification" 
                 onclick="request_Click" ValidationGroup="requestemail" 
-                style="text-align: left" />
+                
+                style="text-align: left; font-family: 'Times New Roman', Times, serif; font-size: medium;" 
+                Height="30px" Width="150px" />
             <asp:CustomValidator ID="CustomValidator3" runat="server" Display="Dynamic" 
                 EnableClientScript="False" ErrorMessage="Record already exist!" ForeColor="Red" 
                 onservervalidate="CustomValidator3_ServerValidate" 

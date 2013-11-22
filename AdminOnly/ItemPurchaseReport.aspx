@@ -184,7 +184,8 @@
                 &nbsp;</td>
             <td class="style11" colspan="3">
                 <asp:Button ID="Button1" runat="server" Text="Generate Report" 
-                    ValidationGroup="itemReport" Width="117px" onclick="Button1_Click" />
+                    ValidationGroup="itemReport" Width="117px" onclick="Button1_Click" 
+                    style="font-family: 'Times New Roman', Times, serif; font-size: small" />
             </td>
             <td class="style14">
                 &nbsp;</td>

@@ -68,9 +68,9 @@
                 </fieldset>
                 <p class="submitButton">
                     <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Log In" 
-                        ValidationGroup="LoginUserValidationGroup" 
-                        BackColor="Silver" BorderColor="Silver" Height="30px" 
-                        style="font-family: 'Maiandra GD'; font-size: medium" Width="100px"/>
+                        ValidationGroup="LoginUserValidationGroup" BorderColor="Silver" Height="30px" 
+                        style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+                        Width="100px"/>
                 </p>
             </div>
         </LayoutTemplate>

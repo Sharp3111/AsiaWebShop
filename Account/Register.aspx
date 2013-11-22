@@ -327,10 +327,10 @@
     </tr>
 </table>
                         <p class="submitButton">
-                            <asp:Button ID="CreateUserButton" runat="server" CommandName="MoveNext" Text="Create User" 
-                                 ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
-                                BorderColor="Silver" Height="30px" 
-                                style="font-size: medium; font-family: 'Maiandra GD'" Width="120px"/>
+                            <asp:Button ID="CreateUserButton" runat="server" CommandName="MoveNext" Text="Register" 
+                                 ValidationGroup="RegisterUserValidationGroup" Height="30px" 
+                                style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+                                Width="120px"/>
                         </p>
                     </div>
                 </ContentTemplate>

@@ -4,10 +4,10 @@
     <style type="text/css">
         .style2
         {
-            font-size: large;
+            font-size: x-large;
             color: #000080;
             text-transform: uppercase;
-            text-decoration: underline;
+            font-family: "Times New Roman", Times, serif;
         }
         .style3
     {
@@ -261,7 +261,9 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="btnAddYourAddress" runat="server" onclick="btnAddYourAddress_Click" 
             Text="Add Your Address" ValidationGroup="AddAddressValidationGroup" 
-                    BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
+                Height="30px" 
+                style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+                Width="200px" />
                     </td>
     </tr>
     <tr>
@@ -305,9 +307,11 @@
     <tr>
         <td class="style64" colspan="5">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="btnChooseAddress" runat="server" BackColor="Silver" 
-                BorderColor="Silver" BorderStyle="Solid" onclick="btnChooseAddress_Click" 
-                Text="Choose Your Address" ValidationGroup="ChooseAddressValidationGroup" />
+            <asp:Button ID="btnChooseAddress" runat="server" onclick="btnChooseAddress_Click" 
+                Text="Choose Your Address" ValidationGroup="ChooseAddressValidationGroup" 
+                Height="30px" 
+                style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+                Width="200px" />
         &nbsp;
             <asp:Label ID="lblMessage1" runat="server" ForeColor="Red"></asp:Label>
         </td>
@@ -378,12 +382,14 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="ContinueButton" runat="server" onclick="ContinueButton_Click" 
             Text="Confirm Change" 
-            ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
-            BorderColor="Silver" BorderStyle="Solid" />
+            ValidationGroup="RegisterUserValidationGroup" Height="30px" 
+            style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+            Width="150px" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:Button ID="btnCancel" runat="server" BackColor="Silver" 
-            BorderColor="Silver" BorderStyle="Solid" 
-            PostBackUrl="~/MemberOnly/ReviewProcessingOrder.aspx" Text="Cancel" />
+        <asp:Button ID="btnCancel" runat="server" 
+            PostBackUrl="~/MemberOnly/ReviewProcessingOrder.aspx" Text="Cancel" 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+            Width="80px" />
     </p>
     <asp:ValidationSummary ID="ValidationSummary3" runat="server" 
         EnableClientScript="False" ForeColor="Red" 

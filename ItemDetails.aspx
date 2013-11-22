@@ -16,12 +16,16 @@
             color: #000080;
             text-transform: uppercase;
             font-weight: bold;
-            text-decoration: underline;
+            }
+        .style5
+        {
+            font-size: x-large;
+            font-family: "Times New Roman", Times, serif;
         }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <p style="font-family: Arial, Helvetica, sans-serif; text-decoration: underline; font-size: large; font-weight: bold; color: #000080">
+    <p style="font-weight: bold; color: #000080" class="style5">
         ITEM INFORMATION</p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
@@ -87,9 +91,9 @@
                 </asp:TemplateField>
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button ID="btn_return" runat="server" Height="25px" 
-                            Text="Return to Item Search" Width="150px" BackColor="Silver" 
-                            BorderColor="Silver" BorderStyle="Solid" PostBackUrl="~/ItemSearch.aspx" />
+                        <asp:Button ID="btn_return" runat="server" Height="30px" 
+                            Text="Return to Item Search" Width="150px" PostBackUrl="~/ItemSearch.aspx" 
+                            style="font-size: medium; font-family: 'Times New Roman', Times, serif" />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Fields>

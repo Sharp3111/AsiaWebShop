@@ -5,9 +5,9 @@
     <style type="text/css">
         .style2
         {
-            text-decoration: underline;
-            font-size: large;
+            font-size: x-large;
             color: #000000;
+            font-family: "Times New Roman", Times, serif;
         }
         .style4
         {
@@ -120,7 +120,7 @@
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <p class="style2">
-        REGISTRATION PAGE</p>
+        <strong>REGISTRATION PAGE</strong></p>
     <p class="style4">
         Member Information</p>
     <table class="style5">
@@ -348,6 +348,8 @@
     ValidationGroup="RegisterUserValidationGroup" />
     <br />
     <br />
-    <asp:Button ID="Register" runat="server" Text="Register" />
+    <asp:Button ID="Register" runat="server" Text="Register" Height="30px" 
+        style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+        Width="150px" />
     <br />
 </asp:Content>

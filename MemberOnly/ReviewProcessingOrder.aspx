@@ -4,11 +4,11 @@
     <style type="text/css">
         .style2
         {
-            font-size: large;
+            font-size: x-large;
             color: #000080;
             text-transform: capitalize;
             font-weight: bold;
-            text-decoration: underline;
+            font-family: "Times New Roman", Times, serif;
         }
         .style3
         {
@@ -52,7 +52,10 @@
         </asp:GridView>
     </p>
     <p class="style3">
-        <asp:Button ID="btnNext" runat="server" onclick="btnNext_Click" Text="Edit" />
+        <asp:Button ID="btnNext" runat="server" onclick="btnNext_Click" Text="Edit" 
+            Height="30px" 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+            Width="80px" />
     </p>
     <p class="style3">
         <asp:Label ID="Label1" runat="server" Font-Underline="False" ForeColor="Red"></asp:Label>

@@ -2,32 +2,19 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
     <style type="text/css">
-        .style2
-        {
-            width: 76%;
-            margin-bottom: 3px;
-        }
-        .style3
-        {
-            width: 182px;
-        }
-        .style4
-        {
-            width: 285px;
-            text-align: right;
-        }
-        .style5
-        {
-            width: 96px;
-        }
         .style6
         {
             color: #000080;
         }
+        .style7
+        {
+            font-size: x-large;
+            font-family: "Times New Roman", Times, serif;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <p style="font-family: Arial, Helvetica, sans-serif; font-size: large; color: #000080; font-weight: bold;">
+    <p style="color: #000080; font-weight: bold;" class="style7">
         Final Order Confirmation</p>
     <p style="font-family: Arial, Helvetica, sans-serif; font-size: medium; color: #000080;">
         Dear
@@ -76,6 +63,8 @@
     <p>
         <asp:Button ID="shoppingCart" runat="server" 
             PostBackUrl="~/MemberOnly/ShoppingCart.aspx" Text="Back to Shopping Cart" 
+            Height="30px" 
+            style="font-size: medium; font-family: 'Times New Roman', Times, serif" Width="200px" 
              />
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
@@ -120,7 +109,9 @@
     <p>
         <asp:Button ID="address" runat="server" 
             PostBackUrl="~/MemberOnly/DeliveryInformation.aspx" 
-            Text="Back to Change Deliver Address" />
+            Text="Back to Change Deliver Address" Height="30px" 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+            Width="250px" />
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         Your payment method:</p>
@@ -161,23 +152,18 @@
     <p>
         <asp:Button ID="payment" runat="server" 
             PostBackUrl="~/MemberOnly/PaymentInformation.aspx" 
-            Text="Back to Change Payment Method" />
+            Text="Back to Change Payment Method" Height="30px" Width="250px" />
     </p>
-    <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
-&nbsp;<table class="style2">
-            <tr>
-                <td class="style3">
-                    <asp:Button ID="confirm" runat="server" onclick="confirm_Click" Text="Confirm Your Order" 
-                        ValidationGroup="finalConfirm" />
-                </td>
-                <td class="style4">
-                    ( The receipt will be sent to your email address:</td>
-                <td class="style5">
+    <p class="style6">
+        The receipt will be sent to your email address:
                     <asp:Label ID="emailAddress" runat="server"></asp:Label>
-                    &nbsp;)</td>
-            </tr>
-        </table>
     </p>
+    <p>
+                    <asp:Button ID="confirm" runat="server" onclick="confirm_Click" Text="Confirm Your Order" 
+                        ValidationGroup="finalConfirm" Height="30px" 
+            style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+            Width="200px" />
+&nbsp;</p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
     </p>

@@ -73,7 +73,8 @@
     </div>
     <div class="style1">
         &copy; <%: DateTime.Now.Year %> 
-        - Sharp</div>
+        - Sharp<br />
+        The currency used in ASIA WEB SHOP is Hong Kong Dollar (HKD).</div>
     </form>
 </body>
 </html>

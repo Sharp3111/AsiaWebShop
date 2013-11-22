@@ -23,12 +23,6 @@
         {
             color: #000080;
         }
-        .style6
-        {
-            font-size: small;
-            color: #008080;
-            font-family: "Segoe UI";
-        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -38,9 +32,6 @@
         Dear
         <asp:Label ID="UserName" runat="server"></asp:Label>
         , your delivery information is as follows:</p>
-    <p class="style6">
-        To add a new address, select any arbitary address below and then click &quot;New&quot; at the 
-        bottom.</p>
     <p class="style3">
         <asp:GridView ID="gvDelivery" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" DataKeyNames = "nickname,userName"
@@ -78,7 +69,7 @@
                     SortExpression="district" />
                 <asp:CheckBoxField DataField="isSelected" HeaderText="isSelected" 
                     SortExpression="isSelected" Visible="False" />
-                <asp:TemplateField HeaderText="Default" SortExpression="isDefault">
+                <asp:TemplateField HeaderText="isDefault" SortExpression="isDefault">
                     <EditItemTemplate>
                         <asp:CheckBox ID="CheckBox1" runat="server" 
                             Checked='<%# Bind("isDefault") %>' />
@@ -334,7 +325,7 @@
             
             
             
-            UpdateCommand="UPDATE Address SET nickname = @nickname, building = @building, floor = @floor, flatSuite = @flatSuite, blockTower = @blockTower, streetAddress = @streetAddress, district = @district WHERE (userName = @userName) AND (isSelected = 'true')">
+            UpdateCommand="UPDATE Address SET nickname = @nickname , building = @building, floor = @floor, flatSuite = @flatSuite, blockTower = @blockTower, streetAddress = @streetAddress, district = @district WHERE (userName = @userName) AND (isSelected = 'true')">
             <DeleteParameters>
                 <asp:Parameter Name="userName" />
                 <asp:Parameter Name="nickname" />

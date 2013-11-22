@@ -47,7 +47,9 @@
                     &nbsp;</td>
                 <td>
                     <asp:Button ID="Button1" runat="server" onclick="Button1_Click" 
-                        Text="Generate Report" />
+                        Text="Generate Report" Height="30px" 
+                        style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+                        Width="150px" />
                 </td>
             </tr>
         </table>
