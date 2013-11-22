@@ -67,7 +67,6 @@
         // Note: The Session_End event is raised only when the sessionstate mode
         // is set to InProc in the Web.config file. If session mode is set to StateServer 
         // or SQLServer, the event is not raised.
-        System.Diagnostics.Debug.Write("Session end.");
         System.Diagnostics.Debug.Write("Username:");
         System.Diagnostics.Debug.WriteLine(Session["Username"].ToString());
         
@@ -101,6 +100,33 @@
             }
         }
 
+        /*query = "UPDATE [Item] SET [quantityAvailable] = ([Item].[quantityAvailable] + [OrderRecord].[quantity]) FROM [Item] JOIN [OrderRecord] ON ([OrderRecord].[upc] = [Item].[upc]) WHERE ([OrderRecord].[isConfirmed] = 'False' AND [OrderRecord].[userName] = '" + username + "')";
+
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        {
+            SqlCommand command = new SqlCommand(query, connection);
+            {
+
+                // Open the connection, execute the INSERT query and close the connection.
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+        }
+        */
+        query = "DELETE [OrderRecord] WHERE ([isConfirmed] = 'False' AND [userName] = '" + username + "')";
+
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        {
+            SqlCommand command = new SqlCommand(query, connection);
+            {
+
+                // Open the connection, execute the INSERT query and close the connection.
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+        }
 
     }
 

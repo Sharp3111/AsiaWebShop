@@ -153,6 +153,16 @@ public partial class _Default : System.Web.UI.Page
 
     protected void UpdateRecommendationDB(string connectionString, string RecommendationTable)
     {
+        //Empty database before inserting anything
+        string queryDelete = "DELETE FROM [" + RecommendationTable + "]";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(queryDelete, connection))
+        {
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+
         DateTime Now = DateTime.Now;
         //Past is initialized to
         DateTime Past = Now;
