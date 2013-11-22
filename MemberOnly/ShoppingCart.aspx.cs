@@ -60,9 +60,74 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                     lblMessage.ForeColor = new System.Drawing.Color();
                 }
             }
+            updateShoppingCart(connectionString, userName,count);
             AccumulateTotalPrice(connectionString, userName);
         }
     }
+
+    private void updateShoppingCart(string connectionString, string userName,int count)
+    {
+        string[] upc = new string[count];
+        decimal[] shoppingprice = new decimal[count];
+        int i = 0;
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT [upc],[unitPrice] FROM [ShoppingCart] WHERE ([userName] = N'" + userName + "')", connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    upc[i] = reader["upc"].ToString().Trim();
+                    shoppingprice[i] = Convert.ToDecimal(reader["unitPrice"]);
+                    i++;
+                }
+            }
+            command.Connection.Close();
+        }
+        for (i = 0; i < count; i++)
+        {
+            decimal itemPrice =  findItemPrice(connectionString,upc[i]);
+            if(shoppingprice[i] > itemPrice) {
+                updatePrice(connectionString,upc[i],itemPrice);
+            }
+        }
+
+
+    }
+
+    private decimal findItemPrice(string connectionString, string upc)
+    {
+        decimal price = 0;
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT [discountPrice] FROM [Item] WHERE ([upc] = N'" + upc + "')", connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    price = Convert.ToDecimal(reader["discountPrice"]);
+                }
+            }
+            command.Connection.Close();
+        }
+        return price;
+    }
+
+    private void updatePrice(string connectionString,string upc, decimal price)
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("UPDATE [ShoppingCart] SET [unitPrice] = '"+price.ToString().Trim()+"' WHERE ([upc] = N'" + upc + "')", connection))
+        {
+            command.Connection.Open();
+            command.ExecuteReader();
+            command.Connection.Close();
+        }
+    }
+
 
     private void AccumulateTotalPrice(string connectionString, string userName)
     {

@@ -177,7 +177,7 @@
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
             
-            SelectCommand="SELECT ShoppingCart.isChecked, Item.upc, Item.name, Item.discountPrice, ShoppingCart.quantity, Item.quantityAvailable, Item.discountPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc WHERE userName = @userName" 
+            SelectCommand="SELECT ShoppingCart.isChecked, Item.upc, Item.name, ShoppingCart.unitPrice AS discountPrice, ShoppingCart.quantity, Item.quantityAvailable, ShoppingCart.unitPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc WHERE (ShoppingCart.userName = @userName)" 
             DeleteCommand="DELETE FROM ShoppingCart WHERE userName = ''">
             <SelectParameters>
                 <asp:ControlParameter ControlID="UserName" Name="userName" 

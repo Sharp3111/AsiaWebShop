@@ -163,7 +163,7 @@ public partial class _Default : System.Web.UI.Page
                 TextBox quantity_textbox = (TextBox)gvItemSearchResult.Rows[Row_index].FindControl("tbQuantity");
                 Int32 quantity = Convert.ToInt32(quantity_textbox.Text.Trim());
                 Int32 count;
-
+                decimal itemPrice = 0;
                 //get the current quantityAvailable in Item BD
                 Int32 currentQuantityAvailable = 0;
                 string query;
@@ -279,11 +279,25 @@ public partial class _Default : System.Web.UI.Page
                     connection.Close();
                 }
 
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+                {
+
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT [discountPrice] FROM [item] WHERE ([upc] = N'" + upc + "')", connection);
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        itemPrice = Convert.ToDecimal(reader["discountPrice"]);
+                    }
+
+                    connection.Close();
+                }
+
                 //if the item is not in the shopping cart, then add it into shopping cart
                 if (count == 0)
                 {
                     string SQLCmd = "INSERT INTO [ShoppingCart] " +
-                        "VALUES (@UserName, @Upc, @Quantity, CURRENT_TIMESTAMP, @IsChecked, @IsReleased)";
+                        "VALUES (@UserName, @Upc, @Quantity, CURRENT_TIMESTAMP, @IsChecked, @IsReleased, @unitPrice)";
 
                     using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                     using (SqlCommand command = new SqlCommand(SQLCmd, connection))
@@ -292,6 +306,7 @@ public partial class _Default : System.Web.UI.Page
                         command.Parameters.AddWithValue("@UserName", userName);
                         command.Parameters.AddWithValue("@Upc", upc);
                         command.Parameters.AddWithValue("@Quantity", quantity);
+                        command.Parameters.AddWithValue("@unitPrice", itemPrice);
                         command.Parameters.AddWithValue("@IsChecked", Convert.ToString(true));
                         command.Parameters.AddWithValue("@IsReleased", Convert.ToString(false));
 
