@@ -77,6 +77,11 @@
                 ErrorMessage="User Name must be alphanumeric and at least 6 characters." 
                 ForeColor="Red" ValidationExpression="^[A-Za-z\d]{6,10}$" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
+            <asp:CustomValidator ID="cvUserName" runat="server" 
+                ControlToValidate="UserName" Display="Dynamic" EnableClientScript="False" 
+                ErrorMessage="This user name has existed. Please try another user name." 
+                ForeColor="Red" onservervalidate="cvUserName_ServerValidate" 
+                ValidationGroup="RegisterUserValidationGroup">*</asp:CustomValidator>
         </td>
         <td class="style46">
             &nbsp;Email Adress:</td>

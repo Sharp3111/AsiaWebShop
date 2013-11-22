@@ -191,4 +191,32 @@ public partial class Account_Register : System.Web.UI.Page
             }
         }
     }
+    protected void cvUserName_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        if(IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string txtUserName = ((TextBox)RegisterUserWizardStep.ContentTemplateContainer.FindControl("UserName")).Text.Trim();
+
+            Int32 count = 0;
+            string query = "SELECT COUNT(*) FROM [Member] WHERE userName = '" + txtUserName + "'";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+                count = (Int32)command.ExecuteScalar();
+                connection.Close();
+            }
+
+            if (count < 1)
+            {
+                args.IsValid = true;
+            }
+            else
+            {
+                args.IsValid = false;
+            }            
+        }
+
+    }
 }
