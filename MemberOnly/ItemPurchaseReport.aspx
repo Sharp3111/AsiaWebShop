@@ -211,7 +211,7 @@
                 SortExpression="phoneNumber" />
             <asp:BoundField DataField="address" HeaderText="Address" 
                 SortExpression="address" />
-            <asp:BoundField DataField="cardnumber" HeaderText="Card Number" ReadOnly="True" 
+            <asp:BoundField DataField="cardnumber" HeaderText="Card Number (Last 4 digits)" ReadOnly="True" 
                 SortExpression="cardnumber" />
             <asp:BoundField DataField="type" HeaderText="Type" SortExpression="type" />
             <asp:BoundField DataField="authorizationCode" HeaderText="Authorization Code" 
