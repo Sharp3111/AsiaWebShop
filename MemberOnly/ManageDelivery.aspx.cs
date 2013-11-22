@@ -143,139 +143,140 @@ public partial class MemberOnly_PaymentMethodManagement : System.Web.UI.Page
 
         if (Page.IsValid)
         {
-            string connectionString = "AsiaWebShopDBConnectionString";
-            string userName = User.Identity.Name;
+            ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked = false;
+        //    string connectionString = "AsiaWebShopDBConnectionString";
+        //    string userName = User.Identity.Name;
 
-            Int32 count = 0;
-            //check if only
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "')", connection))
-            {
-                command.Connection.Open();
-                count = (Int32)command.ExecuteScalar();
-                command.Connection.Close();
-            }
+        //    Int32 count = 0;
+        //    //check if only
+        //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //    using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE ([userName] = N'" + userName + "')", connection))
+        //    {
+        //        command.Connection.Open();
+        //        count = (Int32)command.ExecuteScalar();
+        //        command.Connection.Close();
+        //    }
 
-            if (count <= 1)
-            {
-                //if the only one edited address changes from default to non default, error message.
-                if (((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked == false)
-                {
-                    ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked = true;
-                    ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Enabled = false;
-                    lblMessage.ForeColor = System.Drawing.Color.Red;
-                    lblMessage.Text = "This is your only address in your delivery address list. You have to have this address as the default delivery address.";
-                    lblMessage.Visible = true;
-                }
-            }
-            else
-            {
-                //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
-                if (((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked == true)
-                {
-                    //find the initial default number for later update
-                    string currentnickname = ((TextBox)dvDelivery.FindControl("EditNickname")).Text.Trim();
-                    string initialDefaultAddress = "";
+        //    if (count <= 1)
+        //    {
+        //        //if the only one edited address changes from default to non default, error message.
+        //        if (((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked == false)
+        //        {
+        //            ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked = true;
+        //            ((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Enabled = false;
+        //            lblMessage.ForeColor = System.Drawing.Color.Red;
+        //            lblMessage.Text = "This is your only address in your delivery address list. You have to have this address as the default delivery address.";
+        //            lblMessage.Visible = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //if the edited credit card changes from nondefault to default, then the initial default card becomes nondefault
+        //        if (((CheckBox)(dvDelivery.FindControl("EditIsDefault"))).Checked == true)
+        //        {
+        //            //find the initial default number for later update
+        //            string currentnickname = ((TextBox)dvDelivery.FindControl("EditNickname")).Text.Trim();
+        //            string initialDefaultAddress = "";
 
-                    string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(true) + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(querySelect, connection))
-                    {
-                        command.Connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                initialDefaultAddress = reader.GetString(0);
-                            }
-                        }
+        //            string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(true) + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(querySelect, connection))
+        //            {
+        //                command.Connection.Open();
+        //                SqlDataReader reader = command.ExecuteReader();
+        //                if (reader.HasRows)
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        initialDefaultAddress = reader.GetString(0);
+        //                    }
+        //                }
 
-                        reader.Close();
-                        command.Connection.Close();
-                    }
+        //                reader.Close();
+        //                command.Connection.Close();
+        //            }
 
-                    //Set the edited card to be default
-                    string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", true);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
+        //            //Set the edited card to be default
+        //            string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+        //            {
+        //                command.Connection.Open();
+        //                command.Parameters.AddWithValue("@IsDefault", true);
+        //                command.ExecuteNonQuery();
+        //                command.Connection.Close();
+        //            }
 
-                    //Set the initial default to be nondefault
-                    string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + initialDefaultAddress + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", false);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
+        //            //Set the initial default to be nondefault
+        //            string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + initialDefaultAddress + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+        //            {
+        //                command.Connection.Open();
+        //                command.Parameters.AddWithValue("@IsDefault", false);
+        //                command.ExecuteNonQuery();
+        //                command.Connection.Close();
+        //            }
 
-                    gvDelivery.DataBind();
+        //            gvDelivery.DataBind();
 
-                    lblMessage.ForeColor = System.Drawing.Color.Red;
-                    lblMessage.Text = "Your default delivery address has changed.";
-                    lblMessage.Visible = true;
-                }
-                //else the edited address changes from default to nondefault, then this card is set to the default
-                else
-                {
-                    string currentnickname = ((TextBox)dvDelivery.FindControl("EditNickname")).Text.Trim();
-                    string changedDefaultAddress = "";
+        //            lblMessage.ForeColor = System.Drawing.Color.Red;
+        //            lblMessage.Text = "Your default delivery address has changed.";
+        //            lblMessage.Visible = true;
+        //        }
+        //        //else the edited address changes from default to nondefault, then this card is set to the default
+        //        else
+        //        {
+        //            string currentnickname = ((TextBox)dvDelivery.FindControl("EditNickname")).Text.Trim();
+        //            string changedDefaultAddress = "";
 
-                    string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(false) + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(querySelect, connection))
-                    {
-                        command.Connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                // find next address to be default
-                                changedDefaultAddress = reader.GetString(0); break;
-                            }
-                        }
+        //            string querySelect = "SELECT [nickname] FROM [Address] WHERE ([userName] = N'" + userName + "' AND [isDefault] = '" + Convert.ToString(false) + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(querySelect, connection))
+        //            {
+        //                command.Connection.Open();
+        //                SqlDataReader reader = command.ExecuteReader();
+        //                if (reader.HasRows)
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        // find next address to be default
+        //                        changedDefaultAddress = reader.GetString(0); break;
+        //                    }
+        //                }
 
-                        reader.Close();
-                        command.Connection.Close();
-                    }
+        //                reader.Close();
+        //                command.Connection.Close();
+        //            }
 
-                    //Set the edited card to be default
-                    string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + changedDefaultAddress + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", true);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
+        //            //Set the edited card to be default
+        //            string queryUpdate1 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + changedDefaultAddress + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(queryUpdate1, connection))
+        //            {
+        //                command.Connection.Open();
+        //                command.Parameters.AddWithValue("@IsDefault", true);
+        //                command.ExecuteNonQuery();
+        //                command.Connection.Close();
+        //            }
 
-                    //Set the initial default to be nondefault
-                    string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
-                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                    using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
-                    {
-                        command.Connection.Open();
-                        command.Parameters.AddWithValue("@IsDefault", false);
-                        command.ExecuteNonQuery();
-                        command.Connection.Close();
-                    }
+        //            //Set the initial default to be nondefault
+        //            string queryUpdate2 = "UPDATE [Address] SET [isDefault] = @IsDefault WHERE ([userName] = N'" + userName + "' AND [nickname] = '" + currentnickname + "')";
+        //            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        //            using (SqlCommand command = new SqlCommand(queryUpdate2, connection))
+        //            {
+        //                command.Connection.Open();
+        //                command.Parameters.AddWithValue("@IsDefault", false);
+        //                command.ExecuteNonQuery();
+        //                command.Connection.Close();
+        //            }
 
-                    gvDelivery.DataBind();
+        //            gvDelivery.DataBind();
 
-                    lblMessage.ForeColor = System.Drawing.Color.Green;
-                    lblMessage.Text = "Your default delivery address has changed.";
-                }
-            }
+        //            lblMessage.ForeColor = System.Drawing.Color.Green;
+        //            lblMessage.Text = "Your default delivery address has changed.";
+        //        }
+        //    }
         }
         else
         {
