@@ -393,7 +393,17 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                         command.Connection.Open();
                         command.ExecuteNonQuery();
                         command.Connection.Close();
-                    }                 
+                    }
+
+                    //update the isreleased flag in shopping cart
+                    queryUpdate = "UPDATE [ShoppingCart] SET isReleased = 'True' ";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                    {
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }   
                 }
             }
         }
