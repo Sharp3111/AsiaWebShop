@@ -255,7 +255,7 @@ Women." ForeColor="Red" onservervalidate="cvInsertCategory_ServerValidate">*</as
                         <asp:CustomValidator ID="cvEditDiscountPrice" runat="server" 
                             ControlToValidate="EditDiscountPrice" Display="Dynamic" 
                             EnableClientScript="False" 
-                            ErrorMessage="Discount Price should be positive money values and discount Price cannot be greater than normal price." 
+                            ErrorMessage="Discount Price should be positive money values and Discount Price cannot be greater than normal price." 
                             ForeColor="Red" onservervalidate="cvEditDiscountPrice_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
@@ -268,7 +268,7 @@ Women." ForeColor="Red" onservervalidate="cvInsertCategory_ServerValidate">*</as
                         <asp:CustomValidator ID="cvInsertDiscountPrice" runat="server" 
                             ControlToValidate="InsertDiscountPrice" Display="Dynamic" 
                             EnableClientScript="False" 
-                            ErrorMessage="Discount Price should be positive money values and discount Price cannot be greater than normal price." 
+                            ErrorMessage="Discount Price should be positive money values and Discount Price cannot be greater than normal price." 
                             ForeColor="Red" onservervalidate="cvInsertDiscountPrice_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>

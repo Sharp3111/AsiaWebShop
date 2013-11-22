@@ -67,6 +67,7 @@
         // Note: The Session_End event is raised only when the sessionstate mode
         // is set to InProc in the Web.config file. If session mode is set to StateServer 
         // or SQLServer, the event is not raised.
+        System.Diagnostics.Debug.Write("Session end.");
         System.Diagnostics.Debug.Write("Username:");
         System.Diagnostics.Debug.WriteLine(Session["Username"].ToString());
         
