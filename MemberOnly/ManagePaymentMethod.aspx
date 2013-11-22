@@ -23,6 +23,12 @@
         {
             color: #000080;
         }
+        .style6
+        {
+            font-size: small;
+            color: #008080;
+            font-family: "Segoe UI";
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -32,6 +38,9 @@
         Dear
         <asp:Label ID="UserName" runat="server"></asp:Label>
         , your credit card information is as follows:</p>
+    <p class="style6">
+        To add a new credit card, select any arbitary card below and then click &quot;New&quot; at the 
+        bottom.</p>
     <p class="style3">
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" DataKeyNames = "number,userName"
