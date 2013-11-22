@@ -16,6 +16,8 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
+            String orderConfirmationNumber = Request.QueryString["field"];
+
             // Populate the DistrictDropDownList.
             // DistrictDropDownList.Items.Add("-- Select district --");
             DistrictDropDownList.Items.Add("Central and Western");
@@ -52,8 +54,9 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     }
     private void GetMemberData(string connectionString, string userName)
     {
+        String orderConfirmationNumber = Request.QueryString["field"];
         // Define the SELECT query to get the member's personal data.
-        string query = "SELECT [userName], [email], [firstName], [lastName], [phoneNumber] FROM [Member] WHERE ([username] =N'" + userName + "')";
+        string query = "SELECT [userName], [email], [name], [phoneNumber] FROM [OrderRecord] WHERE ([username] =N'" + userName + "' AND [confirmationNumber] = N'" + orderConfirmationNumber + "')";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -72,8 +75,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                     // Assign the data values to the web form label and textboxes.
                     UserName.Text = reader["userName"].ToString().Trim();
                     Email.Text = reader["email"].ToString().Trim();
-                    FirstName.Text = reader["firstName"].ToString().Trim();
-                    LastName.Text = reader["lastName"].ToString().Trim();
+                    Name.Text = reader["name"].ToString().Trim();
                     PhoneNumber.Text = reader["phoneNumber"].ToString().Trim();
                 }
             }
@@ -115,7 +117,11 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     protected void ContinueButton_Click(object sender, EventArgs e)
     {
         Page.Validate("RegisterUserValidationGroup");
-        if (Page.IsValid)
+        Boolean flag = true;
+        if (AddressDropDownList.SelectedValue == "0")
+            flag = false;
+
+        if (Page.IsValid && flag == true)
         {
             string connectionString = "AsiaWebShopDBConnectionString";
             string connectionString2 = "AsiaWebShopDBConnectionString2";
@@ -152,7 +158,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                             // Define the INSERT query parameters and their values.
                             command2.Parameters.AddWithValue("@UserName", userName);
                             command2.Parameters.AddWithValue("@Email", Email.Text.Trim());
-                            command2.Parameters.AddWithValue("@Name", FirstName.Text.Trim() + " " + LastName.Text.Trim());
+                            command2.Parameters.AddWithValue("@Name", Name.Text.Trim());
                             command2.Parameters.AddWithValue("@PhoneNumber", PhoneNumber.Text.Trim());
                             command2.Parameters.AddWithValue("@Address", Address.Text.Trim());
                             command2.Parameters.AddWithValue("@DeliveryDate", DeliveryDateDropDownList.SelectedItem.Text.Trim());
@@ -181,6 +187,13 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 continueUrl = "~/";
             }
             Response.Redirect(continueUrl, false);
+        }
+
+        if (flag == false)
+        {
+            lblMessage1.ForeColor = System.Drawing.Color.Red;
+            lblMessage1.Visible = true;
+            lblMessage1.Text = "Please choose your address and click the Choose Your Address button to confirm your choice first.";
         }
     }
     protected void cvDeliveryTime_ServerValidate(object source, ServerValidateEventArgs args)

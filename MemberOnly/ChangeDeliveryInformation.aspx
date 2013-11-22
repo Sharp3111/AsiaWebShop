@@ -19,10 +19,6 @@
         .style5
     {
         }
-        .style57
-        {
-            width: 295px;
-        }
         .style64
         {
         }
@@ -57,16 +53,11 @@
         .style73
         {
             height: 29px;
-            width: 191px;
+            width: 182px;
         }
         .style75
         {
-            width: 302px;
-            height: 29px;
-        }
-        .style76
-        {
-            width: 245px;
+            width: 359px;
             height: 29px;
         }
         .style77
@@ -79,33 +70,52 @@
             color: #000080;
             font-family: "Segoe UI";
         }
-        .style79
+        .style82
         {
-            width: 245px;
+            height: 43px;
         }
-        .style80
+        .style83
         {
-            width: 191px;
+            width: 183px;
+            height: 43px;
         }
-        .style81
+        .style84
         {
-            width: 302px;
+            width: 359px;
+            height: 43px;
+        }
+        .style88
+        {
+            height: 29px;
+            width: 183px;
+        }
+        .style89
+        {
+            width: 183px;
+        }
+        .style90
+        {
+            width: 359px;
+        }
+        .style92
+        {
+            width: 347px;
         }
         </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p class="style2">
-        <strong>SPECIFY Delivery Information</strong></p>
+        <strong>Review Delivery Information</strong></p>
 <table class="style78">
     <tr>
         <td class="style77">
             User Name:</td>
-        <td class="style80">
+        <td class="style89">
             <asp:Label ID="UserName" runat="server"></asp:Label>
         </td>
-        <td class="style81" colspan="2">
+        <td class="style90" colspan="2">
             &nbsp;Email Address:</td>
-        <td class="style79">
+        <td class="style89">
             <asp:TextBox ID="Email" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
@@ -121,31 +131,19 @@
         </td>
     </tr>
     <tr>
-        <td class="style77">
-            First Name:</td>
-        <td class="style80">
-            <asp:TextBox ID="FirstName" runat="server" Height="22px" Width="200px" 
+        <td class="style82">
+            Name:</td>
+        <td class="style83">
+            <asp:TextBox ID="Name" runat="server" Height="22px" Width="200px" 
                 MaxLength="20"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvFirstName" runat="server" 
-                ControlToValidate="FirstName" Display="Dynamic" EnableClientScript="False" 
+                ControlToValidate="Name" Display="Dynamic" EnableClientScript="False" 
                 ErrorMessage="First Name is required." ForeColor="Red" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style81" colspan="2">
-            &nbsp;Last Name:</td>
-        <td class="style79">
-            <asp:TextBox ID="LastName" runat="server" Height="22px" Width="200px" 
-                MaxLength="30"></asp:TextBox>
-            <asp:RequiredFieldValidator ID="rfvLastName" runat="server" 
-                ControlToValidate="LastName" Display="Dynamic" EnableClientScript="False" 
-                ErrorMessage="Last Name is required." ForeColor="Red" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
-        </td>
-    </tr>
-    <tr>
-        <td class="style77">
+        <td class="style84" colspan="2">
             Phone Number:</td>
-        <td class="style80">
+        <td class="style83">
             <asp:TextBox ID="PhoneNumber" runat="server" Height="22px" Width="200px" 
                 MaxLength="8"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvPhoneNumber" runat="server" 
@@ -158,17 +156,13 @@
                 ForeColor="Red" ValidationExpression="^\d{8}$" 
                 ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
         </td>
-        <td class="style81" colspan="2">
-            &nbsp;</td>
-        <td class="style79">
-            &nbsp;</td>
     </tr>
     <tr>
         <td class="style66" colspan="5">
             <br />
             <asp:Label ID="lblAddAddress" runat="server" 
                 style="text-transform: uppercase; text-decoration: underline; font-size: medium; font-family: Arial, Helvetica, sans-serif" 
-                Text="Add an Address"></asp:Label>
+                Text="Add Another New Address"></asp:Label>
         </td>
     </tr>
     <tr>
@@ -181,11 +175,11 @@
         <td class="style77">
             <asp:Label ID="lblBuilding" runat="server" Text="Building:"></asp:Label>
         </td>
-        <td class="style80">
+        <td class="style89">
             <asp:TextBox ID="Building" runat="server" Height="22px" Width="200px" 
                 MaxLength="20"></asp:TextBox>
         </td>
-        <td class="style81" colspan="2">
+        <td class="style90" colspan="2">
             <table class="style3" __designer:mapid="51d">
                 <tr __designer:mapid="51e">
                     <td class="style7" __designer:mapid="51f">
@@ -197,7 +191,7 @@
                 </tr>
             </table>
         </td>
-        <td class="style79">
+        <td class="style89">
             <table class="style3" __designer:mapid="523">
                 <tr __designer:mapid="524">
                     <td class="style8" __designer:mapid="525">
@@ -222,7 +216,7 @@
         <td class="style77">
             <asp:Label ID="lblStreet" runat="server" Text="Street:"></asp:Label>
         </td>
-        <td class="style80">
+        <td class="style89">
             <asp:TextBox ID="Street" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvStreet" runat="server" 
@@ -230,10 +224,10 @@
                 ErrorMessage="Street is required." ForeColor="Red" 
                 ValidationGroup="AddAddressValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style81" colspan="2">
+        <td class="style90" colspan="2">
             <asp:Label ID="lblDistrict" runat="server" Text="District:"></asp:Label>
         </td>
-        <td class="style79">
+        <td class="style89">
             <asp:DropDownList ID="DistrictDropDownList" runat="server" 
                 Height="22px" style="margin-left: 0px" Width="205px" 
                 onselectedindexchanged="DistrictDropDownList0_SelectedIndexChanged">
@@ -250,7 +244,7 @@
         <td class="style73">
             <asp:Label ID="lblNickname" runat="server" Text="Nickname:"></asp:Label>
         </td>
-        <td class="style73">
+        <td class="style88">
             <asp:TextBox ID="Nickname" runat="server" MaxLength="10" 
                             Text='<%# Bind("nickname") %>'></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvNickname" runat="server" 
@@ -270,7 +264,7 @@
         </td>
         <td class="style75" colspan="2">
             </td>
-        <td class="style76">
+        <td class="style88">
         </td>
     </tr>
     <tr>
@@ -297,7 +291,7 @@
         <td class="style77">
             <asp:Label ID="lblDeliveryAddress" runat="server" Text="Delivery Address:"></asp:Label>
         </td>
-        <td class="style57" colspan="2">
+        <td class="style92" colspan="2">
             <asp:DropDownList ID="AddressDropDownList" runat="server" 
                 onselectedindexchanged="AddressDropDownList_SelectedIndexChanged">
                 <asp:ListItem Value="0">-- Select an Address --</asp:ListItem>
@@ -314,7 +308,7 @@
     <tr>
         <td class="style77">
             &nbsp;</td>
-        <td class="style57" colspan="2">
+        <td class="style92" colspan="2">
             &nbsp;</td>
         <td class="style5" colspan="2">
             &nbsp;</td>
@@ -325,6 +319,8 @@
             <asp:Button ID="btnChooseAddress" runat="server" BackColor="Silver" 
                 BorderColor="Silver" BorderStyle="Solid" onclick="btnChooseAddress_Click" 
                 Text="Choose Your Address" ValidationGroup="ChooseAddressValidationGroup" />
+        &nbsp;
+            <asp:Label ID="lblMessage1" runat="server" ForeColor="Red"></asp:Label>
         </td>
     </tr>
     <tr>
@@ -355,7 +351,7 @@
     <tr>
         <td class="style77">
             Delivery Date:</td>
-        <td class="style80">
+        <td class="style89">
             <asp:DropDownList ID="DeliveryDateDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select a Date --</asp:ListItem>
             </asp:DropDownList>
@@ -364,9 +360,9 @@
                 EnableClientScript="False" ErrorMessage="Please select a delivery date." 
                 ForeColor="Red" InitialValue="0" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
         </td>
-        <td class="style81" colspan="2">
+        <td class="style90" colspan="2">
             Delivery Time:</td>
-        <td class="style79">
+        <td class="style89">
             <asp:DropDownList ID="DeliveryTimeDropDownList" runat="server">
                 <asp:ListItem Value="0">-- Select a Time Slot --</asp:ListItem>
                 <asp:ListItem Value="9">09:00-12:00</asp:ListItem>
@@ -390,11 +386,14 @@
     <p>
         &nbsp;</p>
     <p>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="ContinueButton" runat="server" onclick="ContinueButton_Click" 
             Text="Next: Specify Payment Information" 
             ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
             BorderColor="Silver" BorderStyle="Solid" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:Button ID="btnCancel" runat="server" BackColor="Silver" 
+            BorderColor="Silver" BorderStyle="Solid" Text="Cancel" />
     </p>
     <asp:ValidationSummary ID="ValidationSummary3" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
