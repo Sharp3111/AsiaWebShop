@@ -393,7 +393,8 @@
             BorderColor="Silver" BorderStyle="Solid" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="btnCancel" runat="server" BackColor="Silver" 
-            BorderColor="Silver" BorderStyle="Solid" Text="Cancel" />
+            BorderColor="Silver" BorderStyle="Solid" 
+            PostBackUrl="~/MemberOnly/ReviewProcessingOrder.aspx" Text="Cancel" />
     </p>
     <asp:ValidationSummary ID="ValidationSummary3" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
