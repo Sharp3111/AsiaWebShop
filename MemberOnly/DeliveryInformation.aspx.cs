@@ -71,7 +71,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 {
                     // Assign the data values to the web form label and textboxes.
                     UserName.Text = reader["userName"].ToString().Trim();
-                    Email.Text = reader["email"].ToString().Trim();
+                    email.Text = reader["email"].ToString().Trim();
                     FirstName.Text = reader["firstName"].ToString().Trim();
                     LastName.Text = reader["lastName"].ToString().Trim();
                     PhoneNumber.Text = reader["phoneNumber"].ToString().Trim();
@@ -162,7 +162,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
 
                         // Define the UPDATE query with parameters.
-                        string query2 = "UPDATE [OrderRecord] SET [name] = @Name, [email] = @Email, [phoneNumber] = @PhoneNumber, [address] = @Address, [deliveryDate] = @DeliveryDate, [deliveryTime] = @DeliveryTime WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed AND [upc] = @UPC";
+                        string query2 = "UPDATE [OrderRecord] SET [name] = @Name,  [phoneNumber] = @PhoneNumber, [address] = @Address, [deliveryDate] = @DeliveryDate, [deliveryTime] = @DeliveryTime WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed AND [upc] = @UPC";
 
                         // Create the connection and the SQL command.
                         using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString2].ConnectionString))
@@ -170,7 +170,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         {
                             // Define the INSERT query parameters and their values.
                             command2.Parameters.AddWithValue("@UserName", userName);
-                            command2.Parameters.AddWithValue("@Email", Email.Text.Trim());
                             command2.Parameters.AddWithValue("@Name", FirstName.Text.Trim() + " " + LastName.Text.Trim());
                             command2.Parameters.AddWithValue("@PhoneNumber", PhoneNumber.Text.Trim());
                             command2.Parameters.AddWithValue("@Address", Address.Text.Trim());

@@ -7,8 +7,8 @@
 &nbsp;Your delivery information has changed successfully.
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; font-size: medium; color: #FF0000">
-&nbsp;The notification has been sent to both old email address and new email address of 
-        your delivery information.</p>
+&nbsp;An notification for that change has been sent to your email address.
+        </p>
     <p>
         &nbsp;</p>
     <p>

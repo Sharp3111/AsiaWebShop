@@ -115,18 +115,7 @@
         <td class="style75" colspan="2">
             &nbsp;Email Address:</td>
         <td class="style76">
-            <asp:TextBox ID="Email" runat="server" Height="22px" Width="200px" 
-                MaxLength="30"></asp:TextBox>
-            <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
-                ControlToValidate="Email" Display="Dynamic" EnableClientScript="False" 
-                ErrorMessage="Email Address is required." ForeColor="Red" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
-            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
-                ControlToValidate="Email" Display="Dynamic" EnableClientScript="False" 
-                ErrorMessage="Email address has to have the form: example@sampleemail.com" 
-                ForeColor="Red" 
-                ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" 
-                ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
+            <asp:Label ID="email" runat="server"></asp:Label>
         </td>
     </tr>
     <tr>
