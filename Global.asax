@@ -11,7 +11,7 @@
     void Application_Start(object sender, EventArgs e) 
     {
         // Code that runs on application startup
-        System.Timers.Timer aTimer = new System.Timers.Timer(10000);
+        System.Timers.Timer aTimer = new System.Timers.Timer(30000);
         aTimer.Enabled = true;
         aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);        
     }
@@ -114,7 +114,14 @@
                     // Update the current quantityAvailable
                     string[] lines = File.ReadAllLines(File1);
                     lines[i] = updatedQuantity.ToString().Trim();
-                    File.WriteAllLines(File1, lines);
+                    try
+                    {
+                        File.WriteAllLines(File1, lines);
+                    }
+                    catch (IOException)
+                    {
+                        System.Diagnostics.Debug.WriteLine("An I/O exception occurred. Saft to continue though.");
+                    }
                     
                     // If quantityPast[i] == 0 and is being updated to a positive number, then send email alert
                     if ((quantityPast[i] == 0) && (updatedQuantity > 0))
