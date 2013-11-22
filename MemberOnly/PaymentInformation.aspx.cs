@@ -412,7 +412,7 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
     }
     protected void checkBoxSelect_CheckedChanged(object sender, EventArgs e)
     {
-        GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
+        /*GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
         //Boolean currentCheck = ((CheckBox)gridViewRow.FindControl("checkBoxSelect")).Checked;
         string currentNumber = ((Label)gridViewRow.FindControl("numberLabel")).Text.Trim();
         //Response.Write("<script>alert('" + currentNumber + "')</script>");
@@ -432,7 +432,18 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
 
                 //Response.Write("<script>alert('" + Convert.ToString(((CheckBox)gridViewRow.FindControl("checkBoxSelect")).Checked) + "')</script>");
             }
+        }*/
+
+        //bool isChecked = ((CheckBox)(sender as object)).Checked;
+        int MaxRow = gvCreditCard.Rows.Count;
+
+        //Response.Write("<script>alert('" + MaxRow + "')</script>");
+        for (int i = 0; i < MaxRow; i++)
+        {
+            ((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked = false;
         }
+
+        ((CheckBox)(sender as object)).Checked =true;
     }
     protected void btNextStep_Click(object sender, EventArgs e)
     {
