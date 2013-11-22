@@ -85,7 +85,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             command.Connection.Close();
             reader.Close();
         }
-        int datedifference = (today - date).Days;
+        int datedifference = (today.Date - date.Date).Days;
         for (int i = 1; i <= 7 - datedifference; i++)
         {
             DeliveryDateDropDownList.Items.Add(today.AddDays(i).ToShortDateString().Trim());
