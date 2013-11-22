@@ -124,7 +124,7 @@
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         Your payment method:</p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
-&nbsp;<asp:GridView ID="paymentMethod" runat="server" AutoGenerateColumns="False" 
+        <asp:GridView ID="paymentMethod" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="AsiaWebDataSource3" ForeColor="#333333" 
             GridLines="None">
             <AlternatingRowStyle BackColor="White" />
