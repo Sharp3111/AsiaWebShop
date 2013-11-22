@@ -16,7 +16,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
-            String orderConfirmationNumber = Request.QueryString["field"];
+            String orderConfirmationNumber = Request.QueryString["confirmationNumber"];
 
             // Populate the DistrictDropDownList.
             // DistrictDropDownList.Items.Add("-- Select district --");
@@ -43,18 +43,50 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             string userName = User.Identity.Name;
             GetMemberData(connectionString, userName);
             GetMemberAddress(connectionString, userName);
+            DateDropdownList(connectionString, userName);
 
             // Populate DeliveryDateDropDownList
-            DateTime today = DateTime.Now.Date;
-            for (int i = 1; i <= 7; i++)
-            {
-                DeliveryDateDropDownList.Items.Add(today.AddDays(i).ToShortDateString().Trim());
-            }
+           
         }
     }
+
+    private void DateDropdownList(string connectionString, string userName)
+    {
+        DateTime date= new DateTime();
+        DateTime today = DateTime.Now.Date;
+        String orderConfirmationNumber = Request.QueryString["confirmationNumber"];
+        string query = "SELECT [orderDateTime]  FROM [OrderRecord] WHERE ([userName] =N'" + userName + "' AND [confirmationNumber] = N'" + orderConfirmationNumber + "')";
+
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to the web form label.
+                    date = DateTime.Parse(reader["orderDateTime"].ToString().Trim());
+                }
+            }
+            command.Connection.Close();
+            reader.Close();
+        }
+        int datedifference = (today - date).Days;
+        for (int i = 1; i <= 7 - datedifference; i++)
+        {
+            DeliveryDateDropDownList.Items.Add(today.AddDays(i).ToShortDateString().Trim());
+        }
+    }
+
     private void GetMemberData(string connectionString, string userName)
     {
-        String orderConfirmationNumber = Request.QueryString["field"];
+        String orderConfirmationNumber = Request.QueryString["confirmationNumber"];
         // Define the SELECT query to get the member's personal data.
         string query = "SELECT [userName], [email], [name], [phoneNumber] FROM [OrderRecord] WHERE ([username] =N'" + userName + "' AND [confirmationNumber] = N'" + orderConfirmationNumber + "')";
 
@@ -118,7 +150,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     {
         Page.Validate("RegisterUserValidationGroup");
         Boolean flag = true;
-        if (AddressDropDownList.SelectedValue == "0")
+        if (AddressDropDownList.SelectedValue == "0" && AddressDropDownList.Enabled == true)
             flag = false;
 
         if (Page.IsValid && flag == true)

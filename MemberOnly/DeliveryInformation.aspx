@@ -326,8 +326,7 @@
                 BorderColor="Silver" BorderStyle="Solid" onclick="btnChooseAddress_Click" 
                 Text="Choose Your Address" ValidationGroup="ChooseAddressValidationGroup" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:Label ID="lblMessage1" runat="server" ForeColor="Red"></asp:Label>
-        </td>
+            </td>
     </tr>
     <tr>
         <td class="style64" colspan="5">
@@ -398,6 +397,7 @@
             ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
             BorderColor="Silver" BorderStyle="Solid" />
     </p>
+            <asp:Label ID="lblMessage1" runat="server" ForeColor="Red"></asp:Label>
     <asp:ValidationSummary ID="ValidationSummary3" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
         HeaderText="The following error(s) occurred:" 
