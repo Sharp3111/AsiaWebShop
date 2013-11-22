@@ -103,10 +103,9 @@
                 </asp:TemplateField>
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button ID="btn_ShoppingCart" runat="server" Height="25px" 
-                            onclick="btn_ShoppingCart_Click" Text="Add To Shopping Cart" 
-                            ValidationGroup="QuantityValidationGroup" Width="150px" BackColor="Silver" 
-                            BorderColor="Silver" BorderStyle="Solid" />
+                        <asp:Button ID="btn_return" runat="server" Height="25px" 
+                            Text="Return to Item Search" Width="150px" BackColor="Silver" 
+                            BorderColor="Silver" BorderStyle="Solid" PostBackUrl="~/ItemSearch.aspx" />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Fields>

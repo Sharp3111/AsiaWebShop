@@ -166,6 +166,71 @@ public partial class _Default : System.Web.UI.Page
 
                 //get the current quantityAvailable in Item BD
                 Int32 currentQuantityAvailable = 0;
+                string query;
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+                {
+
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE (isReleased = 'True' AND [upc] = N'" + upc + "' AND [userName] = N'" + userName + "')", connection);
+                    count = (Int32)command.ExecuteScalar();
+                    connection.Close();
+                }
+                if (count > 0)
+                {
+                    int Releasedquantity = 0;
+
+                    query = "SELECT [quantity] FROM [ShoppingCart] WHERE (isReleased = 'True' AND [upc] = N'" + upc + "' AND [userName] = N'" + userName + "')";
+
+                    // Create the connection and the SQL command.
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Open the connection.
+                        command.Connection.Open();
+                        // Execute the SELECT query and place the result in a DataReader.
+                        SqlDataReader reader = command.ExecuteReader();
+                        // Check if a result was returned.
+                        if (reader.HasRows)
+                        {
+                            // Iterate through the table to get the retrieved values.
+                            while (reader.Read())
+                            {
+                                Releasedquantity = reader.GetInt32(0);
+                            }
+                        }
+
+                        // Close the connection and the DataReader.
+                        command.Connection.Close();
+                        reader.Close();
+                    }
+
+                    query = "UPDATE [Item] SET [quantityAvailable] = (quantityAvailable - @Releasedquantity) WHERE ([upc] = '" + upc + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    {
+                        SqlCommand command = new SqlCommand(query, connection);
+                        {
+                            //Define the UPDATE query parameters with corresponding values
+                            command.Parameters.AddWithValue("@Releasedquantity", Releasedquantity.ToString());
+
+                            // Open the connection, execute the INSERT query and close the connection.
+                            command.Connection.Open();
+                            command.ExecuteNonQuery();
+                            command.Connection.Close();
+                        }
+                    }
+
+                    query = "UPDATE [ShoppingCart] SET [isReleased] = 'False' WHERE ([upc] = '" + upc + "')";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    {
+                        SqlCommand command = new SqlCommand(query, connection);
+                        {
+                            command.Connection.Open();
+                            command.ExecuteNonQuery();
+                            command.Connection.Close();
+                        }
+                    }
+                }
+
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                 using (SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = '" + upc + "')", connection))
                 {
@@ -189,7 +254,7 @@ public partial class _Default : System.Web.UI.Page
                 //get the updated currentQuantityAvailable
                 currentQuantityAvailable -= quantity;
                 //update quantityAvailable in Item DB with quantity and currentQuantityAvailable
-                string query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + upc + "')";
+                query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + upc + "')";
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                 {
                     SqlCommand command = new SqlCommand(query, connection);
@@ -286,6 +351,7 @@ public partial class _Default : System.Web.UI.Page
                             command.Connection.Close();
                         }
                     }
+
                 }
 
 
@@ -349,6 +415,44 @@ public partial class _Default : System.Web.UI.Page
                     // Close the connection and the DataReader.
                     command.Connection.Close();
                     reader.Close();
+                }
+                int count = 0;
+                //check if the item has already added into the shopping cart
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+                {
+
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE (isReleased = 'True' AND [upc] = N'" + upc + "' AND [userName] = N'" + userName + "')", connection);
+                    count = (Int32)command.ExecuteScalar();
+                    connection.Close();
+                }
+
+                if (count > 0) 
+                {
+                    query = "SELECT [quantity] FROM [ShoppingCart] WHERE (isReleased = 'True' AND [upc] = N'" + upc + "' AND [userName] = N'" + userName + "')";
+
+                    // Create the connection and the SQL command.
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Open the connection.
+                        command.Connection.Open();
+                        // Execute the SELECT query and place the result in a DataReader.
+                        SqlDataReader reader = command.ExecuteReader();
+                        // Check if a result was returned.
+                        if (reader.HasRows)
+                        {
+                            // Iterate through the table to get the retrieved values.
+                            while (reader.Read())
+                            {
+                                quantity += reader.GetInt32(0);
+                            }
+                        }
+
+                        // Close the connection and the DataReader.
+                        command.Connection.Close();
+                        reader.Close();
+                    }
                 }
 
                 //if(quantity == avaiableQuantity)

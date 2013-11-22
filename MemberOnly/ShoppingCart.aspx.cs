@@ -396,7 +396,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                     }
 
                     //update the isreleased flag in shopping cart
-                    queryUpdate = "UPDATE [ShoppingCart] SET isReleased = 'True' ";
+                    queryUpdate = "UPDATE [ShoppingCart] SET isReleased = 'False' ";
                     using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                     using (SqlCommand command = new SqlCommand(queryUpdate, connection))
                     {
@@ -815,6 +815,17 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             reader.Close();
         }
 
+        int count = 0;
+        //check if the item has already added into the shopping cart
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        {
+
+            connection.Open();
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([isReleased] = 'True' AND [upc] = N'" + itemUPC + "' AND [userName] = N'" + userName + "')", connection);
+            count = (Int32)command.ExecuteScalar();
+            connection.Close();
+        }
+
         //get quantity for later use of updating quantityAvailable in Item
         TextBox quantity_textbox = (TextBox)gvShoppingCart.Rows[Row_index].FindControl("QuantityTextBox");
         Int32 quantity = Convert.ToInt32(quantity_textbox.Text.Trim());
@@ -851,22 +862,25 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             reader.Close();
         }
 
-        //get the updated currentQuantityAvailable
-        currentQuantityAvailable += quantity;
-        //update quantityAvailable in Item DB with quantity and currentQuantityAvailable
-        string query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + itemUPC + "')";
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        if (count == 0)
         {
-            SqlCommand command = new SqlCommand(query, connection);
+            //get the updated currentQuantityAvailable
+            currentQuantityAvailable += quantity;
+            //update quantityAvailable in Item DB with quantity and currentQuantityAvailable
+            string query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + itemUPC + "')";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             {
-                //Define the UPDATE query parameters with corresponding values
-                command.Parameters.AddWithValue("@QuantityAvailable", currentQuantityAvailable.ToString());
+                SqlCommand command = new SqlCommand(query, connection);
+                {
+                    //Define the UPDATE query parameters with corresponding values
+                    command.Parameters.AddWithValue("@QuantityAvailable", currentQuantityAvailable.ToString());
 
-                // Open the connection, execute the INSERT query and close the connection.
-                command.Connection.Open();
-                command.ExecuteNonQuery();
-                command.Connection.Close();
-            }            
+                    // Open the connection, execute the INSERT query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
         }
         //Response.Write("<script>alert('Hehe')</script>");
         GetItemInformation(connectionString, userName);
