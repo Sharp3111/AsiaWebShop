@@ -38,96 +38,68 @@
     <p class="style2">
         <asp:GridView ID="gvShoppingCart" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" ForeColor="#333333" 
-            GridLines="None" Width="922px">
+            GridLines="None" Width="922px" DataKeyNames="upc">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:TemplateField HeaderText="upc" SortExpression="upc" Visible="False">
+                <asp:TemplateField HeaderText="Delete" ShowHeader="False">
                     <ItemTemplate>
-                        <asp:Label ID="lbUPC" runat="server" Text='<%# Bind("upc") %>'></asp:Label>
+                        <asp:Button ID="deleteButton" runat="server" onclick="deleteButton_Click1" 
+                            Text="Delete" />
                     </ItemTemplate>
-                    <EditItemTemplate>
-                        <asp:Label ID="Label2" runat="server" Text='<%# Eval("upc") %>'></asp:Label>
-                    </EditItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Select">
                     <ItemTemplate>
-                        <asp:CheckBox ID="SelectLabel" runat="server" Checked="True" 
-                            AutoPostBack="True" oncheckedchanged="SelectLabel_CheckedChanged" />
+                        <asp:CheckBox ID="SelectLabel" runat="server" 
+                            oncheckedchanged="CheckBox3_CheckedChanged" />
                     </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Delete">
-                    <ItemTemplate>
-                        <asp:Button ID="deleteButton" runat="server" CausesValidation="false" 
-                            CommandName="Delete" Height="30px" onclick="deleteButton_Click" Text="Delete" 
-                            Width="60px" 
-                            style="font-family: 'Times New Roman', Times, serif; font-size: medium" />
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Name" SortExpression="name">
                     <EditItemTemplate>
-                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("name") %>'></asp:TextBox>
+                        <asp:CheckBox ID="CheckBox2" runat="server" />
                     </EditItemTemplate>
-                    <ItemTemplate>
-                        <asp:Label ID="NameLabel" runat="server" Text='<%# Bind("name") %>'></asp:Label>
-                    </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Unit Purchase Price" 
-                    SortExpression="discountPrice">
+                <asp:TemplateField HeaderText="Selected" Visible="False">
                     <EditItemTemplate>
-                        <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("discountPrice") %>'></asp:TextBox>
+                        <asp:CheckBox ID="CheckBox1" runat="server" 
+                            Checked='<%# Bind("isChecked") %>' />
                     </EditItemTemplate>
-                    <ItemTemplate>
-                        <asp:Label ID="UnitPurchasePriceLabel" runat="server" 
-                            Text='<%# Bind("discountPrice") %>'></asp:Label>
-                    </ItemTemplate>
                 </asp:TemplateField>
+                <asp:BoundField DataField="upc" HeaderText="upc" ReadOnly="True" 
+                    SortExpression="upc" Visible="False" />
+                <asp:BoundField DataField="name" HeaderText="Item Name" SortExpression="name" />
+                <asp:BoundField DataField="unitPrice" HeaderText="Unit Price" 
+                    SortExpression="unitPrice" />
+                <asp:BoundField DataField="quantityAvailable" HeaderText="Quantity Available" 
+                    SortExpression="quantityAvailable" />
                 <asp:TemplateField HeaderText="Quantity" SortExpression="quantity">
-                    <EditItemTemplate>
-                        <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("quantity") %>'></asp:TextBox>
-                    </EditItemTemplate>
                     <ItemTemplate>
-                        <asp:TextBox ID="QuantityTextBox" runat="server"  
-                            ValidationGroup="ShoppingCartValidation" MaxLength="10" 
-                            AutoPostBack="True" ontextchanged="QuantityTextBox_TextChanged" ></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" 
-                            ErrorMessage="Quantity is required." ControlToValidate="QuantityTextBox" 
-                            Display="Dynamic" EnableClientScript="False" ForeColor="Red" 
-                            ValidationGroup="ShoppingCartValidation">*</asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="revQuantity" runat="server" 
-                            ErrorMessage="Quantity can only be nonnegative integer." 
+                        <asp:TextBox ID="QuantityTextBox" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
-                            EnableClientScript="False" ForeColor="Red" 
-                            ValidationExpression="^[1-9]([0-9]+)?" 
-                            ValidationGroup="ShoppingCartValidation">*</asp:RegularExpressionValidator>
-                        <asp:CustomValidator ID="cvQuantity" runat="server" 
+                            EnableClientScript="False" ErrorMessage="Item Quantity Required." 
+                            ForeColor="Red">*</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
-                            EnableClientScript="False" ForeColor="Red" 
-                            onservervalidate="cvQuantity_ServerValidate" 
-                            ErrorMessage="Quantity is not enough." 
-                            ValidationGroup="ShoppingCartValidation">*</asp:CustomValidator>
-                        <br />
+                            EnableClientScript="False" 
+                            ErrorMessage="Quantity can only be nonnegative integer." ForeColor="Red" 
+                            ValidationExpression="^[1-9]([0-9]+)?">*</asp:RegularExpressionValidator>
+                        <asp:CustomValidator ID="CustomValidator1" runat="server" 
+                            ControlToValidate="QuantityTextBox" Display="Dynamic" 
+                            EnableClientScript="False" ErrorMessage="Quantity is not enough." 
+                            ForeColor="Red" onservervalidate="CustomValidator1_ServerValidate">*</asp:CustomValidator>
                     </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Quantity Left After Your Purchase" 
-                    SortExpression="quantityAvailable" Visible="False">
                     <EditItemTemplate>
-                        <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("quantityAvailable") %>'></asp:TextBox>
+                        <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("quantity") %>'></asp:TextBox>
                     </EditItemTemplate>
-                    <ItemTemplate>
-                        <asp:Label ID="QuantityAvailableLabel" runat="server" 
-                            Text='<%# Bind("quantityAvailable") %>'></asp:Label>
-                    </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Total Price of Each Item" 
+                <asp:TemplateField HeaderText="Total Price" 
                     SortExpression="TotalPriceOfEachItem">
-                    <EditItemTemplate>
-                        <asp:Label ID="Label1" runat="server" 
-                            Text='<%# Eval("TotalPriceOfEachItem") %>'></asp:Label>
-                    </EditItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="TotalPriceOfEachItemLabel" runat="server" 
                             Text='<%# Bind("TotalPriceOfEachItem") %>'></asp:Label>
                     </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:Label ID="Label1" runat="server" 
+                            Text='<%# Eval("TotalPriceOfEachItem") %>'></asp:Label>
+                    </EditItemTemplate>
                 </asp:TemplateField>
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
@@ -177,7 +149,7 @@
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
             
-            SelectCommand="SELECT ShoppingCart.isChecked, Item.upc, Item.name, ShoppingCart.unitPrice AS discountPrice, ShoppingCart.quantity, Item.quantityAvailable, ShoppingCart.unitPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc WHERE (ShoppingCart.userName = @userName)" 
+            SelectCommand="SELECT ShoppingCart.isChecked, Item.upc, Item.name, ShoppingCart.unitPrice , ShoppingCart.quantity, Item.quantityAvailable, ShoppingCart.unitPrice * ShoppingCart.quantity AS TotalPriceOfEachItem FROM Item INNER JOIN ShoppingCart ON Item.upc = ShoppingCart.upc WHERE (ShoppingCart.userName = @userName)" 
             DeleteCommand="DELETE FROM ShoppingCart WHERE userName = ''">
             <SelectParameters>
                 <asp:ControlParameter ControlID="UserName" Name="userName" 

@@ -177,13 +177,12 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
     private void GetItemInformation(string connectionString, string userName)
     {
-        string queryPopulate = "SELECT [Item].[upc], [Item].[name], [Item].[discountPrice], [Item].[quantityAvailable], ([Item].[discountPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
+        string queryPopulate = "SELECT [Item].[upc], [Item].[name], [ShoppingCart].[unitPrice], [Item].[quantityAvailable], ([ShoppingCart].[unitPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
 
         // Execute the SQL statement; order the result by item name.
         SqlDataSource1.SelectCommand = queryPopulate;
         SqlDataSource1.Select(DataSourceSelectArguments.Empty);
         gvShoppingCart.DataBind();
-
 
         //Populate the amendable quantity textboxes in GridView
         int i = 0;
@@ -969,6 +968,226 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         //Response.Write("<script>alert('Hehe')</script>");
     }
     protected void SelectLabel_CheckedChanged(object sender, EventArgs e)
+    {
+        Page.Validate("ShoppingCartValidation");
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name; //Response.Write("<script>alert('Before Update')</script>");
+            UpdateItemInformationInDB(connectionString, userName); //Response.Write("<script>alert('After Update; Before Populate')</script>");
+            GetItemInformation(connectionString, userName); //Response.Write("<script>alert('After Populate; Before Calc')</script>");
+            AccumulateTotalPrice(connectionString, userName); //Response.Write("<script>alert('After Calc')</script>");
+        }
+    }
+    protected void deleteButton_Click1(object sender, EventArgs e)
+    {
+        GridViewRow gridViewRow = (GridViewRow)(sender as Control).Parent.Parent;
+        Int32 Row_index = gridViewRow.RowIndex;
+
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+        string itemName = ((Label)gvShoppingCart.Rows[Row_index].FindControl("NameLabel")).Text;
+        //get upc of this item
+        string itemUPC = "";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT [upc] FROM [Item] WHERE ([name] = '" + itemName + "')", connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to itemUPC
+                    itemUPC = reader["upc"].ToString().Trim();
+                }
+            }
+
+            // Close the connection and the DataReader.
+            command.Connection.Close();
+            reader.Close();
+        }
+
+        int count = 0;
+        //check if the item has already added into the shopping cart
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        {
+
+            connection.Open();
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [ShoppingCart] WHERE ([isReleased] = 'True' AND [upc] = N'" + itemUPC + "' AND [userName] = N'" + userName + "')", connection);
+            count = (Int32)command.ExecuteScalar();
+            connection.Close();
+        }
+
+        //get quantity for later use of updating quantityAvailable in Item
+        TextBox quantity_textbox = (TextBox)gvShoppingCart.Rows[Row_index].FindControl("QuantityTextBox");
+        Int32 quantity = Convert.ToInt32(quantity_textbox.Text.Trim());
+
+        //delete the item in ShoppingCart DB
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("DELETE FROM [ShoppingCart] WHERE ([upc] = '" + itemUPC + "' AND [userName] = '" + userName + "')", connection))
+        {
+            connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+
+        //get the current quantityAvailable in Item BD
+        Int32 currentQuantityAvailable = 0;
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = '" + itemUPC + "')", connection))
+        {
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to itemUPC
+                    currentQuantityAvailable = reader.GetInt32(0);
+                }
+            }
+
+            // Close the connection and the DataReader.
+            command.Connection.Close();
+            reader.Close();
+        }
+
+        if (count == 0)
+        {
+            //get the updated currentQuantityAvailable
+            currentQuantityAvailable += quantity;
+            //update quantityAvailable in Item DB with quantity and currentQuantityAvailable
+            string query = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + itemUPC + "')";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                {
+                    //Define the UPDATE query parameters with corresponding values
+                    command.Parameters.AddWithValue("@QuantityAvailable", currentQuantityAvailable.ToString());
+
+                    // Open the connection, execute the INSERT query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+        }
+        //Response.Write("<script>alert('Hehe')</script>");
+        GetItemInformation(connectionString, userName);
+        //Response.Write("<script>alert('Haha')</script>");
+        AccumulateTotalPrice(connectionString, userName);
+    }
+    protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
+    {
+        Page.Validate("ShoppingCartValidation");
+        if (Page.IsValid)
+        {
+            string connectionString = "AsiaWebShopDBConnectionString";
+            string userName = User.Identity.Name; //Response.Write("<script>alert('Before Update')</script>");
+            UpdateItemInformationInDB(connectionString, userName); //Response.Write("<script>alert('After Update; Before Populate')</script>");
+            GetItemInformation(connectionString, userName); //Response.Write("<script>alert('After Populate; Before Calc')</script>");
+            AccumulateTotalPrice(connectionString, userName); //Response.Write("<script>alert('After Calc')</script>");
+        }
+    }
+    protected void CustomValidator1_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        if (IsValid)
+        {
+            //create connectionString
+            string connectionString = "AsiaWebShopDBConnectionString";
+            //create userName for current session
+            string userName = User.Identity.Name;
+
+            GridViewRow gridViewRow = (GridViewRow)(source as Control).Parent.Parent;
+            Int32 Row_index = gridViewRow.RowIndex;
+            TextBox tbQuantity = (TextBox)gvShoppingCart.Rows[Row_index].FindControl("QuantityTextBox");
+            Label lbMax = (Label)gvShoppingCart.Rows[Row_index].FindControl("QuantityAvailableLabel");
+            string itemName = ((Label)gvShoppingCart.Rows[Row_index].FindControl("NameLabel")).Text;
+            Label lbUPC = (Label)gvShoppingCart.Rows[Row_index].FindControl("lbUPC");
+            string itemUPC = lbUPC.Text;
+
+            //Check whether the 15 min session has passed
+            string querySelectIsReleased = "SELECT isReleased FROM [ShoppingCart] WHERE (upc = '" + itemUPC + "' AND userName = '" + userName + "')";
+            Boolean currentItemIsReleased = false;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(querySelectIsReleased, connection))
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                // Check if a result was returned.
+                if (reader.HasRows)
+                {
+                    // Iterate through the table to get the retrieved values.
+                    while (reader.Read())
+                    {
+                        // Assign the data values to currentItemIsReleased
+                        currentItemIsReleased = Convert.ToBoolean(reader["isReleased"].ToString().Trim());
+                        //Response.Write("<script>alert('" + reader["quantity"].ToString().Trim() + "')</script>");
+                        //Response.Write("<script>alert('" + (Convert.ToInt32(tbQuantity.Text) - initialQuantity).ToString().Trim() + "')</script>");
+                    }
+                }
+            }
+
+            //15 min session has not passed
+            if (!currentItemIsReleased)
+            {
+                //Get the initial quantity in database for later comparison
+                Int32 initialQuantity = 0;
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [quantity] FROM [ShoppingCart] WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')", connection))
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            // Assign the data values to initialQuantity
+                            initialQuantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
+                            //Response.Write("<script>alert('" + reader["quantity"].ToString().Trim() + "')</script>");
+                            //Response.Write("<script>alert('" + (Convert.ToInt32(tbQuantity.Text) - initialQuantity).ToString().Trim() + "')</script>");
+                        }
+                    }
+                }
+                if (Convert.ToInt32(tbQuantity.Text) - initialQuantity > Convert.ToInt32(lbMax.Text))
+                    args.IsValid = false;
+            }
+            //15 min session has passed
+            else
+            {
+                //Get the quantityAvailable in Item DB
+                Int32 currentQuantityAvailable = 0;
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = '" + itemUPC + "')", connection))
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        // Iterate through the table to get the retrieved values.
+                        while (reader.Read())
+                        {
+                            // Assign the data values to initialQuantity
+                            currentQuantityAvailable = Convert.ToInt32(reader["quantityAvailable"].ToString().Trim());
+                            //Response.Write("<script>alert('" + reader["quantity"].ToString().Trim() + "')</script>");
+                            //Response.Write("<script>alert('" + (Convert.ToInt32(tbQuantity.Text) - initialQuantity).ToString().Trim() + "')</script>");
+                        }
+                    }
+                }
+                if (Convert.ToInt32(tbQuantity.Text) > currentQuantityAvailable)
+                    args.IsValid = false;
+            }
+        }
+    }
+    protected void CheckBox3_CheckedChanged(object sender, EventArgs e)
     {
         Page.Validate("ShoppingCartValidation");
         if (Page.IsValid)
