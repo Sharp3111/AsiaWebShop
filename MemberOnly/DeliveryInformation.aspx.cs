@@ -115,7 +115,11 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     protected void ContinueButton_Click(object sender, EventArgs e)
     {
         Page.Validate("RegisterUserValidationGroup");
-        if (Page.IsValid)
+        Boolean flag = true;
+        if (AddressDropDownList.SelectedValue == "0")
+            flag = false;
+
+        if (Page.IsValid && flag == true)
         {
             string connectionString = "AsiaWebShopDBConnectionString";
             string connectionString2 = "AsiaWebShopDBConnectionString2";
@@ -182,6 +186,14 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             }
             Response.Redirect(continueUrl, false);
         }
+
+        if (flag == false)
+        {
+            lblMessage1.ForeColor = System.Drawing.Color.Red;
+            lblMessage1.Visible = true;
+            lblMessage1.Text = "Please choose your address and click the Choose Your Address button to confirm your choice first.";
+        }
+        
     }
     protected void cvDeliveryTime_ServerValidate(object source, ServerValidateEventArgs args)
     {
@@ -502,6 +514,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             Address.Visible = true;
            
         }
+
     //    Page.Validate("RegisterUserValidationGroup");
     //    if (Page.IsValid)
     //    {
