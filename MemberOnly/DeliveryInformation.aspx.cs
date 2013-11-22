@@ -136,7 +136,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
         if (count == 0)
             TimeOutFlag = false;
 
-        if (Page.IsValid && ChooseAddressFlag == true && TimeOutFlag == true)
+        if (Page.IsValid && ChooseAddressFlag == true && TimeOutFlag == true && Address.Visible == true)
         {
             string connectionString2 = "AsiaWebShopDBConnectionString2";
 
@@ -206,6 +206,12 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             lblMessage1.ForeColor = System.Drawing.Color.Red;
             lblMessage1.Visible = true;
             lblMessage1.Text = "Please either add an new address or choose an address from your address list and click button to confirm your choice first.";
+        }
+        if (ChooseAddressFlag == true && Address.Visible == false && TimeOutFlag == true)
+        {
+            lblMessage1.ForeColor = System.Drawing.Color.Red;
+            lblMessage1.Visible = true;
+            lblMessage1.Text = "Please click the Choose Your Address button to confirm your choice or add a new delivery address.";
         }
         if (TimeOutFlag == false)
         {
@@ -289,6 +295,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 command.Connection.Close();
                 reader.Close();
             }
+
         }
     }
 
