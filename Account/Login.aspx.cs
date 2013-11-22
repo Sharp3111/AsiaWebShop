@@ -51,7 +51,7 @@ public partial class Account_Login : System.Web.UI.Page
         {
             //Response.Redirect("~/MemberOnly/ShoppingCart.aspx");
 
-            string query = "UPDATE [ShoppingCart] SET [isReleased] = 'False' FROM [Item] JOIN [ShoppingCart] ON ([ShoppingCart].[upc] = [Item].[upc]) WHERE ([Item].[quantityAvailable] - [ShoppingCart].[quantity]>'0' AND [ShoppingCart].[userName] = '" + LoginUser.UserName + "')";
+            string query = "UPDATE [ShoppingCart] SET [isReleased] = 'False' FROM [Item] JOIN [ShoppingCart] ON ([ShoppingCart].[upc] = [Item].[upc]) WHERE ([Item].[quantityAvailable] - [ShoppingCart].[quantity]>'-1' AND [ShoppingCart].[userName] = '" + LoginUser.UserName + "')";
 
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
             {
@@ -65,7 +65,7 @@ public partial class Account_Login : System.Web.UI.Page
                 }
             }
 
-            query = "UPDATE [Item] SET [quantityAvailable] = ([Item].[quantityAvailable] - [ShoppingCart].[quantity]) FROM [Item] JOIN [ShoppingCart] ON ([ShoppingCart].[upc] = [Item].[upc]) WHERE ([Item].[quantityAvailable] - [ShoppingCart].[quantity]>'0' AND [ShoppingCart].[userName] = '" + LoginUser.UserName + "')";
+            query = "UPDATE [Item] SET [quantityAvailable] = ([Item].[quantityAvailable] - [ShoppingCart].[quantity]) FROM [Item] JOIN [ShoppingCart] ON ([ShoppingCart].[upc] = [Item].[upc]) WHERE ([Item].[quantityAvailable] - [ShoppingCart].[quantity]>'-1' AND [ShoppingCart].[userName] = '" + LoginUser.UserName + "')";
 
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
             {
@@ -88,11 +88,12 @@ public partial class Account_Login : System.Web.UI.Page
                 isReleasedCount = (Int32)command.ExecuteScalar();
                 connection.Close();
             }
-
+            Session["ReserveFailed"] = "False";
             if (isReleasedCount > 0)
             {
-                Response.Redirect("~/MemberOnly/ShoppingCart.aspx");
+                
                 Session["ReserveFailed"] = "True";
+                Response.Redirect("~/MemberOnly/ShoppingCart.aspx");
             }
         }
 

@@ -14,7 +14,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
-        {            
+        {
+
             //create connectionString
             string connectionString = "AsiaWebShopDBConnectionString";
             //create userName for current session
@@ -62,6 +63,10 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             }
             updateShoppingCart(connectionString, userName,count);
             AccumulateTotalPrice(connectionString, userName);
+
+            System.Diagnostics.Debug.WriteLine(Session["ReserveFailed"].ToString());
+            if (Session["ReserveFailed"] == "True")
+                Page.Validate();
         }
     }
 
