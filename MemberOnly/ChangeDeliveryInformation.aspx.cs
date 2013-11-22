@@ -150,7 +150,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     {
         Page.Validate("RegisterUserValidationGroup");
         Boolean flag = true;
-        if (AddressDropDownList.SelectedValue == "0")
+        if (AddressDropDownList.SelectedValue == "0" && AddressDropDownList.Enabled == true)
             flag = false;
 
         if (Page.IsValid && flag == true)
