@@ -252,7 +252,7 @@ public partial class ItemManagement : System.Web.UI.Page
     }
     protected void dvItem_ItemUpdated(object sender, DetailsViewUpdatedEventArgs e)
     {
-        
+        gvItem.DataBind();
     }
     protected void dvItem_ItemUpdating(object sender, DetailsViewUpdateEventArgs e)
     {
@@ -310,5 +310,9 @@ public partial class ItemManagement : System.Web.UI.Page
             }
             
         }*/
+    }
+    protected void dvItem_ItemInserted(object sender, DetailsViewInsertedEventArgs e)
+    {
+        gvItem.DataBind(); 
     }
 }

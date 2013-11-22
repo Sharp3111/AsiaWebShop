@@ -63,18 +63,53 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             }
             updateShoppingCart(connectionString, userName,count);
             AccumulateTotalPrice(connectionString, userName);
-
-            System.Diagnostics.Debug.WriteLine(Session["ReserveFailed"].ToString());
+            gvShoppingCart.DataBind();
             if (Session["ReserveFailed"] == "True")
                 Page.Validate();
         }
     }
 
+
+
     private void updateShoppingCart(string connectionString, string userName,int count)
     {
         string[] upc = new string[count];
         decimal[] shoppingprice = new decimal[count];
+        bool[] itemVisible = new bool[count]; 
         int i = 0;
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT [upc] FROM [ShoppingCart] WHERE ([userName] = N'" + userName + "')", connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    upc[i] = reader["upc"].ToString().Trim();
+                    i++;
+                }
+            }
+            command.Connection.Close();
+        }
+        for (i = 0; i < count; i++)
+        {
+            itemVisible[i] = visibleCheck(connectionString, upc[i]);
+            if (itemVisible[i] == false)
+            {
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("DELETE FROM [ShoppingCart] WHERE ([upc] = '" + upc[i] + "' AND [userName] = '" + userName + "')", connection))
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+        }
+
+
+        i = 0;
+        upc = new string[count];
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand("SELECT [upc],[unitPrice] FROM [ShoppingCart] WHERE ([userName] = N'" + userName + "')", connection))
         {
@@ -100,6 +135,26 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         }
 
 
+    }
+
+    private bool visibleCheck(string connectionString, string upc)
+    {
+        bool visible = true;
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT [visible] FROM [Item] WHERE ([upc] = N'" + upc + "')", connection))
+        {
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                     visible = Convert.ToBoolean(reader["visible"]);
+                }
+            }
+            command.Connection.Close();
+        }
+        return visible;
     }
 
     private decimal findItemPrice(string connectionString, string upc)
