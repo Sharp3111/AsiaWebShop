@@ -13,7 +13,8 @@
         }
         .style4
         {
-            width: 287px;
+            width: 285px;
+            text-align: right;
         }
         .style5
         {
@@ -170,8 +171,7 @@
                         ValidationGroup="finalConfirm" />
                 </td>
                 <td class="style4">
-                    ( The receipt will be sent to your email address:
-                </td>
+                    ( The receipt will be sent to your email address:</td>
                 <td class="style5">
                     <asp:Label ID="emailAddress" runat="server"></asp:Label>
                     &nbsp;)</td>
