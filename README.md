@@ -15,4 +15,4 @@ Database last update: 1/11/2013 2:34 PM
 
 Please manually delete non-existing users from ASP.NET besides deleting them from DB to avoid SQL runtime errors.
 
-Don't leave GitHub open or open Quantity.md when running ANY part of the website; otherwise there will be File I/O exceptions!!
+Don't leave GitHub open or open Quantity.md when running ANY part of the website to minimize chance of error.
