@@ -268,7 +268,9 @@
     <p>
         <asp:Label ID="defaultCardMessage" runat="server" ForeColor="Green" 
             Visible="False"></asp:Label>
-        &nbsp;</p>
+        &nbsp;
+        <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
+    </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" HeaderText="The following errors:" 
         ValidationGroup="RegisterUserValidationGroup" />
