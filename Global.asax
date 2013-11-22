@@ -45,7 +45,21 @@
         
         string username = Session["Username"].ToString().Trim();
         string connectionString = "AsiaWebShopDBConnectionString";
-        string query = "UPDATE [ShoppingCart] SET [isReleased] = 'True' WHERE ([isReleased] = 'False' AND [userName] = '" + username + "')";
+        string query = "UPDATE [Item] SET [quantityAvailable] = ([Item].[quantityAvailable] + [ShoppingCart].[quantity]) FROM [Item] JOIN [ShoppingCart] ON ([ShoppingCart].[upc] = [Item].[upc]) WHERE ([isReleased] = 'False' AND [ShoppingCart].[userName] = '" + username + "')";
+
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        {
+            SqlCommand command = new SqlCommand(query, connection);
+            {
+
+                // Open the connection, execute the INSERT query and close the connection.
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+        }
+
+         query = "UPDATE [ShoppingCart] SET [isReleased] = 'True' WHERE ([isReleased] = 'False' AND [userName] = '" + username + "')";
         
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         {
@@ -59,19 +73,6 @@
             }
         }
 
-        query = "UPDATE [Item] SET [quantityAvailable] = ([Item].[quantityAvailable] + [ShoppingCart].[quantity]) FROM [Item] JOIN [ShoppingCart] ON ([ShoppingCart].[upc] = [Item].[upc]) WHERE ([isReleased] = 'False' AND [ShoppingCart].[userName] = '" + username + "')";
-
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        {
-            SqlCommand command = new SqlCommand(query, connection);
-            {
-
-                // Open the connection, execute the INSERT query and close the connection.
-                command.Connection.Open();
-                command.ExecuteNonQuery();
-                command.Connection.Close();
-            }
-        }
 
     }
 
