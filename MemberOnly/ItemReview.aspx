@@ -196,7 +196,7 @@
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
-            SelectCommand="SELECT Item.name, OrderRecord.upc FROM Item INNER JOIN OrderRecord ON Item.upc = OrderRecord.upc WHERE ((userName = @userName) AND (OrderRecord.isConfirmed = 'false'))
+            SelectCommand="SELECT Item.name, OrderRecord.upc FROM Item INNER JOIN OrderRecord ON Item.upc = OrderRecord.upc WHERE ((userName = @userName) AND (OrderRecord.isConfirmed = 'true'))
 ">
             <SelectParameters>
                 <asp:ControlParameter ControlID="UserName" Name="userName" PropertyName="Text" 
