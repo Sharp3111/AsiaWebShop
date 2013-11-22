@@ -49,6 +49,25 @@
         {
             font-size: medium;
         }
+        .style11
+        {
+            background-color: #3366CC;
+        }
+        .style12
+        {
+            font-family: "Segoe UI";
+            color: #FFFFFF;
+        }
+        .style13
+        {
+            font-family: "Segoe UI";
+            color: #B6B7BC;
+        }
+        .style14
+        {
+            color: #000000;
+            background-color: #99CCFF;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -135,44 +154,124 @@
     </tr>
 </table>
     <br />
-    <span class="style9"><strong><span class="style10">RECOMMENDATIONS - </span>
-    <asp:HyperLink ID="NumberLabel" runat="server" style="font-size: medium">[NumberLabel]</asp:HyperLink>
-    </strong></span><span 
-        class="style10"><br />
-    </span>
-    <asp:GridView ID="gvRecommendation" runat="server" AutoGenerateColumns="False" 
-        CellPadding="4" DataKeyNames="upc" DataSourceID="SqlDataSource" 
-        ForeColor="#333333" GridLines="None" 
-        Width="367px">
-        <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
-        <Columns>
-            <asp:BoundField DataField="upc" HeaderText="upc" ReadOnly="True" 
-                SortExpression="upc" />
-            <asp:BoundField DataField="name" HeaderText="name" SortExpression="name" />
-            <asp:BoundField DataField="discountPrice" HeaderText="discountPrice" 
-                SortExpression="discountPrice" />
-            <asp:BoundField DataField="quantitySold" HeaderText="quantitySold" 
-                SortExpression="quantitySold" />
-            <asp:BoundField DataField="ranking" HeaderText="ranking" 
-                SortExpression="ranking" />
-            <asp:CheckBoxField DataField="isEditorChoice" HeaderText="isEditorChoice" 
-                SortExpression="isEditorChoice" />
-        </Columns>
-        <EditRowStyle BackColor="#999999" />
-        <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
-        <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
-        <PagerStyle BackColor="#284775" ForeColor="White" HorizontalAlign="Center" />
-        <RowStyle BackColor="#F7F6F3" ForeColor="#333333" />
-        <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
-        <SortedAscendingCellStyle BackColor="#E9E7E2" />
-        <SortedAscendingHeaderStyle BackColor="#506C8C" />
-        <SortedDescendingCellStyle BackColor="#FFFDF8" />
-        <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
-    </asp:GridView>
     <br />
-    <asp:SqlDataSource ID="SqlDataSource" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT * FROM [RecommendationDay] ORDER BY [ranking]">
-    </asp:SqlDataSource>
-</asp:Content>
+    <asp:RadioButtonList ID="rangeRadioButtonList" runat="server"         
+        style="color: #000080; font-family: 'Segoe UI'" AutoPostBack="True" 
+        onselectedindexchanged="rangeRadioButtonList_SelectedIndexChanged" 
+        RepeatDirection="Horizontal" Width="938px">
+        <asp:ListItem Selected="True" Value="0">Daily Recommnendation</asp:ListItem>
+        <asp:ListItem Value="1">Weekly Recommendation</asp:ListItem>
+        <asp:ListItem Value="2">Monthly Recommendation</asp:ListItem>
+        <asp:ListItem Value="3">Yearly Recommendation</asp:ListItem>
+    </asp:RadioButtonList>
+    <br />
+    <span class="style9"><strong><span class="style10">RECOMMENDATIONS - TOP 5</span></strong></span><span 
+        class="style10"><br />
+    <table class="style2">
+        <tr class="style12">
+            <td class="style11">
+                Ranking</td>
+            <td class="style11">
+                Item Name</td>
+            <td class="style11">
+                Discount Price</td>
+            <td class="style11">
+                Quantity Sold</td>
+            <td class="style11">
+                Editor&#39;s Choice</td>
+        </tr>
+        <tr class="style13">
+            <td class="style14">
+                <asp:Label ID="rankingLabel1" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="itemNameLabel1" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="discountPriceLabel1" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="quantitySoldLabel1" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="editorChoiceLabel1" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr class="style13">
+            <td class="style14">
+                <asp:Label ID="rankingLabel2" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="itemNameLabel2" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="discountPriceLabel2" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="quantitySoldLabel2" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="editorChoiceLabel2" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr class="style13">
+            <td class="style14">
+                <asp:Label ID="rankingLabel3" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="itemNameLabel3" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="discountPriceLabel3" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="quantitySoldLabel3" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="editorChoiceLabel3" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr class="style13">
+            <td class="style14">
+                <asp:Label ID="rankingLabel4" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="itemNameLabel4" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="discountPriceLabel4" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="quantitySoldLabel4" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="editorChoiceLabel4" runat="server"></asp:Label>
+            </td>
+        </tr>
+        <tr class="style13">
+            <td class="style14">
+                <asp:Label ID="rankingLabel5" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="itemNameLabel5" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="discountPriceLabel5" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="quantitySoldLabel5" runat="server"></asp:Label>
+            </td>
+            <td class="style14">
+                <asp:Label ID="editorChoiceLabel5" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <span class="style9">Note:&nbsp; -&nbsp; means that the datum for the entry is 
+    unavailable.&nbsp; * in the column Editor&#39;s Choice indicates that the item in 
+    the row is an Editor&#39;s Choice.</span><br />
+    <br />
+    </span>
+    <br />
+    </asp:Content>
 
