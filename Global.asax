@@ -38,7 +38,7 @@
     void Application_Start(object sender, EventArgs e) 
     {
         // Code that runs on application startup
-        System.Timers.Timer aTimer = new System.Timers.Timer(10000);
+        System.Timers.Timer aTimer = new System.Timers.Timer(30000);
         aTimer.Enabled = true;
         aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);        
     }
@@ -120,7 +120,7 @@
         t1.Close();
         
         // Read current quantityAvailable
-        string query = "SELECT [quantityAvailable], [upc], [name] FROM [Item]";
+        string query = "SELECT [quantityAvailable], [upc], [name], [visible] FROM [Item]";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
@@ -138,6 +138,7 @@
                     Int32 updatedQuantity = Convert.ToInt32(reader["quantityAvailable"].ToString().Trim());
                     string itemName = reader["name"].ToString().Trim();
                     string itemUPC = reader["upc"].ToString().Trim();
+                    bool isVisible = Convert.ToBoolean(reader["visible"].ToString().Trim());
 
                     // See if UPC exists
                     bool hasUPC = false;
@@ -147,8 +148,8 @@
                         {
                             hasUPC = true;
                             
-                            // If past quantity is 0 and is being updated to a positive number, then send email alert
-                            if ((availabilityPast[i].quantityAvailable == 0) && (updatedQuantity > 0))
+                            // If past quantity is 0 and is being updated to a positive number and is visible, then send email alert
+                            if ((availabilityPast[i].quantityAvailable == 0) && (updatedQuantity > 0) && (isVisible))
                             {
                                 System.Diagnostics.Debug.WriteLine("Detected quantity refill for upc " + itemUPC);
                                 // Create an instance of MailMessage named mail.
