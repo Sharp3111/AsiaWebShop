@@ -427,6 +427,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 
             lblFinalAddress.Visible = true;
             Address.Visible = true;
+            btnAddYourAddress.Enabled = false;
         }
     }
     protected void cvInsertNickname_ServerValidate(object source, ServerValidateEventArgs args)
