@@ -179,9 +179,7 @@
         <asp:Label ID="indicator" runat="server"></asp:Label>
     </p>
     <p>
-        If you want your review to be anonymous, please check here
-        <asp:CheckBox ID="checkAnonymous" runat="server" />
-    </p>
+        &nbsp;</p>
     <p>
         <asp:Button ID="submit" runat="server" Text="Submit" Height="30px" 
             ValidationGroup="reviewValidationGroup" Width="120px" 

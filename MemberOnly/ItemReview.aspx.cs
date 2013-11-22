@@ -118,11 +118,11 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
         else
         {
             Page.Validate();
-
+    
             if (Page.IsValid)
             {
-                string checkedUPC = "";
                 //find the checked item
+                string checkedUPC = "";
                 for (int i = 0; i < MaxRow; i++)
                 {
                     if (((CheckBox)gvItemReview.Rows[i].FindControl("selected")).Checked == true)
@@ -157,7 +157,15 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
                 }
                 indicator.ForeColor = System.Drawing.Color.Green;
                 indicator.Text = "Your review is successfully submitted.";
+
+                string continueUrl = "~/MemberOnly/Default.aspx";
+                if (String.IsNullOrEmpty(continueUrl))
+                {
+                    continueUrl = "~/";
+                }
+                Response.Redirect(continueUrl, false);
             }
+
         }
     }
 }
