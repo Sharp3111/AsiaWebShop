@@ -167,7 +167,7 @@
             <asp:HyperLinkField DataNavigateUrlFields="upc" 
                 DataNavigateUrlFormatString="ItemDetails.aspx?upc={0}" 
                 Text="View item details" />
-            <asp:TemplateField HeaderText="Quantity">
+            <asp:TemplateField HeaderText="Purchase Quantity">
                 <ItemTemplate>
                     <asp:TextBox ID="tbQuantity" runat="server" Height="22px" 
                         ValidationGroup="QuantityValidationGroup" Width="30px" MaxLength="10">1</asp:TextBox>
