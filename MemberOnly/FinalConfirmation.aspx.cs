@@ -162,7 +162,22 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
     {
         string connectionString = "AsiaWebShopDBConnectionString";
         string userName = User.Identity.Name;
-        if (IsValid)
+
+        // Judge wether finalConfirmPage is timed out
+        Int32 count = 0;
+        //check if the item has already added into the shopping cart
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [OrderRecord] WHERE ([isConfirmed] = '" + Convert.ToString(false) + "' AND [userName] = '" + userName + "')", connection))
+        {
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+        Boolean flag = true;
+        if (count == 0)
+            flag = false;
+
+        if (IsValid && flag == true)
         {
             string authNum = "";
             char[] confirmationNum = new char[] {'A','A','0','0','0','0','0','0'};
@@ -387,6 +402,13 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             //final confirm
             //finalConfirm();
             Server.Transfer("FinalConfirmDisplay.aspx");
+        }
+
+        if (flag == false)
+        {
+            lblMessage.ForeColor = System.Drawing.Color.Red;
+            lblMessage.Visible = true;
+            lblMessage.Text = "Your session has timed out. Please check out your shopping cart again.";
         }
 
 
