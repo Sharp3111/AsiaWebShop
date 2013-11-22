@@ -16,8 +16,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 {
     public class emailAddress
     {
-        public static string oldEmail = "";
-        public static string newEmail = "";
+        public static string Email = "";
     }
 
     protected void Page_Load(object sender, EventArgs e)
@@ -114,8 +113,8 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 {
                     // Assign the data values to the web form label and textboxes.
                     UserName.Text = reader["userName"].ToString().Trim();
-                    Email.Text = reader["email"].ToString().Trim();
-                    emailAddress.oldEmail = reader["email"].ToString().Trim();
+                    email.Text = reader["email"].ToString().Trim();
+                    emailAddress.Email = reader["email"].ToString().Trim();
                     Name.Text = reader["name"].ToString().Trim();
                     PhoneNumber.Text = reader["phoneNumber"].ToString().Trim();
                 }
@@ -167,7 +166,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             string connectionString = "AsiaWebShopDBConnectionString";
             string connectionString2 = "AsiaWebShopDBConnectionString2";
             string userName = User.Identity.Name;
-            emailAddress.newEmail = Email.Text.Trim();
 
             // Define the SELECT query to get the member's address.
             string query = "SELECT [userName], [upc], [quantity] FROM [ShoppingCart] WHERE ([userName] =N'" + userName + "')";
@@ -191,7 +189,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         int quantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
 
                         // Define the UPDATE query with parameters.
-                        string query2 = "UPDATE [OrderRecord] SET [name] = @Name, [email] = @Email, [phoneNumber] = @PhoneNumber, [address] = @Address, [deliveryDate] = @DeliveryDate, [deliveryTime] = @DeliveryTime WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed AND [upc] = @UPC";
+                        string query2 = "UPDATE [OrderRecord] SET [name] = @Name,  [phoneNumber] = @PhoneNumber, [address] = @Address, [deliveryDate] = @DeliveryDate, [deliveryTime] = @DeliveryTime WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed AND [upc] = @UPC";
 
                         // Create the connection and the SQL command.
                         using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString2].ConnectionString))
@@ -199,7 +197,6 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                         {
                             // Define the INSERT query parameters and their values.
                             command2.Parameters.AddWithValue("@UserName", userName);
-                            command2.Parameters.AddWithValue("@Email", Email.Text.Trim());
                             command2.Parameters.AddWithValue("@Name", Name.Text.Trim());
                             command2.Parameters.AddWithValue("@PhoneNumber", PhoneNumber.Text.Trim());
                             command2.Parameters.AddWithValue("@Address", Address.Text.Trim());
@@ -227,21 +224,19 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 
                 // Set the sender (From), receiver (To), subject and message body fields of the mail message.
                 mail.From = new MailAddress("sharpert115@yeah.net", "Asia Web Shop t115 @Sharp");
-                mail.To.Add(emailAddress.oldEmail);
-                mail.To.Add(emailAddress.newEmail);
+                mail.To.Add(emailAddress.Email);
                 mail.Subject = "Receipt";
 
                 mail.Body = "Dear " + User.Identity.Name + ", your deliver information has been changed:\n\n"
              + "Confirmation #:\n" + Request.QueryString["confirmationNumber"] + '\n'
              + "Name:            " + Name.Text.Trim() + '\n'
-             + "Email Address:   " + emailAddress.newEmail + '\n'
+             + "Email Address:   " + emailAddress.Email + '\n'
              + "Phone Number:    " + PhoneNumber.Text.Trim() + '\n'
              + "Address:         " + Address.Text.Trim() + '\n'
              + "Delivery Date:   " + DeliveryDateDropDownList.SelectedItem.Text.Trim() + '\n'
              + "Delivery Time:   " + DeliveryTimeDropDownList.SelectedItem.Text.Trim() + '\n'
-             + '\n' + '\n' 
-             + "Note: this is a system generated email notification for both your old email address "+emailAddress.oldEmail
-             + " and new email address "+ emailAddress.newEmail 
+             + '\n' + '\n'
+             + "Note: this is a system generated email notification for your delivery information change"
              + ", please do not reply.";
 
                 emailServer.Send(mail);
