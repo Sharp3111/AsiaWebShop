@@ -174,6 +174,11 @@
     <p>
         <asp:TextBox ID="comment" runat="server" Height="191px" TextMode="MultiLine" 
             Width="522px" MaxLength="140"></asp:TextBox>
+        <asp:CustomValidator ID="cvComment" runat="server" ControlToValidate="comment" 
+            Display="Dynamic" EnableClientScript="False" 
+            ErrorMessage="A comment should not be longer than 140 characters." 
+            ForeColor="Red" onservervalidate="cvComment_ServerValidate" 
+            ValidationGroup="reviewValidationGroup">*</asp:CustomValidator>
     </p>
     <p>
         <asp:Label ID="indicator" runat="server"></asp:Label>

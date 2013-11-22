@@ -168,4 +168,8 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
 
         }
     }
+    protected void cvComment_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        args.IsValid = (comment.Text.Length <= 140);
+    }
 }
