@@ -181,11 +181,26 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
     protected void btAddYourCard_Click(object sender, EventArgs e)
     {
         Page.Validate("RegisterUserValidationGroup");
-        if (Page.IsValid)
-        {
-            string connectionString = "AsiaWebShopDBConnectionString";
-            string userName = User.Identity.Name;        
 
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
+
+        // Judge wether finalConfirmPage is timed out
+        Int32 count = 0;
+        //check if the item has already added into the shopping cart
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [OrderRecord] WHERE ([isConfirmed] = '" + Convert.ToString(false) + "' AND [userName] = '" + userName + "')", connection))
+        {
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+        Boolean flag = true;
+        if (count == 0)
+            flag = false;
+
+        if (Page.IsValid && flag == true)
+        {             
             // After the information is added, add the credit card data in the credit card database.
             AddCreditCard(connectionString,
                 userName.Trim(),
@@ -207,6 +222,13 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
                 continueUrl = "~/";
             }
             Response.Redirect(continueUrl, false);
+        }
+
+        if (flag == false)
+        {
+            lblMessage.ForeColor = System.Drawing.Color.Red;
+            lblMessage.Visible = true;
+            lblMessage.Text = "Your session has timed out. Please check out your shopping cart again.";
         }
     }
 
@@ -420,39 +442,62 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
 
         Int32 MaxRows = gvCreditCard.Rows.Count;
 
-        for (int i = 0; i < MaxRows; i++)
+        Int32 count = 0;
+
+        // Judge wether finalConfirmPage is timed out
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [OrderRecord] WHERE ([isConfirmed] = '" + Convert.ToString(false) + "' AND [userName] = '" + userName + "')", connection))
         {
-            if (((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked == true)
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+        Boolean flag = true;
+        if (count == 0)
+            flag = false;
+
+        if (flag == true)
+        {
+            for (int i = 0; i < MaxRows; i++)
             {
-                cardNumberSelected = ((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text.Trim();
-                break;
+                if (((CheckBox)gvCreditCard.Rows[i].FindControl("checkBoxSelect")).Checked == true)
+                {
+                    cardNumberSelected = ((Label)gvCreditCard.Rows[i].FindControl("numberLabel")).Text.Trim();
+                    break;
+                }
             }
+
+            //Response.Write("<script>alert('" + cardNumberSelected + "')</script>");
+
+            // After the information is added, add the credit card data in the order record database.
+            updateCreditCardInOrderRecord(connectionString,
+            userName.Trim(),
+            cardNumberSelected);
+
+            //OnlyOneCardMessgae.Text = "Your selection has been made. Please proceed to the next step.";
+            //OnlyOneCardMessgae.Visible = true;
+            //btNextStep.Visible = true;
+            //btSelectThisCard.Visible = false;
+
+
+
+
+            //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
+
+            /*string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
+            if (String.IsNullOrEmpty(continueUrl))
+            {
+                continueUrl = "~/";
+            }
+            Response.Redirect(continueUrl, false);*/
+            Response.Redirect("~/MemberOnly/FinalConfirmation.aspx");
         }
-
-        //Response.Write("<script>alert('" + cardNumberSelected + "')</script>");
-
-        // After the information is added, add the credit card data in the order record database.
-        updateCreditCardInOrderRecord(connectionString,
-        userName.Trim(),
-        cardNumberSelected);
-
-        //OnlyOneCardMessgae.Text = "Your selection has been made. Please proceed to the next step.";
-        //OnlyOneCardMessgae.Visible = true;
-        //btNextStep.Visible = true;
-        //btSelectThisCard.Visible = false;
-
-
-
-
-        //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
-
-        /*string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
-        if (String.IsNullOrEmpty(continueUrl))
+        else
         {
-            continueUrl = "~/";
+            lblMessage.ForeColor = System.Drawing.Color.Red;
+            lblMessage.Visible = true;
+            lblMessage.Text = "Your session has timed out. Please check out your shopping cart again.";
         }
-        Response.Redirect(continueUrl, false);*/
-        Response.Redirect("~/MemberOnly/FinalConfirmation.aspx");
     }
     protected void gvCreditCard_DataBound(object sender, EventArgs e)
     {

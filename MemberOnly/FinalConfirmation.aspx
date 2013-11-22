@@ -179,7 +179,8 @@
         </table>
     </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
-        &nbsp;</p>
+        <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
+    </p>
     <p style="font-family: Arial, Helvetica, sans-serif; color: #000080">
         <asp:SqlDataSource ID="AsiaWebDataSource" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 

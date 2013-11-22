@@ -115,15 +115,30 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
     protected void ContinueButton_Click(object sender, EventArgs e)
     {
         Page.Validate("RegisterUserValidationGroup");
-        Boolean flag = true;
-        if (AddressDropDownList.SelectedValue == "0" && AddressDropDownList.Enabled == true)
-            flag = false;
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string userName = User.Identity.Name;
 
-        if (Page.IsValid && flag == true)
+        Boolean ChooseAddressFlag = true;
+        Boolean TimeOutFlag = true;
+        
+        if (AddressDropDownList.SelectedValue == "0" && AddressDropDownList.Enabled == true)
+            ChooseAddressFlag = false;
+
+        Int32 count = 0;
+        // Judge wether finalConfirmPage is timed out
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [OrderRecord] WHERE ([isConfirmed] = '" + Convert.ToString(false) + "' AND [userName] = '" + userName + "')", connection))
         {
-            string connectionString = "AsiaWebShopDBConnectionString";
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+        if (count == 0)
+            TimeOutFlag = false;
+
+        if (Page.IsValid && ChooseAddressFlag == true && TimeOutFlag == true)
+        {
             string connectionString2 = "AsiaWebShopDBConnectionString2";
-            string userName = User.Identity.Name;
 
             // Define the SELECT query to get the member's address.
             string query = "SELECT [userName], [upc], [quantity] FROM [ShoppingCart] WHERE ([userName] =N'" + userName + "')";
@@ -187,11 +202,17 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             Response.Redirect(continueUrl, false);
         }
 
-        if (flag == false)
+        if (ChooseAddressFlag == false && TimeOutFlag == true)
         {
             lblMessage1.ForeColor = System.Drawing.Color.Red;
             lblMessage1.Visible = true;
-            lblMessage1.Text = "Please choose your address and click the Choose Your Address button to confirm your choice first.";
+            lblMessage1.Text = "Please either add an new address or choose an address from your address list and click button to confirm your choice first.";
+        }
+        if (TimeOutFlag == false)
+        {
+            lblMessage1.ForeColor = System.Drawing.Color.Red;
+            lblMessage1.Visible = true;
+            lblMessage1.Text = "Your session has timed out. Please check out your shopping cart again.";
         }
         
     }
@@ -322,7 +343,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 
     protected void updateAddressInOrderRecord(string connectionString, string userName)
     {
-        //// Define the INSERT query with parameters.
+      //// Define the INSERT query with parameters.
         //string query1 = "SELECT [building], [floor], [flatSuite], [blockTower], [streetAddress], [district] FROM [Address] WHERE ([userName] =N'" + userName + "' AND [nickname] = N'" + nickname + "')";
         //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         //using (SqlCommand command = new SqlCommand(query1, connection))
@@ -350,7 +371,8 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
         //    command.Connection.Close();
         //    reader.Close();
         //}
-        string query2 = "UPDATE [OrderRecord] SET [address] = @Address WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
+   
+ /*       string query2 = "UPDATE [OrderRecord] SET [address] = @Address WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query2, connection))
@@ -359,33 +381,13 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             command.Parameters.AddWithValue("@Username", userName);
             command.Parameters.AddWithValue("@Address", Address.Text);
             command.Parameters.AddWithValue("@IsConfirmed", false);
-            /*command.Parameters.AddWithValue("@Type", type);
-            command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
-            command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
-    //    // Define the INSERT query with parameters.
-    //    string query = "UPDATE [OrderRecord] SET [creditCardNumber] = @CreditCardNumber WHERE [userName] = @UserName AND [isConfirmed] = @IsConfirmed";
-    //    // Create the connection and the SQL command.
-    //    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-    //    using (SqlCommand command = new SqlCommand(query, connection))
-    //    {
-    //        // Define the UPDATE query parameters and their values.
-    //        command.Parameters.AddWithValue("@Username", userName);
-    //        command.Parameters.AddWithValue("@CreditCardNumber", creditCardNumber);
-    //        command.Parameters.AddWithValue("@IsConfirmed", false);
-    //        /*command.Parameters.AddWithValue("@Type", type);
-    //        command.Parameters.AddWithValue("@CardHolderName", cardHolderName);
-    //        command.Parameters.AddWithValue("@ExpiryMonth", expiryMonth); */
 
-    //        //System.Diagnostics.Debug.WriteLine("UpdateCreditCard_MonthDropDownList.SelectedItem.Value:");
-    //        //System.Diagnostics.Debug.WriteLine(MonthDropDownList.SelectedItem.Value);
-
-    //        //command.Parameters.AddWithValue("@ExpiryYear", expiryYear);
 
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();
             command.ExecuteNonQuery();
             command.Connection.Close();
-        }
+        } */
     }
 
     protected void btnAddYourAddress_Click(object sender, EventArgs e)
@@ -408,17 +410,10 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 Nickname.Text.Trim());
 
             // After the information is added, add the credit card data in the order record database.
-            updateAddressInOrderRecord(connectionString,
-               userName.Trim());
+            /*updateAddressInOrderRecord(connectionString,
+               userName.Trim());*/
 
-            //FormsAuthentication.SetAuthCookie(userName.Trim(), false /* createPersistentCookie */);
 
-            //string continueUrl = "~/MemberOnly/FinalConfirmation.aspx";
-            //if (String.IsNullOrEmpty(continueUrl))
-            //{
-            //    continueUrl = "~/";
-            //}
-            //Response.Redirect(continueUrl, false);
             lblMessage.Visible = true;
             lblMessage.ForeColor = System.Drawing.Color.Red;
             lblMessage.Text = "You successfully added a new delivery address. Next please specify delivery time.";
