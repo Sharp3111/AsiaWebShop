@@ -14,10 +14,6 @@
         {
             width: 99px;
         }
-        .style5
-        {
-            width: 85px;
-        }
         .style6
         {
             width: 123px;
@@ -53,6 +49,10 @@
         {
             width: 44px;
         }
+        .style15
+        {
+            width: 12px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -65,8 +65,6 @@
             <td class="style4">
                 <asp:Label ID="userName" runat="server"></asp:Label>
             </td>
-            <td class="style5">
-                (empty for all)</td>
             <td rowspan="3" class="style6">
                 <asp:RadioButtonList ID="date" runat="server" Width="115px" 
                     ValidationGroup="itemReport" Height="70px" RepeatLayout="Flow">
@@ -86,7 +84,7 @@
             </td>
             <td class="style10">
                 Month:</td>
-            <td class="style11">
+            <td class="style15">
                 <asp:DropDownList ID="monthFrom" runat="server" AutoPostBack="True" 
                     ValidationGroup="itemReport" 
                     onselectedindexchanged="monthFrom_SelectedIndexChanged">
@@ -106,8 +104,6 @@
                 &nbsp;</td>
             <td class="style4">
                 &nbsp;</td>
-            <td class="style5">
-                &nbsp;</td>
             <td class="style7">
                 to</td>
             <td class="style8">
@@ -120,7 +116,7 @@
             </td>
             <td class="style10">
                 Month:</td>
-            <td class="style11">
+            <td class="style15">
                 <asp:DropDownList ID="monthTo" runat="server" AutoPostBack="True" 
                     ValidationGroup="itemReport" 
                     onselectedindexchanged="monthTo_SelectedIndexChanged">
@@ -143,8 +139,6 @@
             <td class="style3">
                 &nbsp;</td>
             <td class="style4">
-                &nbsp;</td>
-            <td class="style5">
                 &nbsp;</td>
             <td class="style7">
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
@@ -169,8 +163,6 @@
             <td class="style3">
                 &nbsp;</td>
             <td class="style4">
-                &nbsp;</td>
-            <td class="style5">
                 &nbsp;</td>
             <td class="style6">
                 &nbsp;</td>
