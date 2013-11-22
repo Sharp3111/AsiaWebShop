@@ -31,13 +31,15 @@
             <td class="style11">
                 Search user:</td>
             <td class="style6">
-                <asp:TextBox ID="txtSearchString" runat="server"></asp:TextBox>
+                <asp:TextBox ID="txtSearchString" runat="server" Height="22px" Width="150px"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td class="style11">
                 <asp:Button ID="btnSearch" runat="server" onclick="btnSearch_Click" 
-                    Text="Search" />
+                    Text="Search" Height="30px" 
+                    style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+                    Width="100px" />
             </td>
             <td class="style6">
                 &nbsp;</td>

@@ -53,11 +53,16 @@
         {
             width: 12px;
         }
+        .style16
+        {
+            font-size: x-large;
+            font-family: "Times New Roman", Times, serif;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <p style="font-family: Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; text-decoration: underline; color: #000080">
-        Item Purchase Report</p>
+    <p style="color: #000080" class="style16">
+        <strong>Item Purchase Report</strong></p>
     <table class="style2">
         <tr>
             <td class="style3">
@@ -176,7 +181,9 @@
                 &nbsp;</td>
             <td class="style11" colspan="3">
                 <asp:Button ID="Button1" runat="server" Text="Generate Report" 
-                    ValidationGroup="itemReport" Width="117px" onclick="Button1_Click" />
+                    ValidationGroup="itemReport" Width="120px" onclick="Button1_Click" 
+                    Height="30px" 
+                    style="font-family: 'Times New Roman', Times, serif; font-size: medium" />
             </td>
             <td class="style14">
                 &nbsp;</td>

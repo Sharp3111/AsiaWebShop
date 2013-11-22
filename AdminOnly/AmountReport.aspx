@@ -351,7 +351,8 @@
             </td>
             <td class="style20" colspan="2">
                 <asp:Button ID="Button1" runat="server" Text="Generate Report" 
-                    ValidationGroup="purchaseAmount" Width="103px" onclick="Button1_Click" />
+                    ValidationGroup="purchaseAmount" Width="103px" onclick="Button1_Click" 
+                    style="font-family: 'Times New Roman', Times, serif; font-size: small" />
             </td>
             <td>
                 &nbsp;</td>

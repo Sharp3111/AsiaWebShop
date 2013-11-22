@@ -24,9 +24,9 @@
         ForeColor="Red"></asp:Label>
     </p>
     <p>
-        <asp:Button ID="Execute" runat="server" BackColor="Silver" BorderColor="Silver" 
+        <asp:Button ID="Execute" runat="server" 
             Height="30px" onclick="Execute_Click" 
-            style="font-family: 'Maiandra GD'; font-size: medium" Text="Execute" 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium" Text="Execute" 
             Width="100px" />
     </p>
 </asp:Content>

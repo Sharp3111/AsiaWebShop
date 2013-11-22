@@ -22,6 +22,11 @@
             font-size: large;
             color: #000080;
         }
+        .style5
+        {
+            font-family: "Times New Roman", Times, serif;
+            font-size: medium;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
@@ -77,9 +82,13 @@
                     </p>
                 </fieldset>
                 <p class="submitButton">
-                    <asp:Button ID="CancelPushButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel"/>
-                    <asp:Button ID="ChangePasswordPushButton" runat="server" CommandName="ChangePassword" Text="Change Password" 
-                         ValidationGroup="ChangeUserPasswordValidationGroup"/>
+                    <asp:Button ID="CancelPushButton" runat="server" CausesValidation="False" 
+                        CommandName="Cancel" Text="Cancel" Height="30px" Width="100px" 
+                        CssClass="style5"/>
+                    <asp:Button ID="ChangePasswordPushButton" runat="server" 
+                        CommandName="ChangePassword" Text="Change Password" 
+                         ValidationGroup="ChangeUserPasswordValidationGroup" Height="30px" 
+                        Width="160px" CssClass="style5"/>
                 </p>
             </div>
         </ChangePasswordTemplate>

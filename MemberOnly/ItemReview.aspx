@@ -188,7 +188,8 @@
     <p>
         <asp:Button ID="submit" runat="server" Text="Submit" Height="30px" 
             ValidationGroup="reviewValidationGroup" Width="120px" 
-            onclick="submit_Click" />
+            onclick="submit_Click" 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium" />
     </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" 
         HeaderText="The following errors occur:" 

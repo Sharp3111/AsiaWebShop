@@ -193,6 +193,6 @@
     <br />
     <asp:Button ID="Edit" runat="server" CausesValidation="False" 
         PostBackUrl="~/MemberOnly/EditMemberInformation.aspx" Text="Edit" 
-        Width="100px" BackColor="Silver" BorderColor="Silver" Height="30px" 
-        style="font-size: medium; font-family: 'Maiandra GD'" />
+        Width="100px" Height="30px" 
+        style="font-size: medium; font-family: 'Times New Roman', Times, serif" />
     </asp:Content>

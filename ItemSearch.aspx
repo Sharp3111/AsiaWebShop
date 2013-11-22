@@ -116,7 +116,9 @@
         <tr>
             <td class="style4">
                 <asp:Button ID="btnSearch" runat="server" Text="Search" 
-                    onclick="btnSearch_Click" />
+                    onclick="btnSearch_Click" Height="30px" 
+                    style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+                    Width="80px" />
             </td>
             <td class="style5">
                 &nbsp;</td>
@@ -185,11 +187,11 @@
             </asp:TemplateField>
             <asp:TemplateField ShowHeader="False">
                 <ItemTemplate>
-                    <asp:Button ID="btn_ShoppingCart" runat="server" Height="25px" 
+                    <asp:Button ID="btn_ShoppingCart" runat="server" Height="30px" 
                         Text="Add To Shopping Cart" Width="150px" 
                         onclick="btn_ShoppingCart_Click" 
-                        ValidationGroup="QuantityValidationGroup" BackColor="Silver" 
-                        BorderColor="Silver" BorderStyle="Solid" />
+                        ValidationGroup="QuantityValidationGroup" 
+                        style="font-size: medium; font-family: 'Times New Roman', Times, serif" />
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>

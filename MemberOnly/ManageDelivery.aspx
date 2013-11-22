@@ -4,9 +4,9 @@
     <style type="text/css">
         .style2
         {
-            font-size: large;
-            text-decoration: underline;
+            font-size: x-large;
             text-transform: uppercase;
+            font-family: "Times New Roman", Times, serif;
         }
         .style3
         {
@@ -16,7 +16,6 @@
         .style4
         {
             font-size: medium;
-            text-decoration: underline;
             color: #000080;
         }
         .style5
@@ -81,9 +80,10 @@
                 </asp:TemplateField>
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Button ID="RemoveButton" runat="server" BackColor="Silver" 
-                            BorderColor="Silver" BorderStyle="Outset" onclick="RemoveButton_Click" 
-                            Text="Remove" />
+                        <asp:Button ID="RemoveButton" runat="server" onclick="RemoveButton_Click" 
+                            Text="Remove" Height="30px" 
+                            style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+                            Width="100px" />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>

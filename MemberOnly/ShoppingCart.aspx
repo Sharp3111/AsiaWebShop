@@ -11,8 +11,8 @@
         {
             color: #000080;
             font-weight: bold;
-            font-size: xx-large;
-            font-family: "Microsoft Sans Serif";
+            font-size: x-large;
+            font-family: "Times New Roman", Times, serif;
         }
         .style4
         {
@@ -57,10 +57,10 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Delete">
                     <ItemTemplate>
-                        <asp:Button ID="deleteButton" runat="server" BackColor="Silver" 
-                            BorderColor="Silver" BorderStyle="Solid" CausesValidation="false" 
+                        <asp:Button ID="deleteButton" runat="server" CausesValidation="false" 
                             CommandName="Delete" Height="30px" onclick="deleteButton_Click" Text="Delete" 
-                            Width="60px" />
+                            Width="60px" 
+                            style="font-family: 'Times New Roman', Times, serif; font-size: medium" />
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="Name" SortExpression="name">
@@ -159,7 +159,9 @@
     <p class="style2">
         <asp:Button ID="Next" runat="server" Text="Next: Specify Delivery Information" 
             ValidationGroup="ShoppingCartValidation" onclick="Next_Click" 
-            BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
+            Height="30px" 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+            Width="250px" />
     </p>
     <p class="style2">
         &nbsp;</p>

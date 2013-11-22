@@ -1,9 +1,16 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AsiaWebShopSite.master" AutoEventWireup="true" CodeFile="FinalConfirmDisplay.aspx.cs" Inherits="MemberOnly_FinalConfirmDisplay" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
+    <style type="text/css">
+        .style2
+        {
+            font-size: x-large;
+            font-family: "Times New Roman", Times, serif;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <p style="font-family: Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; color: #000080">
+    <p style="font-weight: bold; color: #000080" class="style2">
         Final Order Confirmation</p>
     <p style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: medium; color: #000080">
         Dear
@@ -22,7 +29,9 @@
         &nbsp;</p>
     <p>
         <asp:Button ID="Button1" runat="server" PostBackUrl="~/Default.aspx" 
-            Text="Back to Homepage" />
+            Text="Back to Homepage" Height="30px" 
+            style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+            Width="200px" />
     </p>
     <p>
         &nbsp;</p>

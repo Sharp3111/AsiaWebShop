@@ -173,8 +173,9 @@
         <tr>
             <td colspan="2" style="text-align: center">
         <asp:Button ID="btAddYourCard" runat="server" onclick="btAddYourCard_Click" 
-            Text="Add Your Card" ValidationGroup="RegisterUserValidationGroup" 
-                    BackColor="Silver" BorderColor="Silver" BorderStyle="Solid" />
+            Text="Add Your Card" ValidationGroup="RegisterUserValidationGroup" Height="30px" 
+                    style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+                    Width="200px" />
                     </td>
         </tr>
     </table>
@@ -277,8 +278,9 @@
     <p class="style8">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button 
             ID="btNextStep" runat="server" onclick="btNextStep_Click" 
-            Text="Next: Final Confirmation" BackColor="Silver" 
-            BorderColor="Silver" BorderStyle="Solid" />
+            Text="Next: Final Confirmation" Height="30px" 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium" 
+            Width="200px" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
     <p class="style8">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

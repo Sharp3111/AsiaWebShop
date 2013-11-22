@@ -4,10 +4,10 @@
     <style type="text/css">
         .style2
         {
-            font-size: large;
+            font-size: x-large;
             color: #000080;
             text-transform: uppercase;
-            text-decoration: underline;
+            font-family: "Times New Roman", Times, serif;
         }
     </style>
 </asp:Content>

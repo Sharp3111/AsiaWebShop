@@ -13,7 +13,9 @@
         &nbsp;</p>
     <p>
         <asp:Button ID="Button1" runat="server" PostBackUrl="~/Default.aspx" 
-            Text="Back to Homepage" />
+            Text="Back to Homepage" Height="30px" 
+            style="font-size: medium; font-family: 'Times New Roman', Times, serif" 
+            Width="200px" />
     </p>
 </asp:Content>
 

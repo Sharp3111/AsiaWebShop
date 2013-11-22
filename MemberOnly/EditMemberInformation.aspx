@@ -257,10 +257,9 @@
 </table>
     <p>
         <asp:Button ID="Update" runat="server" Text="Update" Height="30px" 
-            style="font-family: 'Maiandra GD'; font-size: medium; color: #000000; text-align: center; background-color: #C0C0C0; " 
+            style="font-family: 'Times New Roman', Times, serif; font-size: medium; color: #000000; text-align: center; background-color: #C0C0C0; " 
             Width="100px" onclick="Update_Click" 
-            ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
-            BorderColor="Silver" />
+            ValidationGroup="RegisterUserValidationGroup" />
     </p>
     <p>
         <span class="style54">If you want to edit delivery addresses, please click</span>
