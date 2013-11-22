@@ -25,12 +25,13 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
             string connectionString = "AsiaWebShopDBConnectionString";
             string userName = User.Identity.Name;
             GetMemberData(connectionString, userName);
-            PopulateCheckBoxSelect(connectionString, userName);            
+                    
         }
     }
 
     private void PopulateCheckBoxSelect(string connectionString, string userName)
     {        
+        
         Int32 MaxRow = gvCreditCard.Rows.Count;
         for (int i = 0; i < MaxRow; i++)
         {
@@ -452,5 +453,9 @@ public partial class MemberOnly_PaymentInformation : System.Web.UI.Page
         }
         Response.Redirect(continueUrl, false);*/
         Response.Redirect("~/MemberOnly/FinalConfirmation.aspx");
+    }
+    protected void gvCreditCard_DataBound(object sender, EventArgs e)
+    {
+        PopulateCheckBoxSelect("AsiaWebShopDBConnectionString",User.Identity.Name );    
     }
 }

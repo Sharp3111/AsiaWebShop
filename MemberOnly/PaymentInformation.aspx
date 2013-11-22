@@ -187,7 +187,8 @@
     <p>
         <asp:GridView ID="gvCreditCard" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataSourceID="SqlDataSource1" 
-            ForeColor="#333333" GridLines="None" Width="928px"> 
+            ForeColor="#333333" GridLines="None" Width="928px" 
+            ondatabound="gvCreditCard_DataBound"> 
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:TemplateField HeaderText="Delete" Visible="False">
