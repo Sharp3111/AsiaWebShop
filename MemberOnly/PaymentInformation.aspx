@@ -228,7 +228,7 @@
                 <asp:BoundField DataField="expiryYear" HeaderText="Expiry Year" 
                     SortExpression="expiryYear" />
                 <asp:TemplateField HeaderText="Credit Card Default" 
-                    SortExpression="creditCardDefault" Visible="False">
+                    SortExpression="creditCardDefault">
                     <ItemTemplate>
                         <asp:CheckBox ID="checkBoxDefault" runat="server" 
                             Checked='<%# Bind("creditCardDefault") %>' Enabled="false" />
@@ -257,7 +257,11 @@
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             
-            SelectCommand="SELECT * FROM [CreditCard]">
+            SelectCommand="SELECT * FROM [CreditCard] WHERE ([userName] = @userName)">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="UserName" Name="userName" PropertyName="Text" 
+                    Type="String" />
+            </SelectParameters>
         </asp:SqlDataSource>
     </p>
     <p>
