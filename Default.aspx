@@ -101,7 +101,10 @@
     </tr>
     <tr>
         <td class="style3">
-            &nbsp;</td>
+            <asp:HyperLink ID="HyperLink1" runat="server" 
+                NavigateUrl="~/MemberOnly/ReviewProcessingOrder.aspx" 
+                style="color: #1D60FF; font-family: Arial, Helvetica, sans-serif; text-decoration: underline">View Your Processing Orders</asp:HyperLink>
+        </td>
         <td class="style8" width="250">
     <asp:HyperLink ID="LuggageLink" runat="server" 
                 NavigateUrl="~/ItemSearch.aspx?category=Luggage">Luggage</asp:HyperLink>
