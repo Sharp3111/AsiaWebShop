@@ -38,7 +38,7 @@
     void Application_Start(object sender, EventArgs e) 
     {
         // Code that runs on application startup
-        System.Timers.Timer aTimer = new System.Timers.Timer(30000);
+        System.Timers.Timer aTimer = new System.Timers.Timer(10000);
         aTimer.Enabled = true;
         aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);        
     }
