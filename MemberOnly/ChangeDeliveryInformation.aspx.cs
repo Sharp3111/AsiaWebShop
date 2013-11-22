@@ -246,6 +246,8 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 
                 emailServer.Send(mail);
 
+                Server.Transfer("ChangeDeliveryInformationDisplay.aspx");
+
             }
 
             FormsAuthentication.SetAuthCookie(UserName.Text, false /* createPersistentCookie */);
