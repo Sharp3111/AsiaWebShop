@@ -225,9 +225,9 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 // Set the sender (From), receiver (To), subject and message body fields of the mail message.
                 mail.From = new MailAddress("sharpert115@yeah.net", "Asia Web Shop t115 @Sharp");
                 mail.To.Add(emailAddress.Email);
-                mail.Subject = "Receipt";
+                mail.Subject = "Delivery Information Changed Notification";
 
-                mail.Body = "Dear " + User.Identity.Name + ", your deliver information has been changed:\n\n"
+                mail.Body = "Dear " + User.Identity.Name + ", your delivery information has been changed:\n\n"
              + "Confirmation #:\n" + Request.QueryString["confirmationNumber"] + '\n'
              + "Name:            " + Name.Text.Trim() + '\n'
              + "Email Address:   " + emailAddress.Email + '\n'
