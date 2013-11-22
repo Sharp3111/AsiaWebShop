@@ -324,7 +324,8 @@
             
             
             
-            UpdateCommand="UPDATE Address SET building = @building, floor = @floor, flatSuite = @flatSuite, blockTower = @blockTower, streetAddress = @streetAddress, district = @district WHERE (userName = @userName) AND (isSelected = 'true')">
+            
+            UpdateCommand="UPDATE Address SET nickname = @nickname, building = @building, floor = @floor, flatSuite = @flatSuite, blockTower = @blockTower, streetAddress = @streetAddress, district = @district WHERE (userName = @userName) AND (isSelected = 'true')">
             <DeleteParameters>
                 <asp:Parameter Name="userName" />
                 <asp:Parameter Name="nickname" />
@@ -346,6 +347,7 @@
                     PropertyName="SelectedValue" />
             </SelectParameters>
             <UpdateParameters>
+                <asp:Parameter Name="nickname" />
                 <asp:Parameter Name="building" />
                 <asp:Parameter Name="floor" />
                 <asp:Parameter Name="flatSuite" />
