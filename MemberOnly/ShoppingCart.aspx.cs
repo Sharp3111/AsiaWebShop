@@ -241,6 +241,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 //All checkBox.Checked == false;
                 if (countCheckBox != 0)
                 {
+                    UpdateItemDatabase(connectionString, userName);
                     ShopAround.Visible = true;
                     Response.Redirect("~/MemberOnly/DeliveryInformation.aspx");
                 }
@@ -258,6 +259,88 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 AccumulateTotalPrice(connectionString, userName);
                 lblMessage.Text = "Your shopping cart is currently empty. You have to have at least one item in your shopping cart in order to proceed. Please shop around: ";
                 ShopAround.Visible = true;
+            }
+        }
+    }
+
+    private void UpdateItemDatabase(string connectionString, string userName)
+    {
+        Int32 MaxRow = gvShoppingCart.Rows.Count;
+
+        //loop the user's shopping cart to check whether the item is checked upon proceeding to next.
+        //if the item is checked, then the quantity of this item should be decremented in the Item DB
+        //if the item is unchecked, then nothing needs to be done
+        for (int i = 0; i < MaxRow; i++)
+        {
+            Boolean currentIsSelected = false;
+            currentIsSelected = ((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked;
+
+            if (currentIsSelected)
+            {
+                string currentItemUPC = ((Label)gvShoppingCart.Rows[i].FindControl("lbUPC")).Text.Trim();
+
+                Int32 ShoppingCartQuantity = 0;
+                Boolean currentItemReleased = false;
+                //check whether the current item is released back to inventory and store the table
+                string querySelect1 = "SELECT isReleased, quantity FROM [ShoppingCart] WHERE upc = '" + currentItemUPC + "'";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(querySelect1, connection))
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {                            
+                            currentItemReleased = Convert.ToBoolean(reader["isReleased"].ToString().Trim());
+                            ShoppingCartQuantity = Convert.ToInt32(reader["quantity"].ToString().Trim());
+                            //Response.Write("<script>alert('" + reader["quantity"].ToString().Trim() + "')</script>");
+                            //Response.Write("<script>alert('" + (Convert.ToInt32(tbQuantity.Text) - initialQuantity).ToString().Trim() + "')</script>");
+                        }
+                    }
+                }
+
+                if(currentItemReleased)
+                {
+                    string initialQuantityAvailable_string = "";
+                    Int32 initialQuantityAvailable = 0;
+                    //get the initial quantityAvailable in Item DB
+                    string querySelect2 = "SELECT quantityAvailable FROM [Item] WHERE upc = '" + currentItemUPC + "'";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(querySelect2, connection))
+                    {
+                        connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+                        // Check if a result was returned.
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {                            
+                                initialQuantityAvailable_string = reader["quantityAvailable"].ToString().Trim();
+                                initialQuantityAvailable = Convert.ToInt32(initialQuantityAvailable_string);
+                                //Response.Write("<script>alert('" + reader["quantity"].ToString().Trim() + "')</script>");
+                                //Response.Write("<script>alert('" + (Convert.ToInt32(tbQuantity.Text) - initialQuantity).ToString().Trim() + "')</script>");
+                            }
+                        }
+                    }
+
+
+                    //set the currentQuantityAvailable
+                    Int32 currentQuantityAvailable = 0;
+                    currentQuantityAvailable = initialQuantityAvailable - ShoppingCartQuantity;
+
+                    //update the corresponding item in Item DB
+                    string queryUpdate = "UPDATE [Item] SET quantityAvailable = @quantityAvailable WHERE upc = '" + currentItemUPC + "'";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryUpdate, connection))
+                    {
+                        command.Parameters.AddWithValue("@quantityAvailable", currentQuantityAvailable);
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }
             }
         }
     }
