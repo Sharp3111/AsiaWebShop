@@ -388,7 +388,7 @@
     <p>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:Button ID="ContinueButton" runat="server" onclick="ContinueButton_Click" 
-            Text="Next: Specify Payment Information" 
+            Text="Confirm Change" 
             ValidationGroup="RegisterUserValidationGroup" BackColor="Silver" 
             BorderColor="Silver" BorderStyle="Solid" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
