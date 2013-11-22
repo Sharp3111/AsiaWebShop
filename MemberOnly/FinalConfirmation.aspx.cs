@@ -243,7 +243,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
 
             // Set the sender (From), receiver (To), subject and message body fields of the mail message.
-            mail.From = new MailAddress("huanbang@gmail.com", "Asia Web Shop t115 @Sharp");
+            mail.From = new MailAddress("sharpert115@yeah.net", "Asia Web Shop t115 @Sharp");
             mail.To.Add(emailAddress.Text.Trim());
             mail.Subject = "Receipt";
 
@@ -302,7 +302,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
             itemsInformation += "\nAmount saved from current normal price: HKD ";
             itemsInformation += amountSaved;
 
-            string query2 = "SELECT confirmationNumber, authorizationCode, name, phoneNumber, address, deliveryDate, deliveryTime FROM [OrderRecord] WHERE (userName = '" + userName + "' AND isConfirmed = 'False')";
+            string query2 = "SELECT confirmationNumber, authorizationCode, name, email, phoneNumber, address, deliveryDate, deliveryTime FROM [OrderRecord] WHERE (userName = '" + userName + "' AND isConfirmed = 'False')";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
             using (SqlCommand command = new SqlCommand(query2, connection))
             {
@@ -318,9 +318,10 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                         authorizationCode = reader["authorizationCode"].ToString().Trim();
                         deliveryInformation = "Name:               " + reader["name"].ToString().Trim() + '\n'
                                          + "phoneNumber:        " + reader["phoneNumber"].ToString().Trim() + '\n'
+                                         + "Email Address:      " + reader["email"].ToString().Trim() + '\n'
                                          + "Address:            " + reader["address"].ToString().Trim() + '\n'
-                                         + "Delivery Address:   " + reader["deliveryDate"].ToString().Trim() + '\n'
-                                         + "DeliveryTime:       " + reader["deliveryTime"].ToString().Trim() + '\n';
+                                         + "Delivery Date:      " + reader["deliveryDate"].ToString().Trim() + '\n'
+                                         + "Delivery Time:      " + reader["deliveryTime"].ToString().Trim() + '\n';
                         break;
                     }
                 }

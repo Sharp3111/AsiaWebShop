@@ -72,7 +72,7 @@
     <tr>
         <td class="style3">
     <asp:HyperLink ID="ManageInformationLink" runat="server" 
-        NavigateUrl="~/MemberOnly/ViewMemberInformation.aspx">Manage Your Information</asp:HyperLink>
+        NavigateUrl="~/MemberOnly/Default.aspx">Member Use Only</asp:HyperLink>
         </td>
         <td class="style8" width="250">
     <asp:HyperLink ID="BabyChildrenLink" runat="server" 
@@ -81,8 +81,8 @@
     </tr>
     <tr>
         <td class="style4">
-            <asp:HyperLink ID="ItemPurchaseReport" runat="server" 
-                NavigateUrl="~/MemberOnly/ItemPurchaseReport.aspx">View Your Item Purchase Report</asp:HyperLink>
+    <asp:HyperLink ID="AdminLink" runat="server" 
+        NavigateUrl="~/AdminOnly/AdminManagement.aspx">Admin Use Only</asp:HyperLink>
         </td>
         <td class="style8" width="250">
     <asp:HyperLink ID="ComputersElectronicsLink" runat="server" 
@@ -91,9 +91,7 @@
     </tr>
     <tr>
         <td class="style4">
-    <asp:HyperLink ID="AdminLink" runat="server" 
-        NavigateUrl="~/AdminOnly/AdminManagement.aspx">Admin Use Only</asp:HyperLink>
-        </td>
+            &nbsp;</td>
         <td class="style5" width="250">
     <asp:HyperLink ID="JewelryandWatchesLink" runat="server" 
                 NavigateUrl="~/ItemSearch.aspx?category=JewelryandWatches">Jewelry and Watches</asp:HyperLink>
@@ -101,10 +99,7 @@
     </tr>
     <tr>
         <td class="style3">
-            <asp:HyperLink ID="HyperLink1" runat="server" 
-                NavigateUrl="~/MemberOnly/ReviewProcessingOrder.aspx" 
-                style="color: #1D60FF; font-family: Arial, Helvetica, sans-serif; text-decoration: underline">View Your Processing Orders</asp:HyperLink>
-        </td>
+            &nbsp;</td>
         <td class="style8" width="250">
     <asp:HyperLink ID="LuggageLink" runat="server" 
                 NavigateUrl="~/ItemSearch.aspx?category=Luggage">Luggage</asp:HyperLink>
