@@ -152,7 +152,8 @@
     <p>
         <asp:Button ID="payment" runat="server" 
             PostBackUrl="~/MemberOnly/PaymentInformation.aspx" 
-            Text="Back to Change Payment Method" Height="30px" Width="250px" />
+            Text="Back to Change Payment Method" Height="30px" Width="250px" 
+            style="font-size: medium; font-family: 'Times New Roman', Times, serif" />
     </p>
     <p class="style6">
         The receipt will be sent to your email address:

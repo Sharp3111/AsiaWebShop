@@ -205,13 +205,13 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
         {
             lblMessage1.ForeColor = System.Drawing.Color.Red;
             lblMessage1.Visible = true;
-            lblMessage1.Text = "Please either add an new address or choose an address from your address list and click button to confirm your choice first.";
+            lblMessage1.Text = "Please either add an new address, or choose an address from your address list, and click button to confirm your choice first.";
         }
         if (ChooseAddressFlag == true && Address.Visible == false && TimeOutFlag == true)
         {
             lblMessage1.ForeColor = System.Drawing.Color.Red;
             lblMessage1.Visible = true;
-            lblMessage1.Text = "Please click the Choose Your Address button to confirm your choice or add a new delivery address.";
+            lblMessage1.Text = "Please click the Choose Your Address button to confirm your choice, or add a new delivery address.";
         }
         if (TimeOutFlag == false)
         {
