@@ -332,7 +332,7 @@ public partial class MemberOnly_FinalConfirmationPage : System.Web.UI.Page
                         confirmationNumber = reader["confirmationNumber"].ToString().Trim();
                         authorizationCode = reader["authorizationCode"].ToString().Trim();
                         deliveryInformation = "Name:               " + reader["name"].ToString().Trim() + '\n'
-                                         + "phoneNumber:        " + reader["phoneNumber"].ToString().Trim() + '\n'
+                                         + "Phone Number:        " + reader["phoneNumber"].ToString().Trim() + '\n'
                                          + "Email Address:      " + reader["email"].ToString().Trim() + '\n'
                                          + "Address:            " + reader["address"].ToString().Trim() + '\n'
                                          + "Delivery Date:      " + reader["deliveryDate"].ToString().Trim() + '\n'
