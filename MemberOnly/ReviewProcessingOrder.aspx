@@ -14,8 +14,7 @@
         {
             font-size: medium;
             color: #000080;
-            text-decoration: underline;
-        }
+            }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -26,9 +25,20 @@
         <asp:Label ID="UserName" runat="server"></asp:Label>
         , your processing order information is as follows:</p>
     <p class="style3">
-        <asp:GridView ID="GridView1" runat="server" CellPadding="4" 
-            DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="None">
+        <asp:GridView ID="gvDeliveryTime" runat="server" CellPadding="4" 
+            ForeColor="#333333" GridLines="None">
             <AlternatingRowStyle BackColor="White" />
+            <Columns>
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:CheckBox ID="cbOrderRecord" runat="server" AutoPostBack="True" 
+                            oncheckedchanged="cbOrderRecord_CheckedChanged" />
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:CheckBox ID="CheckBox1" runat="server" />
+                    </EditItemTemplate>
+                </asp:TemplateField>
+            </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
             <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -40,9 +50,12 @@
             <SortedDescendingCellStyle BackColor="#E9EBEF" />
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server"></asp:SqlDataSource>
     </p>
     <p class="style3">
-        &nbsp;</p>
+        <asp:Button ID="btnNext" runat="server" onclick="btnNext_Click" Text="Edit" />
+    </p>
+    <p class="style3">
+        <asp:Label ID="Label1" runat="server" Font-Underline="False" ForeColor="Red"></asp:Label>
+    </p>
 </asp:Content>
 
