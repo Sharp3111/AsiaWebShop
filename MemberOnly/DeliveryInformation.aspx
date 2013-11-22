@@ -54,11 +54,6 @@
         {
             height: 74px;
         }
-        .style73
-        {
-            height: 29px;
-            width: 191px;
-        }
         .style75
         {
             width: 302px;
@@ -83,13 +78,27 @@
         {
             width: 245px;
         }
-        .style80
-        {
-            width: 191px;
-        }
         .style81
         {
             width: 302px;
+        }
+        .style82
+        {
+            width: 347px;
+        }
+        .style83
+        {
+            width: 347px;
+            height: 29px;
+        }
+        .style84
+        {
+            height: 29px;
+            width: 178px;
+        }
+        .style85
+        {
+            width: 178px;
         }
         </style>
 </asp:Content>
@@ -98,14 +107,14 @@
         <strong>SPECIFY Delivery Information</strong></p>
 <table class="style78">
     <tr>
-        <td class="style77">
+        <td class="style84">
             User Name:</td>
-        <td class="style80">
+        <td class="style83">
             <asp:Label ID="UserName" runat="server"></asp:Label>
         </td>
-        <td class="style81" colspan="2">
+        <td class="style75" colspan="2">
             &nbsp;Email Address:</td>
-        <td class="style79">
+        <td class="style76">
             <asp:TextBox ID="Email" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
@@ -121,9 +130,9 @@
         </td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             First Name:</td>
-        <td class="style80">
+        <td class="style82">
             <asp:TextBox ID="FirstName" runat="server" Height="22px" Width="200px" 
                 MaxLength="20"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvFirstName" runat="server" 
@@ -143,9 +152,9 @@
         </td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             Phone Number:</td>
-        <td class="style80">
+        <td class="style82">
             <asp:TextBox ID="PhoneNumber" runat="server" Height="22px" Width="200px" 
                 MaxLength="8"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvPhoneNumber" runat="server" 
@@ -178,10 +187,10 @@
         </td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             <asp:Label ID="lblBuilding" runat="server" Text="Building:"></asp:Label>
         </td>
-        <td class="style80">
+        <td class="style82">
             <asp:TextBox ID="Building" runat="server" Height="22px" Width="200px" 
                 MaxLength="20"></asp:TextBox>
         </td>
@@ -219,10 +228,10 @@
         </td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             <asp:Label ID="lblStreet" runat="server" Text="Street:"></asp:Label>
         </td>
-        <td class="style80">
+        <td class="style82">
             <asp:TextBox ID="Street" runat="server" Height="22px" Width="200px" 
                 MaxLength="30"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvStreet" runat="server" 
@@ -235,7 +244,7 @@
         </td>
         <td class="style79">
             <asp:DropDownList ID="DistrictDropDownList" runat="server" 
-                Height="22px" style="margin-left: 0px" Width="205px" 
+                Height="22px" style="margin-left: 0px" Width="200px" 
                 onselectedindexchanged="DistrictDropDownList0_SelectedIndexChanged">
                 <asp:ListItem Value="0">-- Select district --</asp:ListItem>
             </asp:DropDownList>
@@ -247,12 +256,12 @@
         </td>
     </tr>
     <tr>
-        <td class="style73">
+        <td class="style84">
             <asp:Label ID="lblNickname" runat="server" Text="Nickname:"></asp:Label>
         </td>
-        <td class="style73">
+        <td class="style83">
             <asp:TextBox ID="Nickname" runat="server" MaxLength="10" 
-                            Text='<%# Bind("nickname") %>'></asp:TextBox>
+                            Text='<%# Bind("nickname") %>' Height="22px" Width="160px"></asp:TextBox>
             <asp:RequiredFieldValidator ID="rfvNickname" runat="server" 
                             ControlToValidate="Nickname" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Nickname is required." ForeColor="Red" 
@@ -294,12 +303,13 @@
         </td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             <asp:Label ID="lblDeliveryAddress" runat="server" Text="Delivery Address:"></asp:Label>
         </td>
         <td class="style57" colspan="2">
             <asp:DropDownList ID="AddressDropDownList" runat="server" 
-                onselectedindexchanged="AddressDropDownList_SelectedIndexChanged">
+                onselectedindexchanged="AddressDropDownList_SelectedIndexChanged" 
+                Height="22px">
                 <asp:ListItem Value="0">-- Select an Address --</asp:ListItem>
             </asp:DropDownList>
             <asp:RequiredFieldValidator ID="rfvAddressDropDownList" runat="server" 
@@ -312,7 +322,7 @@
             &nbsp;</td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             &nbsp;</td>
         <td class="style57" colspan="2">
             &nbsp;</td>
@@ -333,7 +343,7 @@
             &nbsp;</td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             <asp:Label ID="lblFinalAddress" runat="server" 
                 Text="Now your delivery address is: " Visible="False"></asp:Label>
         </td>
@@ -354,10 +364,11 @@
             <span class="style67">Specify Delivery Time</span></td>
     </tr>
     <tr>
-        <td class="style77">
+        <td class="style85">
             Delivery Date:</td>
-        <td class="style80">
-            <asp:DropDownList ID="DeliveryDateDropDownList" runat="server">
+        <td class="style82">
+            <asp:DropDownList ID="DeliveryDateDropDownList" runat="server" Height="22px" 
+                Width="160px">
                 <asp:ListItem Value="0">-- Select a Date --</asp:ListItem>
             </asp:DropDownList>
             <asp:RequiredFieldValidator ID="rfvDeliveryDate" runat="server" 
@@ -368,7 +379,8 @@
         <td class="style81" colspan="2">
             Delivery Time:</td>
         <td class="style79">
-            <asp:DropDownList ID="DeliveryTimeDropDownList" runat="server">
+            <asp:DropDownList ID="DeliveryTimeDropDownList" runat="server" Height="22px" 
+                Width="160px">
                 <asp:ListItem Value="0">-- Select a Time Slot --</asp:ListItem>
                 <asp:ListItem Value="9">09:00-12:00</asp:ListItem>
                 <asp:ListItem Value="12">12:00-15:00</asp:ListItem>
