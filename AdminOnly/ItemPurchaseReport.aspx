@@ -183,7 +183,7 @@
             <td class="style10">
                 &nbsp;</td>
             <td class="style11" colspan="3">
-                <asp:Button ID="Button1" runat="server" Text="General Report" 
+                <asp:Button ID="Button1" runat="server" Text="Generate Report" 
                     ValidationGroup="itemReport" Width="117px" onclick="Button1_Click" />
             </td>
             <td class="style14">

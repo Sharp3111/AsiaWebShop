@@ -350,8 +350,8 @@
                     ValidationGroup="purchaseAmount">*</asp:RequiredFieldValidator>
             </td>
             <td class="style20" colspan="2">
-                <asp:Button ID="Button1" runat="server" Text="General Report" 
-                    ValidationGroup="purchaseAmount" Width="97px" onclick="Button1_Click" />
+                <asp:Button ID="Button1" runat="server" Text="Generate Report" 
+                    ValidationGroup="purchaseAmount" Width="103px" onclick="Button1_Click" />
             </td>
             <td>
                 &nbsp;</td>
