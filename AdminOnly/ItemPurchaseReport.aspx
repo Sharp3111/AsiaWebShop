@@ -71,7 +71,7 @@
                 <asp:RadioButtonList ID="date" runat="server" Width="115px" 
                     ValidationGroup="itemReport" Height="70px" RepeatLayout="Flow">
                     <asp:ListItem Value="certain">in certain date: <br></br></asp:ListItem>
-                    <asp:ListItem Value="any">at any time</asp:ListItem>
+                    <asp:ListItem Value="any" Selected="True">at any time</asp:ListItem>
                 </asp:RadioButtonList>
             </td>
             <td class="style7">
