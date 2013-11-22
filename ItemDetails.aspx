@@ -85,22 +85,6 @@
                             Text='<%# Bind("quantityAvailable") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="Quantity">
-                    <ItemTemplate>
-                        <asp:TextBox ID="tbQuantity" runat="server" Height="22px" 
-                            ValidationGroup="QuantityValidationGroup" Width="30px">1</asp:TextBox>
-                        <asp:RegularExpressionValidator ID="revQuantity" runat="server" 
-                            ControlToValidate="tbQuantity" Display="Dynamic" EnableClientScript="False" 
-                            ErrorMessage="Please input the correct quantity" ForeColor="Red" 
-                            ValidationExpression="^[1-9]([0-9]+)?" 
-                            ValidationGroup="QuantityValidationGroup">*</asp:RegularExpressionValidator>
-                        <asp:CustomValidator ID="cvQuantity" runat="server" 
-                            ControlToValidate="tbQuantity" Display="Dynamic" EnableClientScript="False" 
-                            ErrorMessage="Available quantity for this item is not enough." ForeColor="Red" 
-                            onservervalidate="cvQuantity_ServerValidate" 
-                            ValidationGroup="QuantityValidationGroup">*</asp:CustomValidator>
-                    </ItemTemplate>
-                </asp:TemplateField>
                 <asp:TemplateField>
                     <ItemTemplate>
                         <asp:Button ID="btn_return" runat="server" Height="25px" 
