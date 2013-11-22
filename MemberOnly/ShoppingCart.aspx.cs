@@ -183,7 +183,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         SqlDataSource1.SelectCommand = queryPopulate;
         SqlDataSource1.Select(DataSourceSelectArguments.Empty);
         gvShoppingCart.DataBind();
-
+        System.Diagnostics.Debug.WriteLine(gvShoppingCart.Rows.Count);
         //Populate the amendable quantity textboxes in GridView
         int i = 0;
         {
@@ -584,7 +584,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 string quantity = ((TextBox)gvShoppingCart.Rows[i].FindControl("QuantityTextBox")).Text.Trim(); //for quantity in OrderRecord
 
                 //unitPuchasePrice is from DB Item
-                string unitPuchasePrice = ((Label)gvShoppingCart.Rows[i].FindControl("UnitPurchasePriceLabel")).Text.Trim(); //for unitPrice in OrderRecord
+                string unitPuchasePrice = gvShoppingCart.Rows[i].Cells[5].Text.Trim();//((Label)gvShoppingCart.Rows[i].FindControl("UnitPurchasePriceLabel")).Text.Trim(); //for unitPrice in OrderRecord
 
                 string IsConfirmed = "0"; //for isConfirmed in OrderRecord
                 //string currentTime = "CURRENT_TIMESTAMP"; //for orderDateTime in OrderRecord
@@ -1197,6 +1197,27 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             UpdateItemInformationInDB(connectionString, userName); //Response.Write("<script>alert('After Update; Before Populate')</script>");
             GetItemInformation(connectionString, userName); //Response.Write("<script>alert('After Populate; Before Calc')</script>");
             AccumulateTotalPrice(connectionString, userName); //Response.Write("<script>alert('After Calc')</script>");
+        }
+    }
+    protected void QuantityTextBox_TextChanged1(object sender, EventArgs e)
+    {
+        Page.Validate("ShoppingCartValidation");
+
+        //Response.Write("<script>alert('Hehe')</script>");
+
+        if (Page.IsValid)
+        {
+
+            string connectionString = "AsiaWebShopDBConnectionString";
+
+            string userName = User.Identity.Name; //Response.Write("<script>alert('Before Update')</script>");
+
+            UpdateItemInformationInDB(connectionString, userName); //Response.Write("<script>alert('After Update; Before Populate')</script>");
+
+            GetItemInformation(connectionString, userName); //Response.Write("<script>alert('After Populate; Before Calc')</script>");
+
+            AccumulateTotalPrice(connectionString, userName); //Response.Write("<script>alert('After Calc')</script>");
+
         }
     }
 }

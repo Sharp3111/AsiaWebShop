@@ -50,7 +50,7 @@
                 <asp:TemplateField HeaderText="Select">
                     <ItemTemplate>
                         <asp:CheckBox ID="SelectLabel" runat="server" 
-                            oncheckedchanged="CheckBox3_CheckedChanged" />
+                            oncheckedchanged="CheckBox3_CheckedChanged" AutoPostBack="True" />
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:CheckBox ID="CheckBox2" runat="server" />
@@ -62,29 +62,55 @@
                             Checked='<%# Bind("isChecked") %>' />
                     </EditItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="upc" HeaderText="upc" ReadOnly="True" 
-                    SortExpression="upc" Visible="False" />
-                <asp:BoundField DataField="name" HeaderText="Item Name" SortExpression="name" />
+                <asp:TemplateField HeaderText="upc" SortExpression="upc" Visible="False">
+                    <ItemTemplate>
+                        <asp:Label ID="lbUPC" runat="server" Text='<%# Bind("upc") %>'></asp:Label>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:Label ID="Label2" runat="server" Text='<%# Eval("upc") %>'></asp:Label>
+                    </EditItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Item Name" SortExpression="name">
+                    <ItemTemplate>
+                        <asp:Label ID="NameLabel" runat="server" Text='<%# Bind("name") %>'></asp:Label>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("name") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                </asp:TemplateField>
                 <asp:BoundField DataField="unitPrice" HeaderText="Unit Price" 
                     SortExpression="unitPrice" />
-                <asp:BoundField DataField="quantityAvailable" HeaderText="Quantity Available" 
-                    SortExpression="quantityAvailable" />
+                <asp:TemplateField HeaderText="Quantity Available" 
+                    SortExpression="quantityAvailable">
+                    <ItemTemplate>
+                        <asp:Label ID="QuantityAvailableLabel" runat="server" 
+                            Text='<%# Bind("quantityAvailable") %>'></asp:Label>
+                    </ItemTemplate>
+                    <EditItemTemplate>
+                        <asp:TextBox ID="TextBox3" runat="server" 
+                            Text='<%# Bind("quantityAvailable") %>'></asp:TextBox>
+                    </EditItemTemplate>
+                </asp:TemplateField>
                 <asp:TemplateField HeaderText="Quantity" SortExpression="quantity">
                     <ItemTemplate>
-                        <asp:TextBox ID="QuantityTextBox" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="QuantityTextBox" runat="server" AutoPostBack="True" 
+                            ontextchanged="QuantityTextBox_TextChanged1" 
+                            ValidationGroup="ShoppingCartValidation"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Item Quantity Required." 
-                            ForeColor="Red">*</asp:RequiredFieldValidator>
+                            ForeColor="Red" ValidationGroup="ShoppingCartValidation">*</asp:RequiredFieldValidator>
                         <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
                             EnableClientScript="False" 
                             ErrorMessage="Quantity can only be nonnegative integer." ForeColor="Red" 
-                            ValidationExpression="^[1-9]([0-9]+)?">*</asp:RegularExpressionValidator>
+                            ValidationExpression="^[1-9]([0-9]+)?" 
+                            ValidationGroup="ShoppingCartValidation">*</asp:RegularExpressionValidator>
                         <asp:CustomValidator ID="CustomValidator1" runat="server" 
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Quantity is not enough." 
-                            ForeColor="Red" onservervalidate="CustomValidator1_ServerValidate">*</asp:CustomValidator>
+                            ForeColor="Red" onservervalidate="CustomValidator1_ServerValidate" 
+                            ValidationGroup="ShoppingCartValidation">*</asp:CustomValidator>
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("quantity") %>'></asp:TextBox>
