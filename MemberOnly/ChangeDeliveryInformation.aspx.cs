@@ -8,10 +8,18 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Text;
+using System.Net.Mail;
 
 
 public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
 {
+    public class emailAddress
+    {
+        public static string oldEmail = "";
+        public static string newEmail = "";
+    }
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
@@ -107,6 +115,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                     // Assign the data values to the web form label and textboxes.
                     UserName.Text = reader["userName"].ToString().Trim();
                     Email.Text = reader["email"].ToString().Trim();
+                    emailAddress.oldEmail = reader["email"].ToString().Trim();
                     Name.Text = reader["name"].ToString().Trim();
                     PhoneNumber.Text = reader["phoneNumber"].ToString().Trim();
                 }
@@ -158,6 +167,7 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
             string connectionString = "AsiaWebShopDBConnectionString";
             string connectionString2 = "AsiaWebShopDBConnectionString2";
             string userName = User.Identity.Name;
+            emailAddress.newEmail = Email.Text.Trim();
 
             // Define the SELECT query to get the member's address.
             string query = "SELECT [userName], [upc], [quantity] FROM [ShoppingCart] WHERE ([userName] =N'" + userName + "')";
@@ -209,6 +219,33 @@ public partial class MemberOnly_DeliveryInformation : System.Web.UI.Page
                 // Close the connection and the DataReader.
                 command.Connection.Close();
                 reader.Close();
+
+                MailMessage mail = new MailMessage();
+
+                // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
+                SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
+
+                // Set the sender (From), receiver (To), subject and message body fields of the mail message.
+                mail.From = new MailAddress("sharpert115@yeah.net", "Asia Web Shop t115 @Sharp");
+                mail.To.Add(emailAddress.oldEmail);
+                mail.To.Add(emailAddress.newEmail);
+                mail.Subject = "Receipt";
+
+                mail.Body = "Dear " + User.Identity.Name + ", your deliver information has been changed:\n\n"
+             + "Confirmation #:\n" + Request.QueryString["confirmationNumber"] + '\n'
+             + "Name:            " + Name.Text.Trim() + '\n'
+             + "Email Address:   " + emailAddress.newEmail + '\n'
+             + "Phone Number:    " + PhoneNumber.Text.Trim() + '\n'
+             + "Address:         " + Address.Text.Trim() + '\n'
+             + "Delivery Date:   " + DeliveryDateDropDownList.SelectedItem.Text.Trim() + '\n'
+             + "Delivery Time:   " + DeliveryTimeDropDownList.SelectedItem.Text.Trim() + '\n'
+             + '\n' + '\n' 
+             + "Note: this is a system generated email notification for both your old email address "+emailAddress.oldEmail
+             + " and new email address "+ emailAddress.newEmail 
+             + ", please do not reply.";
+
+                emailServer.Send(mail);
+
             }
 
             FormsAuthentication.SetAuthCookie(UserName.Text, false /* createPersistentCookie */);
