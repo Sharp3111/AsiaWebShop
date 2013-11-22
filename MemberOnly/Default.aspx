@@ -48,11 +48,5 @@
         <asp:HyperLink ID="HyperLink3" runat="server" 
             NavigateUrl="~/MemberOnly/ItemReview.aspx">Review Purchased Items</asp:HyperLink>
     </p>
-    <p>
-        &nbsp;</p>
-    <p>
-        <asp:HyperLink ID="HyperLink8" runat="server" 
-            NavigateUrl="~/MemberOnly/StockAvailableAlert.aspx">Subscribe to Temporily Unavailable Items</asp:HyperLink>
-    </p>
-</asp:Content>
+    </asp:Content>
 
