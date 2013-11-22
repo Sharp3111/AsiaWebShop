@@ -144,39 +144,16 @@
         <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
         <Columns>
             <asp:BoundField DataField="upc" HeaderText="upc" ReadOnly="True" 
-                SortExpression="upc" Visible="False" />
-            <asp:TemplateField HeaderText="Ranking" SortExpression="ranking">
-                <EditItemTemplate>
-                    <asp:TextBox ID="TextBox4" runat="server" Text='<%# Bind("ranking") %>'></asp:TextBox>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="Label4" runat="server" Text='<%# Bind("ranking") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Item Name" SortExpression="name">
-                <EditItemTemplate>
-                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("name") %>'></asp:TextBox>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("name") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Discount Price" SortExpression="discountPrice">
-                <EditItemTemplate>
-                    <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("discountPrice") %>'></asp:TextBox>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="Label2" runat="server" Text='<%# Bind("discountPrice") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Quantity Sold" SortExpression="quantitySold">
-                <EditItemTemplate>
-                    <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("quantitySold") %>'></asp:TextBox>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="Label3" runat="server" Text='<%# Bind("quantitySold") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
+                SortExpression="upc" />
+            <asp:BoundField DataField="name" HeaderText="name" SortExpression="name" />
+            <asp:BoundField DataField="discountPrice" HeaderText="discountPrice" 
+                SortExpression="discountPrice" />
+            <asp:BoundField DataField="quantitySold" HeaderText="quantitySold" 
+                SortExpression="quantitySold" />
+            <asp:BoundField DataField="ranking" HeaderText="ranking" 
+                SortExpression="ranking" />
+            <asp:CheckBoxField DataField="isEditorChoice" HeaderText="isEditorChoice" 
+                SortExpression="isEditorChoice" />
         </Columns>
         <EditRowStyle BackColor="#999999" />
         <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
@@ -192,7 +169,7 @@
     <br />
     <asp:SqlDataSource ID="SqlDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT * FROM [Recommendation] ORDER BY [ranking]">
+        SelectCommand="SELECT * FROM [RecommendationDay] ORDER BY [ranking]">
     </asp:SqlDataSource>
 </asp:Content>
 

@@ -15,7 +15,7 @@ public partial class _Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         string connectionString = "AsiaWebShopDBConnectionString";
-
+        /*
         Int32 count = 0;
         //check if the item has already added into the shopping cart
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -34,5 +34,6 @@ public partial class _Default : System.Web.UI.Page
         {
             NumberLabel.Text = "Top " + count.ToString().Trim();
         }
+         * */
     }
 }
