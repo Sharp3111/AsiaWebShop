@@ -263,7 +263,7 @@
     <p>
         <asp:SqlDataSource ID="AsiaWebShopDBSqlDataSource2" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT userName, qualityRating, featuresRating, performanceRating, appearanceRating, durabilityRating, comment, isAnonymous, upc FROM Review WHERE (upc = @upc)">
+            SelectCommand="SELECT userName, qualityRating, featuresRating, performanceRating, appearanceRating, durabilityRating, comment, upc FROM Review WHERE (upc = @upc)">
             <SelectParameters>
                 <asp:ControlParameter ControlID="UPC" Name="upc" PropertyName="Text" />
             </SelectParameters>

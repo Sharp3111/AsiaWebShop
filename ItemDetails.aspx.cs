@@ -254,7 +254,7 @@ public partial class ItemDetails : System.Web.UI.Page
     {
         string connectionString = "AsiaWebShopDBConnectionString";
 
-        string querySelect = "SELECT userName, qualityRating, featuresRating, performanceRating, appearanceRating, durabilityRating, comment, isAnonymous FROM Review WHERE (upc = @upc)";
+        string querySelect = "SELECT userName, qualityRating, featuresRating, performanceRating, appearanceRating, durabilityRating, comment FROM Review WHERE (upc = @upc)";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(querySelect, connection))
         {
@@ -276,17 +276,17 @@ public partial class ItemDetails : System.Web.UI.Page
                     string appearanceRating = reader["appearanceRating"].ToString().Trim();
                     string durabilityRating = reader["durabilityRating"].ToString().Trim();
                     string comment = reader["comment"].ToString().Trim();
-                    Boolean anonymous = Convert.ToBoolean(reader["isAnonymous"].ToString().Trim());
+                    //Boolean anonymous = Convert.ToBoolean(reader["isAnonymous"].ToString().Trim());
 
                     //populate username
-                    if (anonymous)
-                    {
-                        ((Label)gvReview.Rows[i].FindControl("userNameLabel")).Text = "Anonymous";
-                    }
-                    else
-                    {
-                        ((Label)gvReview.Rows[i].FindControl("userNameLabel")).Text = userName;
-                    }
+                    //if (anonymous)
+                    //{
+                    //    ((Label)gvReview.Rows[i].FindControl("userNameLabel")).Text = "Anonymous";
+                    //}
+                    //else
+                    //{
+                    //((Label)gvReview.Rows[i].FindControl("userNameLabel")).Text = userName;
+                    //}
                     //populate quality rating
                     ((Label)gvReview.Rows[i].FindControl("qRatingLabel")).Text = qualityRating;
 

@@ -11,11 +11,21 @@
             text-decoration: underline;
             text-align: left;
         }
+        .style3
+        {
+            font-family: "Segoe UI";
+            font-size: small;
+            color: #008080;
+            text-align: left;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p class="style2">
         ITEM MANAGEMENT</p>
+    <p class="style3">
+        To add a new item, select any arbitary item below and then click &quot;New&quot; at the 
+        bottom.</p>
     <p>
         <asp:GridView ID="gvItem" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataKeyNames="upc" DataSourceID="AsiaWebShopDBSqlDataSource1" 

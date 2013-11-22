@@ -84,7 +84,7 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
             {
                 ((CheckBox)gvItemReview.Rows[Row_index].FindControl("selected")).Checked = false;
                 lblMessage.ForeColor = System.Drawing.Color.Red;
-                lblMessage.Text = "* You have reviewed this item before. You cannot reviewed an item twice";
+                lblMessage.Text = "* You have reviewed this item before. You cannot review an item twice";
             }
         }
         //uncheck an item
@@ -131,7 +131,7 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
                     }
                 }
 
-                string queryInsert = "INSERT INTO [Review] VALUES(@upc, @userName, @qualityRating, @featuresRating, @performanceRating, @appearanceRating, @durabilityRating, @comment, @isAnonymous)";
+                string queryInsert = "INSERT INTO [Review] VALUES(@upc, @userName, @qualityRating, @featuresRating, @performanceRating, @appearanceRating, @durabilityRating, @comment)";
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
                 using (SqlCommand command = new SqlCommand(queryInsert, connection))
                 {
@@ -151,7 +151,7 @@ public partial class MemberOnly_ItemReview : System.Web.UI.Page
                     {
                         command.Parameters.AddWithValue("@comment", comment.Text.Trim());
                     }
-                    command.Parameters.AddWithValue("@isAnonymous", checkAnonymous.Checked);
+                    //command.Parameters.AddWithValue("@isAnonymous", checkAnonymous.Checked);
                     command.ExecuteNonQuery();
                     command.Connection.Close();
                 }
