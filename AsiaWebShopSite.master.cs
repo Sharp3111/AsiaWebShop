@@ -15,7 +15,7 @@ public partial class SiteMaster : System.Web.UI.MasterPage
     protected void Page_Load(object sender, EventArgs e)
     {
  
-        Session.Timeout = 1;
+        Session.Timeout = 15;
     }
 
     protected void LoginStatus_LoggingOut(Object sender, EventArgs e)
