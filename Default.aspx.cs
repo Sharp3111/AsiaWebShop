@@ -258,9 +258,10 @@ public partial class _Default : System.Web.UI.Page
         }
 
         //indexHolder is used to hold index of the max in an array every round
+        Int32 Capacity = 5;
         Int32 indexHolder;
 
-        for (i = 0; i < MaxNumItems; i++)
+        for (i = 0; i < Capacity; i++)
         {
             indexHolder = IndexOfMaxOfAnArray(quantitySoldList, MaxNumItems);
             if (quantitySoldList[indexHolder] <= 0)
