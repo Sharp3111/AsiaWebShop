@@ -39,6 +39,17 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 command.Connection.Close();
             }
 
+            //Twist ShoppingCart - make all isChecked's true
+            string twist = "UPDATE ShoppingCart SET isChecked = '" + true + "' WHERE ([userName] = N'" + userName + "')";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(twist, connection))
+            {
+
+                command.Connection.Open();
+                command.ExecuteNonQuery();
+                command.Connection.Close();
+            }
+
             //If there are records in the current user's shopping cart
             if (count != 0)
             {
@@ -213,15 +224,37 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
             for (int i = 0; i < MaxRows; i++)
             {
-                bool selected = ((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked;
-                decimal totalPriceOfEachItem = Convert.ToDecimal(((Label)gvShoppingCart.Rows[i].FindControl("TotalPriceOfEachItemLabel")).Text.ToString().Trim());
-
-                if (selected)
+                string currentUPC = ((Label)gvShoppingCart.Rows[i].FindControl("lbUPC")).Text.Trim();
+                //check whether the item is invisible
+                Boolean currentIsVisible = true;
+                string queryInvisible = "SELECT visible FROM [Item] WHERE upc = '" + currentUPC + "'";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryInvisible, connection))
                 {
-                    SelectedTotalPrice += totalPriceOfEachItem;
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            currentIsVisible = Convert.ToBoolean(reader["visible"].ToString().Trim());
+                        }
+                    }
+                    command.Connection.Close();
                 }
 
-                TotalPrice += totalPriceOfEachItem;
+                if (currentIsVisible)
+                {
+                    bool selected = ((CheckBox)gvShoppingCart.Rows[i].FindControl("SelectLabel")).Checked;
+                    decimal totalPriceOfEachItem = Convert.ToDecimal(((Label)gvShoppingCart.Rows[i].FindControl("TotalPriceOfEachItemLabel")).Text.ToString().Trim());
+
+                    if (selected)
+                    {
+                        SelectedTotalPrice += totalPriceOfEachItem;
+                    }
+
+                    TotalPrice += totalPriceOfEachItem;
+                }
             }
 
             SelectedPriceLabel.Text = SelectedTotalPrice.ToString();
@@ -237,13 +270,16 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
     private void GetItemInformation(string connectionString, string userName)
     {
-        string queryPopulate = "SELECT [Item].[upc], [Item].[name], [ShoppingCart].[unitPrice], [Item].[quantityAvailable], ([ShoppingCart].[unitPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
+        string queryPopulate = "SELECT [Item].[upc], [Item].[name], [Item].[discountPrice] AS unitPrice, [Item].[quantityAvailable], [ShoppingCart].[quantity], ([Item].[discountPrice] * [ShoppingCart].[quantity]) AS TotalPriceOfEachItem FROM [Item] JOIN [ShoppingCart] ON [Item].[upc] = [ShoppingCart].[upc] WHERE [ShoppingCart].[userName] = '" + userName + "'";
 
+        
         // Execute the SQL statement; order the result by item name.
         SqlDataSource1.SelectCommand = queryPopulate;
         SqlDataSource1.Select(DataSourceSelectArguments.Empty);
         gvShoppingCart.DataBind();
-        System.Diagnostics.Debug.WriteLine(gvShoppingCart.Rows.Count);
+        //System.Diagnostics.Debug.WriteLine(gvShoppingCart.Rows.Count);
+        
+
         //Populate the amendable quantity textboxes in GridView
         int i = 0;
         {
@@ -268,10 +304,11 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                     {
                         intQuantity = reader.GetInt32(0);
                         ((TextBox)gvShoppingCart.Rows[i].FindControl("QuantityTextBox")).Text = intQuantity.ToString();
-
+                        //Response.Write("<script>alert('" + intQuantity.ToString().Trim() + "')</script>");
                         IsChecked = reader.GetBoolean(1);
                         ((CheckBox)gvShoppingCart.Rows[i++].FindControl("SelectLabel")).Checked = IsChecked;
                         //Response.Write("<script>alert('" + IsChecked.ToString().Trim() + "')</script>");
+                        //Response.Write("<script>alert('" + ((CheckBox)gvShoppingCart.Rows[i++].FindControl("SelectLabel")).Checked.ToString().Trim() + "')</script>");
                     }
                 }
 
