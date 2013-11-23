@@ -191,7 +191,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     private void updatePrice(string connectionString,string upc, decimal price)
     {
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand("UPDATE [ShoppingCart] SET [unitPrice] = '"+price.ToString().Trim()+"' WHERE ([upc] = N'" + upc + "')", connection))
+        using (SqlCommand command = new SqlCommand("UPDATE [ShoppingCart] SET [unitPrice] = '"+price.ToString().Trim()+"' WHERE ([upc] = N'" + upc + "' AND userName = '" + User.Identity.Name + "')", connection))
         {
             command.Connection.Open();
             command.ExecuteReader();
