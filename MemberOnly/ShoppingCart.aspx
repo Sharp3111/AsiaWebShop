@@ -50,8 +50,7 @@
                 <asp:TemplateField HeaderText="Select">
                     <ItemTemplate>
                         <asp:CheckBox ID="SelectLabel" runat="server" 
-                            oncheckedchanged="CheckBox3_CheckedChanged" AutoPostBack="True" 
-                            Checked="True" />
+                            oncheckedchanged="CheckBox3_CheckedChanged" AutoPostBack="True" />
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:CheckBox ID="CheckBox2" runat="server" />
@@ -82,7 +81,7 @@
                 <asp:BoundField DataField="unitPrice" HeaderText="Unit Price" 
                     SortExpression="unitPrice" />
                 <asp:TemplateField HeaderText="Quantity Available" 
-                    SortExpression="quantityAvailable" Visible="False">
+                    SortExpression="quantityAvailable">
                     <ItemTemplate>
                         <asp:Label ID="QuantityAvailableLabel" runat="server" 
                             Text='<%# Bind("quantityAvailable") %>'></asp:Label>
@@ -96,7 +95,7 @@
                     <ItemTemplate>
                         <asp:TextBox ID="QuantityTextBox" runat="server" AutoPostBack="True" 
                             ontextchanged="QuantityTextBox_TextChanged1" 
-                            ValidationGroup="ShoppingCartValidation" Text="<%# Bind('quantity') %>"></asp:TextBox>
+                            ValidationGroup="ShoppingCartValidation"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                             ControlToValidate="QuantityTextBox" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Item Quantity Required." 
