@@ -550,14 +550,95 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             Label lbMax = (Label)gvShoppingCart.Rows[i].FindControl("QuantityAvailableLabel");
             Int32 labelQuantityAvailable = Convert.ToInt32(lbMax.Text);
 
-                //get itemUPC
-                Label lbUPC = (Label)gvShoppingCart.Rows[i].FindControl("lbUPC");
-                string itemUPC = lbUPC.Text;   
+            //get itemUPC
+            Label lbUPC = (Label)gvShoppingCart.Rows[i].FindControl("lbUPC");
+            string itemUPC = lbUPC.Text;   
 
+            //check whether the current item is released
+            Boolean currentItemIsReleased = true;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand("SELECT [isReleased] FROM [ShoppingCart] WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')", connection))
+            {
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {   
+                    while (reader.Read())
+                    {
+                        currentItemIsReleased = reader.GetBoolean(0); 
+                    }
+                }
+                command.Connection.Close();
+                reader.Close();
+            }
+
+            if (currentItemIsReleased)
+            {
+                //set quantity in ShoppingCart to textBoxQuantity
+                //set isReleased in ShoppingCart to false 
+                
+                //update ShoppingCart DB
+                string queryUpdateShoppingCart = "UPDATE [ShoppingCart] SET [quantity] = @Quantity, [isChecked] = @IsChecked, [isReleased] = @IsReleased WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdateShoppingCart, connection))
+                {
+                    //Define the UPDATE query parameters with corresponding values
+                    command.Parameters.AddWithValue("@Quantity", textBoxQuantity.ToString());
+                    command.Parameters.AddWithValue("@IsChecked", selected.ToString().Trim());
+                    command.Parameters.AddWithValue("@IsReleased", Convert.ToString(false));
+                    //Response.Write("<script>alert('" + selected.ToString() + "')</script>");
+
+                    //Open the connection, execute the UPDATE query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+
+
+
+                //set quantityAvailable in Item to initialItemQuantity - textBoxQuantity
+
+                //get initialItemQuantity in Item DB
+                Int32 initialItemQuantity = 0;
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand("SELECT [quantityAvailable] FROM [Item] WHERE ([upc] = '" + itemUPC + "')", connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    // Check if a result was returned.
+                    if (reader.HasRows)
+                    {   // Assign the data values to itemUPC
+                        while (reader.Read())
+                        {
+                            initialItemQuantity = reader.GetInt32(0);
+                        }
+                    }
+
+                    // Close the connection and the DataReader.
+                    command.Connection.Close();
+                    reader.Close();
+                }
+
+                //update Item DB
+                string queryUpdateItem = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + itemUPC + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdateItem, connection))
+                {
+                    //Define the UPDATE query parameters with corresponding values
+                    command.Parameters.AddWithValue("@QuantityAvailable", (initialItemQuantity - textBoxQuantity).ToString());
+
+                    // Open the connection, execute the UPDATE query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+            }
+            else
+            {
                 //get initialShoppingCartQuantity in ShoppingCart DB
                 Int32 initialShoppingCartQuantity = 0;
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-                using (SqlCommand command = new SqlCommand("SELECT [quantity] FROM [ShoppingCart] WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC +"')", connection))
+                using (SqlCommand command = new SqlCommand("SELECT [quantity] FROM [ShoppingCart] WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')", connection))
                 {
                     command.Connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
@@ -567,7 +648,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                         while (reader.Read())
                         {
                             initialShoppingCartQuantity = reader.GetInt32(0); //Response.Write("<script>alert('" + initialShoppingCartQuantity.ToString().Trim() + "'</script>");
-                        }                                           
+                        }
                     }
 
                     // Close the connection and the DataReader.
@@ -587,8 +668,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                     {   // Assign the data values to itemUPC
                         while (reader.Read())
                         {
-                            initialItemQuantity = reader.GetInt32(0); 
-                        }  
+                            initialItemQuantity = reader.GetInt32(0);
+                        }
                     }
 
                     // Close the connection and the DataReader.
@@ -598,34 +679,35 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
                 Int32 difference = textBoxQuantity - initialShoppingCartQuantity;
 
-            //update Item DB
-            string queryUpdateItem = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + itemUPC + "')";
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand(queryUpdateItem, connection))
-            {
-                //Define the UPDATE query parameters with corresponding values
-                command.Parameters.AddWithValue("@QuantityAvailable", (initialItemQuantity - difference).ToString());
+                //update Item DB
+                string queryUpdateItem = "UPDATE [Item] SET [quantityAvailable] = @QuantityAvailable WHERE ([upc] = '" + itemUPC + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdateItem, connection))
+                {
+                    //Define the UPDATE query parameters with corresponding values
+                    command.Parameters.AddWithValue("@QuantityAvailable", (initialItemQuantity - difference).ToString());
 
-                // Open the connection, execute the UPDATE query and close the connection.
-                command.Connection.Open();
-                command.ExecuteNonQuery();
-                command.Connection.Close();
-            }
+                    // Open the connection, execute the UPDATE query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
 
-            //update ShoppingCart DB
-            string queryUpdateShoppingCart = "UPDATE [ShoppingCart] SET [quantity] = @Quantity, [isChecked] = @IsChecked WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')";
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-            using (SqlCommand command = new SqlCommand(queryUpdateShoppingCart, connection))
-            {
-                //Define the UPDATE query parameters with corresponding values
-                command.Parameters.AddWithValue("@Quantity", (initialShoppingCartQuantity + difference).ToString());
-                command.Parameters.AddWithValue("@IsChecked", selected.ToString().Trim());
-                //Response.Write("<script>alert('" + selected.ToString() + "')</script>");
+                //update ShoppingCart DB
+                string queryUpdateShoppingCart = "UPDATE [ShoppingCart] SET [quantity] = @Quantity, [isChecked] = @IsChecked WHERE ([userName] = '" + userName + "' AND [upc] = '" + itemUPC + "')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(queryUpdateShoppingCart, connection))
+                {
+                    //Define the UPDATE query parameters with corresponding values
+                    command.Parameters.AddWithValue("@Quantity", (initialShoppingCartQuantity + difference).ToString());
+                    command.Parameters.AddWithValue("@IsChecked", selected.ToString().Trim());
+                    //Response.Write("<script>alert('" + selected.ToString() + "')</script>");
 
-                //Open the connection, execute the UPDATE query and close the connection.
-                command.Connection.Open();
-                command.ExecuteNonQuery();
-                command.Connection.Close();
+                    //Open the connection, execute the UPDATE query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
             }
         }        
     }
