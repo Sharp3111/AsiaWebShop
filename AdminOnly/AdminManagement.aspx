@@ -26,7 +26,9 @@
     <br />
 <br />
     <asp:HyperLink ID="RecommendationManagement" runat="server" 
-        style="color: #034AF3; font-weight: 700; font-family: 'Segoe UI'; font-size: large; text-decoration: underline">Recommendation Management</asp:HyperLink>
+        
+        style="color: #034AF3; font-weight: 700; font-family: 'Segoe UI'; font-size: large; text-decoration: underline" 
+        NavigateUrl="~/AdminOnly/RecommendationManagement.aspx">Recommendation Management</asp:HyperLink>
     <br />
 <br />
 </asp:Content>
