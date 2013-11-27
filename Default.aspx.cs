@@ -16,11 +16,7 @@ public partial class _Default : System.Web.UI.Page
     {
         string connectionString = "AsiaWebShopDBConnectionString";
 
-        UpdateRecommendationDB(connectionString, "RecommendationDay");
-        UpdateRecommendationDB(connectionString, "RecommendationWeek");
-        UpdateRecommendationDB(connectionString, "RecommendationMonth");
-        UpdateRecommendationDB(connectionString, "RecommendationYear");
-
+        //UpdateRecommendationDB(connectionString, "RecommendationDay");
         DisplayRecommendationDB(connectionString, "RecommendationDay");
 
     }
@@ -96,14 +92,18 @@ public partial class _Default : System.Web.UI.Page
                     {
                         itemIsEditorChoice = " * ";
                     }
+                    else
+                    {
+                        itemIsEditorChoice = " ";
+                    }
 
 
                     //put data into lists
-                    rankingLabel[i] = itemRanking.Trim();
-                    itemNameLabel[i] = itemName.Trim();
-                    discountPriceLabel[i] = itemDiscountPrice.Trim();
-                    quantitySoldLabel[i] = itemQuantitySold.Trim();
-                    editorChoiceLabel[i] = itemIsEditorChoice.Trim();
+                    rankingLabel[i] = itemRanking;
+                    itemNameLabel[i] = itemName;
+                    discountPriceLabel[i] = itemDiscountPrice;
+                    quantitySoldLabel[i] = itemQuantitySold;
+                    editorChoiceLabel[i] = itemIsEditorChoice;
 
                     //go to another row
                     i++;
@@ -153,7 +153,60 @@ public partial class _Default : System.Web.UI.Page
 
     protected void UpdateRecommendationDB(string connectionString, string RecommendationTable)
     {
-        //Empty database before inserting anything
+        /* Step 1. Store Editor's Choices in RecommendationTable
+         * Rationale: Editor's Choices are not subject to update
+         * */
+        Int32 NumOfRecommendationTableEditorChoice = 0;
+        string queryCountEditorChoice = "SELECT COUNT(*) FROM [" + RecommendationTable + "] WHERE isEditorChoice = 'True'";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(queryCountEditorChoice, connection))
+        {
+            command.Connection.Open();
+            NumOfRecommendationTableEditorChoice = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+
+        string[] editorChoiceUPCList = new string[NumOfRecommendationTableEditorChoice];
+        string[] editorChoiceRankingList = new string[NumOfRecommendationTableEditorChoice];
+
+        Boolean EditorChoiceExist = false;
+        if (NumOfRecommendationTableEditorChoice > 0)
+        {
+            EditorChoiceExist = true;
+        }
+        else
+        {
+            EditorChoiceExist = false;
+        }
+
+        if (EditorChoiceExist)
+        {
+            int j = 0;
+            string queryEditorChoice = "SELECT upc, ranking FROM [" + RecommendationTable + "] WHERE isEditorChoice = 'True'";
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+            using (SqlCommand command = new SqlCommand(queryEditorChoice, connection))
+            {
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        editorChoiceUPCList[j] = reader["upc"].ToString().Trim();
+                        editorChoiceRankingList[j] = reader["ranking"].ToString().Trim();
+
+                        //proceed to populate the next item
+                        j++;
+                    }
+                }
+                command.Connection.Close();
+            }
+        }
+
+        
+        /* Step 2. Empty RecommendationTable
+         * Rationale: Clean-up before set-up
+         * */
         string queryDelete = "DELETE FROM [" + RecommendationTable + "]";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(queryDelete, connection))
@@ -163,8 +216,10 @@ public partial class _Default : System.Web.UI.Page
             command.Connection.Close();
         }
 
-        DateTime Now = DateTime.Now;
-        //Past is initialized to
+        /* Step 3. Collect required data
+         * Rationale: Data collecting before data embedding
+         * */
+        DateTime Now = DateTime.Now;        
         DateTime Past = Now;
         string DAILYTABLE = "RecommendationDay";
         string WEEKLYTABLE = "RecommendationWeek";
@@ -257,6 +312,9 @@ public partial class _Default : System.Web.UI.Page
             }
         }
 
+        /* Step 4. Insert data into RecommendationTable
+         * Rationale: Data embedding after data collection
+         * */
         //indexHolder is used to hold index of the max in an array every round
         Int32 Capacity = 5;
         Int32 indexHolder;
@@ -284,6 +342,106 @@ public partial class _Default : System.Web.UI.Page
             //make the extracted item invisible
             quantitySoldList[indexHolder] = -1;
         }
+
+        /* Step 5. Override inserting data
+         * Rationale: Editor's Choices should be kept in their original positions
+         *            Items inserted in these places are overriden
+         * */
+        if (EditorChoiceExist)
+        {
+            for (i = 0; i < NumOfRecommendationTableEditorChoice; i++)
+            {
+                string currentUPC = editorChoiceUPCList[i];
+                string currentName = "";
+                string currentDiscountPrice = "";
+                Int32 currentQuantitySold = 0;
+                string currentRanking = editorChoiceRankingList[i];
+
+                //get currentName, currentDiscountPrice from [Item]
+                string querySelectFromItem = "SELECT name, discountPrice FROM [Item] WHERE upc = '" + currentUPC + "'";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(querySelectFromItem, connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            currentName = reader["name"].ToString().Trim();
+                            currentDiscountPrice = reader["discountPrice"].ToString().Trim();
+                        }
+                    }
+                    command.Connection.Close();
+                    reader.Close();
+                }
+
+                //get currentQuantityAvailable from the information quantity in [OrderRecord]
+                Int32 quantityHolder = 0;
+                string querySelectFromOrderRecord = "SELECT quantity FROM [OrderRecord] WHERE (upc = '" + currentUPC + "' AND isConfirmed = 'True')";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                using (SqlCommand command = new SqlCommand(querySelectFromOrderRecord, connection))
+                {
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            quantityHolder = reader.GetInt32(0);
+                            currentQuantitySold += quantityHolder;
+                        }
+                    }
+                    command.Connection.Close();
+                    reader.Close();
+                }
+
+                //Check whether the Editor's Choice is in RecommendationTable
+                //if not, proceed
+                //if so, do nothing
+                if (!ExistInRecommedationTable(currentUPC, connectionString, RecommendationTable))
+                {
+                    string queryOverride = "UPDATE [" + RecommendationTable + "] SET upc = @upc, name = @name, discountPrice = @discountPrice, quantitySold = @quantitySold, isEditorChoice = 'True' WHERE ranking = @ranking";
+                    using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+                    using (SqlCommand command = new SqlCommand(queryOverride, connection))
+                    {
+                        //Instantiation
+                        command.Parameters.AddWithValue("@upc", currentUPC);
+                        command.Parameters.AddWithValue("@name", currentName);
+                        command.Parameters.AddWithValue("@discountPrice", currentDiscountPrice);
+                        command.Parameters.AddWithValue("@quantitySold", currentQuantitySold);
+                        command.Parameters.AddWithValue("@ranking", currentRanking);
+
+                        //Processing
+                        command.Connection.Open();
+                        command.ExecuteNonQuery();
+                        command.Connection.Close();
+                    }
+                }       
+            }
+        }
+    }
+
+    protected bool ExistInRecommedationTable(string currentUPC, string connectionString, string RecommendationTable)
+    {
+        Int32 count = 0;
+        string queryCountEditorChoice = "SELECT COUNT(*) FROM [" + RecommendationTable + "] WHERE upc = '" + currentUPC + "'";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(queryCountEditorChoice, connection))
+        {
+            command.Connection.Open();
+            count = (Int32)command.ExecuteScalar();
+            command.Connection.Close();
+        }
+
+        if (count > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     protected void rangeRadioButtonList_SelectedIndexChanged(object sender, EventArgs e)
@@ -297,18 +455,22 @@ public partial class _Default : System.Web.UI.Page
 
         if (selectedValue.Equals(DAILY, StringComparison.Ordinal))
         {
+            //UpdateRecommendationDB(connectionString, "RecommendationDay");
             DisplayRecommendationDB(connectionString, "RecommendationDay");
         }
         else if (selectedValue.Equals(WEEKLY, StringComparison.Ordinal))
         {
+            //UpdateRecommendationDB(connectionString, "RecommendationWeek");
             DisplayRecommendationDB(connectionString, "RecommendationWeek");
         }
         else if (selectedValue.Equals(MONTHLY, StringComparison.Ordinal))
         {
+            //UpdateRecommendationDB(connectionString, "RecommendationMonth");
             DisplayRecommendationDB(connectionString, "RecommendationMonth");
         }
         else if (selectedValue.Equals(YEARLY, StringComparison.Ordinal))
         {
+            //UpdateRecommendationDB(connectionString, "RecommendationYear");
             DisplayRecommendationDB(connectionString, "RecommendationYear");
         }
 

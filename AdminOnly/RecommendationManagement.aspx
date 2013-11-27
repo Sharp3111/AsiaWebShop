@@ -40,7 +40,7 @@
         UPC of the item you want to add: </span>
     </p>
     <p>
-        <asp:TextBox ID="txtUPC" runat="server" Width="150px"></asp:TextBox>
+        <asp:TextBox ID="txtUPC" runat="server" Width="150px" MaxLength="12"></asp:TextBox>
         <asp:RequiredFieldValidator ID="rfvUPC" runat="server" 
                             ControlToValidate="txtUPC" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="UPC is required." ForeColor="Red" 
@@ -50,16 +50,18 @@
                             ErrorMessage="UPC must be exactly 12 digits." ForeColor="Red" 
                             ValidationExpression="^\d{12}$" 
             ValidationGroup="recommendationManagementValidationGroup">*</asp:RegularExpressionValidator>
+        <asp:CustomValidator ID="cvUPCExist" runat="server" ControlToValidate="txtUPC" 
+            Display="Dynamic" EnableClientScript="False" 
+            ErrorMessage="This item does not exist." ForeColor="Red" 
+            onservervalidate="cvUPCExist_ServerValidate" 
+            ValidationGroup="recommendationManagementValidationGroup">*</asp:CustomValidator>
         <asp:CustomValidator ID="cvUPC" runat="server" Display="Dynamic" 
                             EnableClientScript="False" 
             ErrorMessage="The item with this UPC has zero quantity available." ForeColor="Red" 
                             
             ControlToValidate="txtUPC" 
-            ValidationGroup="recommendationManagementValidationGroup">*</asp:CustomValidator>
-        <asp:CustomValidator ID="cvUPC2" runat="server" Display="Dynamic" 
-            EnableClientScript="False" 
-            ErrorMessage="The item with this UPC has existed in the specified recommendation table." 
-            ForeColor="Red" ValidationGroup="recommendationManagementValidationGroup">*</asp:CustomValidator>
+            ValidationGroup="recommendationManagementValidationGroup" 
+            onservervalidate="cvUPC_ServerValidate">*</asp:CustomValidator>
     </p>
     <p class="style3">
         A list of the items put on sale:</p>
