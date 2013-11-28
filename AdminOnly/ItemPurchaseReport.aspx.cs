@@ -123,7 +123,7 @@ public partial class AdminOnly_ItemPurchaseReport : System.Web.UI.Page
                 SQLCmd3 = "AND [Member].[userName] = '" + userName.Text.Trim() + "' ";
 
 
-            SQLCmd = "SELECT [Item].[name], [Item].[category], SUM(OrderRecord.quantity) AS totalQuantity, [OrderRecord].[unitPrice], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS totalPrice, SUM(OrderRecord.quantity * (Item.normalPrice - OrderRecord.unitPrice)) AS saving," +
+            SQLCmd = "SELECT [Item].[name], [Item].[category], SUM(OrderRecord.quantity) AS totalQuantity, [OrderRecord].[unitPrice], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS totalPrice, SUM(OrderRecord.quantity * (OrderRecord.normalPrice - OrderRecord.unitPrice)) AS saving," +
                             "[Member].[firstName] + ' ' + [Member].[lastName] AS customerName," +
                             "[OrderRecord].[email], [OrderRecord].[phoneNumber], [OrderRecord].[address]," +
                             " + RIGHT([CreditCard].[number],4) AS cardnumber, + [CreditCard].[type]," +
