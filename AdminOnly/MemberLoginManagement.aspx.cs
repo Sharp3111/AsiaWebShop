@@ -34,7 +34,7 @@ public partial class AdminOnly_MemberLoginManagement : System.Web.UI.Page
             if (user != null)
             {
                 if(Roles.IsUserInRole(enableUser.Text.Trim(),"Admin")) {
-                    lblEnableMemberLoginMessage.Text = "You cannot deactive an admin!";
+                    lblEnableMemberLoginMessage.Text = "You cannot active an admin!";
                 }
                 else{
                 user.IsApproved = true;
@@ -100,7 +100,7 @@ public partial class AdminOnly_MemberLoginManagement : System.Web.UI.Page
             {
                 if (Roles.IsUserInRole(enableUser.Text.Trim(), "Admin"))
                 {
-                    lblDisableMemberLoginMessage.Text = "You cannot active an admin!";
+                    lblDisableMemberLoginMessage.Text = "You cannot deactive an admin!";
                 }
                 else
                 {
