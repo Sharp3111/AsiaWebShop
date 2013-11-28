@@ -217,7 +217,7 @@
                     RepeatLayout="Flow" ValidationGroup="purchaseAmount">
                     <asp:ListItem Value="certain">in certain date <br><br></asp:ListItem>
                     
-                    <asp:ListItem Value="any">at any time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      </asp:ListItem>
+                    <asp:ListItem Value="any" Selected="True">at any time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      </asp:ListItem>
                 </asp:RadioButtonList>
             </td>
             <td class="style74">
@@ -366,15 +366,15 @@
         AutoGenerateColumns="False" DataKeyNames="userName">
         <AlternatingRowStyle BackColor="White" />
         <Columns>
-            <asp:BoundField DataField="userName" HeaderText="Username" ReadOnly="True" 
+            <asp:BoundField DataField="userName" HeaderText="User Name" ReadOnly="True" 
                 SortExpression="userName" />
             <asp:BoundField DataField="firstName" HeaderText="First Name" 
                 SortExpression="firstName" />
             <asp:BoundField DataField="lastName" HeaderText="Last Name" 
                 SortExpression="lastName" />
-            <asp:BoundField DataField="orderDateTime" HeaderText="Purchase Date" 
-                SortExpression="orderDateTime" />
-            <asp:BoundField DataField="Expr1" HeaderText="Total Purchase amount" 
+            <asp:BoundField DataField="district" HeaderText="District" 
+                SortExpression="district" />
+            <asp:BoundField DataField="Expr1" HeaderText="Purchase Amount" 
                 ReadOnly="True" SortExpression="Expr1" />
         </Columns>
         <EditRowStyle BackColor="#2461BF" />
@@ -392,7 +392,8 @@
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
         
-        SelectCommand="SELECT Member.userName, Member.firstName, Member.lastName,OrderRecord.orderDateTime, SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS Expr1 FROM OrderRecord INNER JOIN Member ON OrderRecord.userName = Member.userName GROUP BY OrderRecord.confirmationNumber, Member.userName, Member.firstName, Member.lastName,OrderRecord.orderDateTime"></asp:SqlDataSource>
+        
+        SelectCommand="SELECT Member.userName, Member.firstName, Member.lastName, Address.district, SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS Expr1 FROM OrderRecord INNER JOIN Member ON OrderRecord.userName = Member.userName INNER JOIN Address ON OrderRecord.userName = Address.userName WHERE (Address.isDefault = 'True') GROUP BY Member.userName, Member.firstName, Member.lastName, Address.district"></asp:SqlDataSource>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         EnableClientScript="False" ForeColor="Red" 
         HeaderText="Following error occurred:" ValidationGroup="purchaseAmount" />
