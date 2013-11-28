@@ -126,7 +126,7 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                 SQLCmd3 = "AND [Member].[userName] = '" + userName.Text.Trim() + "' ";
 
                 if (groupDistrict.Checked) {
-                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName], [Member].[lastName],[OrderRecord].[orderDateTime], SUM (OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
+                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district], SUM (OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
                              "FROM [OrderRecord] " +
                              "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
                              "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName] " + "WHERE [Address].[isDefault] = 'True' "+
@@ -134,12 +134,12 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                              SQLCmd3 +
                              //"WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
                              //"AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
-                             "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district],[OrderRecord].[orderDateTime]" +
+                             "GROUP BY [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district]" +
                              "ORDER BY [Address].[district], ";
                              //    "ORDER BY [Member].[lastName]";
                 }
                 else {
-                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName],[OrderRecord].[orderDateTime], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
+                    SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName],[Address].[district], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
                                  "FROM [OrderRecord] " +
                                  "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName]" +
                                  "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" + "WHERE [Address].[isDefault] = 'True' " +
@@ -147,7 +147,7 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                                  SQLCmd3 +
                                  //"WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
                                  //"AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'" +
-                                 "GROUP BY [OrderRecord].[confirmationNumber], [Member].[userName], [Member].[firstName], [Member].[lastName],[OrderRecord].[orderDateTime]" +
+                                 "GROUP BY [Member].[userName], [Member].[firstName], [Member].[lastName],[Address].[district]" +
                                  "ORDER BY ";// [Expr1]";
                  }
 
