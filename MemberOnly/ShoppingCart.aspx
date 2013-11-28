@@ -20,6 +20,12 @@
             font-weight: bold;
             text-align: right;
         }
+        .style5
+        {
+            color: #000080;
+            font-weight: bold;
+            text-align: left;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -154,6 +160,8 @@
         Total Price:
         <asp:Label ID="TotalPriceLabel" runat="server"></asp:Label>
     </p>
+    <p class="style5" align="left">
+        Hurry up! 15 minutes of inactivity, your items will become others!!!</p>
     <p class="style2">
         <asp:Button ID="Next" runat="server" Text="Next: Specify Delivery Information" 
             ValidationGroup="ShoppingCartValidation" onclick="Next_Click" 
