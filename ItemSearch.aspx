@@ -188,7 +188,7 @@
             <asp:TemplateField ShowHeader="False">
                 <ItemTemplate>
                     <asp:Button ID="btn_ShoppingCart" runat="server" Height="30px" 
-                        Text="Add To Shopping Cart" Width="150px" 
+                        Text="Add To Shopping Cart" Width="170px" 
                         onclick="btn_ShoppingCart_Click" 
                         ValidationGroup="QuantityValidationGroup" 
                         style="font-size: medium; font-family: 'Times New Roman', Times, serif" />
