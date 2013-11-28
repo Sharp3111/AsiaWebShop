@@ -38,7 +38,7 @@
     void Application_Start(object sender, EventArgs e) 
     {
         // Code that runs on application startup
-        System.Timers.Timer aTimer = new System.Timers.Timer(10000);
+        System.Timers.Timer aTimer = new System.Timers.Timer(30000);
         aTimer.Enabled = true;
         aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);        
     }
@@ -130,10 +130,22 @@
 
     }
 
+    void deleteRecord(string itemUPC) {
+
+        using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString2"].ConnectionString))
+        {
+        // Get the email addresses subscribed to the item
+        connection2.Open();
+        SqlCommand command2 = new SqlCommand("DELETE FROM [Subscription] WHERE ([upc] = N'" + itemUPC + "')", connection2);
+        SqlDataReader reader2 = command2.ExecuteReader();
+        connection2.Close();
+        }
+    }
+
     void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
     {
         // Read in past quantities from log file and store them into quantityPast
-        String File1 = HostingEnvironment.MapPath("~/Quantity.md");
+       /* String File1 = HostingEnvironment.MapPath("~/Quantity.md");
         FileStream t1 = new System.IO.FileStream(File1, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         StreamReader readFile = new StreamReader(t1);
         List<Availability> availabilityPast = new List<Availability>();
@@ -145,6 +157,7 @@
         }
         readFile.Close();
         t1.Close();
+        */
         
         // Read current quantityAvailable
         string query = "SELECT [quantityAvailable], [upc], [name], [visible] FROM [Item]";
@@ -168,94 +181,97 @@
                     bool isVisible = Convert.ToBoolean(reader["visible"].ToString().Trim());
 
                     // See if UPC exists
-                    bool hasUPC = false;
-                    for (int i = 0; i < availabilityPast.Count; ++i)
+                    //bool hasUPC = false;
+                    // for (int i = 0; i < availabilityPast.Count; ++i)
+                    //{
+                    //      if (availabilityPast[i].upc == itemUPC)
+                    //     {
+                    //           hasUPC = true;
+
+                    // If past quantity is 0 and is being updated to a positive number and is visible, then send email alert
+                    if ((updatedQuantity > 0) && (isVisible))
                     {
-                        if (availabilityPast[i].upc == itemUPC)
+                        System.Diagnostics.Debug.WriteLine("Detected quantity refill for upc " + itemUPC);
+                        // Create an instance of MailMessage named mail.
+                        MailMessage mail = new MailMessage();
+
+                        // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
+                        SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
+                        emailServer.Timeout = 30000;
+
+                        // Set the sender (From), receiver (To), subject and message body fields of the mail message.
+                        mail.From = new MailAddress("sharpert115@yeah.net", "AsiaWebShop");
+                        using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString2"].ConnectionString))
                         {
-                            hasUPC = true;
-                            
-                            // If past quantity is 0 and is being updated to a positive number and is visible, then send email alert
-                            if ((availabilityPast[i].quantityAvailable == 0) && (updatedQuantity > 0) && (isVisible))
+                            // Get the email addresses subscribed to the item
+                            connection2.Open();
+                            SqlCommand command2 = new SqlCommand("SELECT [email],[userName],[upc] FROM [Subscription] WHERE ([upc] = N'" + itemUPC + "')", connection2);
+                            SqlDataReader reader2 = command2.ExecuteReader();
+
+                            if (reader2.HasRows)
                             {
-                                System.Diagnostics.Debug.WriteLine("Detected quantity refill for upc " + itemUPC);
-                                // Create an instance of MailMessage named mail.
-                                MailMessage mail = new MailMessage();
-
-                                // Create an instance of SmtpClient named emailServer and set the mail server to use as "smtp.cse.ust.hk".
-                                SmtpClient emailServer = new SmtpClient("smtp.cse.ust.hk");
-                                emailServer.Timeout = 30000;
-
-                                // Set the sender (From), receiver (To), subject and message body fields of the mail message.
-                                mail.From = new MailAddress("sharpert115@yeah.net", "AsiaWebShop");
-                                using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString2"].ConnectionString))
+                                while (reader2.Read())
                                 {
-                                    // Get the email addresses subscribed to the item
-                                    connection2.Open();
-                                    SqlCommand command2 = new SqlCommand("SELECT [email] FROM [Subscription] WHERE ([upc] = N'" + itemUPC + "')", connection2);
-                                    SqlDataReader reader2 = command2.ExecuteReader();
-
-                                    if (reader2.HasRows)
+                                    string subscriber = reader2["email"].ToString().Trim();
+                                    string userName = reader2["userName"].ToString().Trim();
+                                    string upc = reader2["upc"].ToString().Trim();
+                                    MembershipUser user = Membership.GetUser(userName);
+                                    System.Diagnostics.Debug.WriteLine(userName + user.IsApproved);
+                                    if (user.IsApproved == true)
                                     {
-                                        while (reader2.Read())
-                                        {
-                                            string subscriber = reader2["email"].ToString().Trim();
-                                            mail.To.Add(subscriber);
-                                        }
-
+                                        mail.To.Add(subscriber);
+                                        deleteRecord(upc);
                                         mail.Subject = "Item " + itemName + " is Available!";
                                         mail.Body = "Dear Customer,\nThank you for your interest in Item " + itemName + ". New stock for this item is available. Act now!\nAsiaWebShop";
 
                                         // Send the message.
                                         emailServer.Send(mail);
                                         System.Diagnostics.Debug.WriteLine("Can send email!");
+                                        mail.Subject = "";
+                                        mail.Body = "";
                                     }
-                                    connection2.Close();
-                                }
-
-                                // Delete the subscriptions
-                                using (SqlConnection connection2 = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString2"].ConnectionString))
-                                {
-                                    // Get the email addresses subscribed to the item
-                                    connection2.Open();
-                                    SqlCommand command2 = new SqlCommand("DELETE FROM [Subscription] WHERE ([upc] = N'" + itemUPC + "')", connection2);
-                                    SqlDataReader reader2 = command2.ExecuteReader();
-                                    connection2.Close();
                                 }
                             }
-                            
-                            availabilityPast[i].quantityAvailable = updatedQuantity;// update the quantity in array
-                            break;// no need to iterate through
+                            connection2.Close();
                         }
-                    }
-                    
-                    // If a new item exists, add it to the availability array
-                    if (!hasUPC)
-                    {
-                        Availability newItem = new Availability(itemUPC, updatedQuantity);
-                        availabilityPast.Add(newItem);
+
+                        // Delete the subscriptions
+
                     }
 
-                    List<string> lines = new List<string>();
-                    
-                    // Convert availability array to string list
-                    for (int i = 0; i < availabilityPast.Count; ++i)
-                    {
-                        lines.Add(availabilityPast[i].upc);
-                        lines.Add(Convert.ToString(availabilityPast[i].quantityAvailable));
-                    }
-
-                    try
-                    {
-                        File.WriteAllLines(File1, lines);
-                    }
-                    catch (IOException)
-                    {
-                        System.Diagnostics.Debug.WriteLine("An I/O exception occurred. Safe to continue though.");
-                    }
+                    //availabilityPast[i].quantityAvailable = updatedQuantity;// update the quantity in array
+                    // break;// no need to iterate through
+                    //    }
                 }
+
+                // If a new item exists, add it to the availability array
+                //   if (!hasUPC)
+                //     {
+                //          Availability newItem = new Availability(itemUPC, updatedQuantity);
+                //           availabilityPast.Add(newItem);
+                //      }
+
+                //     List<string> lines = new List<string>();
+
+                // Convert availability array to string list
+                //        for (int i = 0; i < availabilityPast.Count; ++i)
+                //        {
+                //            lines.Add(availabilityPast[i].upc);
+                //             lines.Add(Convert.ToString(availabilityPast[i].quantityAvailable));
+                //          }
+
+                //          try
+                //          {
+                //              File.WriteAllLines(File1, lines);
+                //            }
+                //           catch (IOException)
+                //         {
+                //             System.Diagnostics.Debug.WriteLine("An I/O exception occurred. Safe to continue though.");
+                //           }
+                //       }
+                //       }
+                      command.Connection.Close();
             }
-            command.Connection.Close();
         }
     }
 
