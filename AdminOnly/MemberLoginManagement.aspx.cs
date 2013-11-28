@@ -33,10 +33,16 @@ public partial class AdminOnly_MemberLoginManagement : System.Web.UI.Page
             MembershipUser user = Membership.GetUser(searchEnableUser);
             if (user != null)
             {
+                if(Roles.IsUserInRole(enableUser.Text.Trim(),"Admin")) {
+                    lblEnableMemberLoginMessage.Text = "You cannot deactive an admin!";
+                }
+                else{
                 user.IsApproved = true;
                 Membership.UpdateUser(user);
                 lblEnableMemberLoginMessage.Text = "Member with user name: " + searchEnableUser + " is activated. ";
+                }
             }
+
             else
             {
                 lblEnableMemberLoginMessage.Text = "No such member exists. ";
@@ -92,9 +98,16 @@ public partial class AdminOnly_MemberLoginManagement : System.Web.UI.Page
             MembershipUser user = Membership.GetUser(searchDisableUser);
             if (user != null)
             {
-                user.IsApproved = false;
-                Membership.UpdateUser(user);
-                lblDisableMemberLoginMessage.Text = "Member with user name: " + searchDisableUser + " is deactivated. ";
+                if (Roles.IsUserInRole(enableUser.Text.Trim(), "Admin"))
+                {
+                    lblDisableMemberLoginMessage.Text = "You cannot active an admin!";
+                }
+                else
+                {
+                    user.IsApproved = false;
+                    Membership.UpdateUser(user);
+                    lblDisableMemberLoginMessage.Text = "Member with user name: " + searchDisableUser + " is deactivated. ";
+                }
             }
             else
             {
