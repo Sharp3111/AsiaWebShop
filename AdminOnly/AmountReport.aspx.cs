@@ -120,7 +120,7 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
         if (IsValid)
         {
             if (date.SelectedValue == "certain")
-                SQLCmd2 = "WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
+                SQLCmd2 = "AND [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
                              "AND [OrderRecord].[orderDateTime] <= '" + yearTo.SelectedValue + "-" + monthTo.SelectedValue + "-" + dayTo.SelectedValue + " 23:59:59'";
             if (userName.Text.Trim() != "")
                 SQLCmd3 = "AND [Member].[userName] = '" + userName.Text.Trim() + "' ";
@@ -129,7 +129,7 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                     SQLCmd = "SELECT [Member].[userName], [Member].[firstName], [Member].[lastName],[OrderRecord].[orderDateTime], SUM (OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1] " +
                              "FROM [OrderRecord] " +
                              "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName] " +
-                             "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
+                             "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName] " + "WHERE [Address].[isDefault] = 'True' "+
                              SQLCmd2 +
                              SQLCmd3 +
                              //"WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +
@@ -142,7 +142,7 @@ public partial class AdminOnly_AmountReport : System.Web.UI.Page
                     SQLCmd = "SELECT [Member].[userName], [Member].[firstName],[Member].[lastName],[OrderRecord].[orderDateTime], SUM(OrderRecord.quantity * OrderRecord.unitPrice) AS [Expr1]" +
                                  "FROM [OrderRecord] " +
                                  "JOIN [Member] ON [OrderRecord].[userName] = [Member].[userName]" +
-                                 "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" +
+                                 "JOIN [Address] ON [OrderRecord].[userName] = [Address].[userName]" + "WHERE [Address].[isDefault] = 'True' " +
                                  SQLCmd2 +
                                  SQLCmd3 +
                                  //"WHERE [OrderRecord].[orderDateTime] >= '" + yearFrom.SelectedValue + "-" + monthFrom.SelectedValue + "-" + dayFrom.SelectedValue + " 00:00:00'" +

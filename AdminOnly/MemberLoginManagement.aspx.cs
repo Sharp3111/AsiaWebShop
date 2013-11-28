@@ -20,6 +20,11 @@ public partial class AdminOnly_MemberLoginManagement : System.Web.UI.Page
     {
         string connectionString = "AsiaWebShopDBConnectionString";
         EnableMemberLogin(connectionString);
+    }
+
+    protected void disable_Click(object sender, EventArgs e)
+    {
+        string connectionString = "AsiaWebShopDBConnectionString";
         DisableMemberLogin(connectionString);
     }
 
@@ -98,7 +103,7 @@ public partial class AdminOnly_MemberLoginManagement : System.Web.UI.Page
             MembershipUser user = Membership.GetUser(searchDisableUser);
             if (user != null)
             {
-                if (Roles.IsUserInRole(enableUser.Text.Trim(), "Admin"))
+                if (Roles.IsUserInRole(disableUser.Text.Trim(), "Admin"))
                 {
                     lblDisableMemberLoginMessage.Text = "You cannot deactivate an admin!";
                 }
@@ -155,5 +160,6 @@ public partial class AdminOnly_MemberLoginManagement : System.Web.UI.Page
         }
          * */
     }
-         
+
+
 }
